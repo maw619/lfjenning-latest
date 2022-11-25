@@ -82,7 +82,7 @@ class AddPhotosForm(ModelForm):
         
         widgets = {
            
-            'ph_link': ClearableFileInput(attrs={'class':'form-control','multiple': False}),
+            'ph_link': ClearableFileInput(attrs={'class':'form-control','multiple': False, 'required':True}),
             'ph_obs': forms.TextInput(attrs={'class':'form-control'}),
             'ph_desc': forms.TextInput(attrs={'class':'form-control'}),
             'ph_fk_rep_key': forms.TextInput(attrs={'class':'form-control'}),

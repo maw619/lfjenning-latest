@@ -1,4 +1,3 @@
-from socket import fromshare
 from django.forms import ModelForm, widgets
 from django import forms
 from django.contrib.auth.models import User

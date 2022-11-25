@@ -85,7 +85,7 @@ DATABASES = {
        'ENGINE': 'django.db.backends.mysql',
        'NAME': 'wolffdb',
        'USER': 'root',
-       'PASSWORD': '2552',
+       'PASSWORD': 'Charlie23##',
        'HOST': 'localhost',
        'PORT': '3306',
    }
