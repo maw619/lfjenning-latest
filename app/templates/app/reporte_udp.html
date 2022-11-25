@@ -1,0 +1,77 @@
+
+
+{% include 'head.html' %}
+{% include 'header.html' %}
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+{% block content %}
+<!-- {% include 'header.html' %} -->
+<h3><center>{{tabletitle }}</center></h3>
+<div class="container">
+  <div class="box">
+    <p>{{date}}</p>
+    <p>To: {{rep_ws_to}}</p>
+    <p>From: {{emp_name}}</p>
+    <p>
+      This report is a follow up to the safety inspection completed on {{date}}.
+      The purpose of the inspection was to identify potential safety hazards
+      and/or OSHA violations. Attached is a list of observations and
+      recommendations based on the conditions present at the time of my visit.
+      Please review the report and verify that all potential hazards are
+      corrected. If you have any questions or require additional information after
+      reviewing this report, please don't hesitate to contact me.
+    </p>
+    <p>Sincerely,</p>
+
+    <p>
+      {{emp_name}}<br /> LF Jennings, Inc. <br />Safety Department <br />{{emp_phone}}<br />{{emp_email}}
+    </p>
+  </div>
+
+  {% include 'footer.html' %}
+
+  {% for x in get_photo %}
+  {% if x.ph_link2 != None %}
+<!-- 
+  {% include 'header.html' %} -->
+ 
+  <div class="box">
+    <div class="container text-center">
+      <div class="row">
+        <div class="col mt-4">
+          <strong>
+            <p id="shaded">Observation </p>
+          </strong>
+          <p>{{x.ph_obs}}</p>
+          <p>{{x.ph_desc}}</p>
+          <a href=""><img class="img-fluid" src="/images/{{x.ph_link}}" id="resize" style="height:300px;"></a>
+          <a href=""><img class="img-fluid" src="/images/{{x.ph_link2}}" id="resize" style="height:300px;"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% include 'footer.html' %}
+  {% else %}
+  {% include 'header.html' %}
+  <div class="box">
+    <div class="container text-center">
+      <div class="row">
+        <div class="col mt-4">
+          <strong>
+            <p id="shaded">Observation </p>
+          </strong>
+          <p>{{x.ph_obs}}</p>
+          <p>{{x.ph_desc}}</p>
+          <a href=""><img class="img-fluid" src="/images/{{x.ph_link}}" id="resize" style="height:300px;"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% include 'footer.html' %}
+  {% endif %}
+
+  {% endfor %}
+
+
+  {% endblock content %}
+
+</div>

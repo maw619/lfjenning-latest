@@ -1,0 +1,17 @@
+{% include 'head.html' %} 
+{% include 'header.html' %}
+{% include 'nav.html' %}
+
+<!-- messages -->
+{% if messages %} {% for x in messages %}
+<div class="alert alert-success" role="alert">{{ x }}</div>
+{% endfor %} 
+{% endif %} 
+
+
+{% block content %}
+{% endblock content %} 
+
+
+{% include 'footer.html' %}
+ {% include 'footer-links.html' %}

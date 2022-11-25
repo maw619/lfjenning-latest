@@ -1,0 +1,61 @@
+
+</div>
+<!-- End your project here-->
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/dataTables.material.min.js"></script>
+<!-- Select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<!-- MDB -->
+{% load static %}
+<!-- MDB -->
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.0/mdb.min.js"
+></script>
+<!-- Custom scripts -->
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#example").DataTable({
+      autoWidth: false,
+
+      columnDefs: [
+        {
+          targets: ["_all"],
+          className: "mdc-data-table__cell",
+        },
+
+        //{"width": "10%", "targets": 0},
+
+      ],
+    });
+  });
+</script>
+
+<script>
+  $("#single1").select2({
+    placeholder: "Select a Project",
+    allowClear: true,
+  });
+  $("#single2").select2({
+    placeholder: "Select an Employee",
+    allowClear: true,
+  });
+  $("#single3").select2({
+    placeholder: "Select a Supervisor",
+    allowClear: true,
+  });
+  $("#single4").select2({
+    placeholder: "choose email(s):",
+    allowClear: true,
+    dropdownParent: $('#staticBackdrop'),
+    
+  });
+  
+</script>
+
+<script src="">
+
+</script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+
+    <!-- Container wrapper -->
+    <div class="container-fluid">
+      <!-- Toggle button -->
+      <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+        data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <!-- Collapsible wrapper -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <!-- Navbar brand -->
+        <!-- <a class="navbar-brand mt-2 mt-lg-0" href="#">
+      <img
+        src="./img/jennings.png"
+        height="35"
+        alt="MDB Logo"
+        loading="lazy"
+      />
+    </a> -->
+        <!-- Left links -->
+        
+        <div class="dropdown">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'home' %}">Home</a>
+            </li>
+            {% comment %} {% if request.session.rep_key is not None %} {% endcomment %}
+            <li class="nav-item">
+              <ul class="navbar-nav">
+                
+                <!-- Dropdown -->
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                    data-mdb-toggle="dropdown" aria-expanded="false">
+                    Admin
+                  </a>
+                  
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <li>
+                      <a class="dropdown-item" href="{% url 'employees' %}">Employees</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="{% url 'charges' %}">Charges</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="{% url 'certification' %}">Certifications</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="{% url 'admin:index' %}">Admin Panel</a>
+                    </li>
+                   
+                  </ul>
+                </li>
+              </ul>
+            </li>
+           
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'projects' %}">Projects</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'photos' %}">Photos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'reports' %}">Reports</a>
+            </li>
+            {% comment %} {% else %} {% endcomment %}
+       
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'employees' %}">Employees</a>
+            </li>
+  
+       
+          
+            {% comment %} {% endif %} {% endcomment %}
+ 
+  
+          </ul>
+        </div>
+        <!-- Left links -->
+      </div>
+      <!-- Collapsible wrapper -->
+
+      <!-- Right elements -->
+      <div class="d-flex align-items-center">
+        <!-- Icon -->
+        <a class="text-reset me-3" href="#">
+          <!-- <i class="fa fa-sign-in"></i> -->
+        </a>
+
+       
+  
+        <ul class="navbar-nav">
+          <!-- Login/Logout Dropdown -->
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdownMenuLink"
+              role="button"
+              data-mdb-toggle="dropdown"
+              aria-expanded="false"
+            >
+            {% if user.is_authenticated %}
+              <i class="fa-solid fa-user"></i>{{request.user.username}}
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <li><a class="dropdown-item" href="{% url 'logout' %}">logout</a></li>
+              {% else %}
+              <i class="fa-solid fa-user"></i>{{request.user.username}}
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <li><a class="dropdown-item" href="{% url 'login' %}">login</a></li>
+              {% endif %}
+            </ul>
+          </li>
+        </ul>
+        <!-- Avatar -->
+        <div class="dropdown">
+          <a class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#" id="navbarDropdownMenuAvatar"
+            role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+            <li>
+              <a class="dropdown-item" href="#">My profile</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">Settings</a>
+            </li>
+            <li>
+           
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- Right elements -->
+    </div>
+    <!-- Container wrapper -->
+  </nav>
+  <!-- Navbar -->

@@ -1,0 +1,56 @@
+{% extends 'base.html' %} {% block content %}
+<!-- Add button -->
+
+<h3><center>{{ tabletitle }}</center></h3>
+<div class="row">
+  <div class="col-md-2">
+    <a href="{% url 'add_employee' %}"
+      type="button"
+      class="btn btn-primary btn-sm my-3"
+      data-mdb-ripple-color="#ffffff"
+      style="background-color: #b70b0b">
+      ADD EMPLOYEE <i class="fas fa-add ms-1"></i>
+    </a>
+  </div>
+  <div class="col-md-10"></div>
+</div>
+
+<table id="example" class="mdl-data-table" style="width: 100vh">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Charge</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for x in employees %}
+    <tr>
+      <td>{{ x.emp_name }}</td>
+      <td>{{ x.emp_email }}</td>
+      <td>{{ x.emp_phone }}</td>
+      
+      <td>{{ get_charge }}</td>
+  
+      <td><a href="update_employee/{{x.emp_key}}"><i class="fa fa-edit" aria-hidden="true"></i></a></td>
+      <td><a href="delete_employee/{{x.emp_key}}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+  <tfoot>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Charge</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </tfoot>
+</table>
+
+{% endblock content %}

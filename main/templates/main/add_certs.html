@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+<h3><center>{{tabletitle }}</center></h3>
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="width:100%;">
+
+<form action="" method="POST" style="width:100%;">
+        {% csrf_token %}
+        {{ form }}
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary mt-2">Add</button>
+          </div>
+</form>
+</div>
+{% endblock content %}
+
+

@@ -1,0 +1,42 @@
+{% extends 'base.html' %} {% block content %}
+<!-- Add button -->
+<h3><center>{{tabletitle }}</center></h3>
+<div class="col-md-2">
+  <a
+    href="{% url 'add_charge' %}"
+    type="button"
+    class="btn btn-primary btn-sm my-3"
+    data-mdb-ripple-color="#ffffff"
+    style="background-color: #b70b0b"
+  >
+    ADD CHARGE <i class="fas fa-add ms-1"></i>
+  </a>
+</div>
+
+<table id="example" class="mdl-data-table" style="width: 100vh">
+  <thead>
+    <tr>
+      <th>Charge</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for x in charges %}
+    <tr>
+      <td>{{ x.ch_desc }}</td>
+      <td><a href="update_charge/{{x.ch_key}}"><i class="fa fa-edit" aria-hidden="true"></i></a></td>
+      <td><a href="delete_charge/{{x.ch_key}}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+  <tfoot>
+    <tr>
+        <th>Charge</th>
+        <th></th>
+        <th></th>
+    </tr>
+  </tfoot>
+</table>
+
+{% endblock content %}

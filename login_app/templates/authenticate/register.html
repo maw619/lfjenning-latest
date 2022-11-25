@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="d-flex align-items-center justify-content-center">
+    <form method="POST"  style="width:70%;">
+      <p>Register</p>
+      {% csrf_token %}
+      <!-- Name input -->
+   
+      {{form.as_p}}
+
+      <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary btn-block mb-4">Register</button>
+
+        </div>
+        <p class="mt-3"><i>Reset password </i><a href="{% url 'password_reset' %}">here</a></p>
+        <p class="mt-3"><i></i><a href="{% url 'login' %}"><i>go back</i></a></p>
+    </form>
+  </div> 
+{% endblock content %}
+
+

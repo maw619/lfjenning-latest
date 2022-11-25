@@ -1,0 +1,45 @@
+{% extends 'base.html' %} {% block content %}
+<!-- Add button -->
+<h3><center>{{tabletitle }}</center></h3>
+<div class="row">
+    <div class="col-md-2">
+        <a href="{% url 'add_project' %}" type="button" class="btn btn-primary btn-sm my-3"
+            data-mdb-ripple-color="#ffffff" style="background-color: #b70b0b;">
+            ADD PROJECT <i class="fas fa-add ms-1"></i>
+        </a>
+    </div>
+    <div class="col-md-10">
+
+    </div>
+</div>
+
+<table id="example" class="mdl-data-table" style="width: 100vh">
+    <thead>
+        <tr>
+            <th>Project</th>
+            <th>Address</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for x in projects %}
+        <tr>
+            <td>{{ x.pr_desc }}</td>
+            <td>{{ x.pr_address }}</td>
+            <td><a href="update_project/{{x.pr_key}}"><i class="fa fa-edit" aria-hidden="true"></i></td>
+            <td><a href="delete_project/{{x.pr_key}}"><i class="fa fa-trash" aria-hidden="true"></i></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>Project</th>
+            <th>Address</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </tfoot>
+</table>
+
+{% endblock content %}
