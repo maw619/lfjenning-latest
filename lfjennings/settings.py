@@ -80,16 +80,22 @@ WSGI_APPLICATION = 'lfjennings.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 #aws user admin and pass Charlie23##
  
+
 DATABASES = {
-   'default': {
-       'ENGINE': 'django.db.backends.mysql',
-       'NAME': 'wolffdb',
-       'USER': 'root',
-       'PASSWORD': 'Charlie23##',
-       'HOST': 'localhost',
-       'PORT': '3306',
-   }
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        'NAME': "wolffdb",
+        'USER': "admin",
+        'PASSWORD': "Charlie23##$$%%",
+        'HOST': "wolffdb.cvopqdkkwgwq.us-east-1.rds.amazonaws.com",
+        'PORT': "3306",
+    	'OPTIONS': {
+            'sql_mode': 'traditional',
+        }
+    }
 }
+
+
 
 
 # Password validation
