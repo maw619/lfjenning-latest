@@ -68,6 +68,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'lfjennings.wsgi.application'
+load_dotenv()
 
 
 # Database
@@ -146,32 +147,24 @@ LOGOUT_REDIRECT_URL = 'logout'
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = '/static/'
-MEDIA_URL = '/images/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+MEDIA_URL = '/img/'
 
-load_dotenv()
+
 
 
 USE_S3 = os.getenv('USE_S3') == 'TRUE'
 
-if USE_S3:
-    # aws settings
-    print('using S3 storage')
-    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
-    AWS_S3_CUSTOM_DOMAIN = os.getenv('AWS_S3_CUSTOM_DOMAIN')
-    AWS_S3_OBJECT_PARAMETERS = os.getenv('AWS_S3_OBJECT_PARAMETERS')
-    # s3 static settings
-    AWS_LOCATION = os.getenv('AWS_LOCATION')
-    STATIC_URL = os.getenv('STATIC_URL')
-    STATICFILES_STORAGE = os.getenv('STATICFILES_STORAGE')
+AWS_ACCESS_KEY_ID = 'AKIAURUAQBNXSNYUCBUW' 
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'lfj'
+# s3 static settings
 
-else:
-    print('using static storage')
-    STATIC_URL = '/staticfiles/'
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-    STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+
+
+print('using static storage')
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 
 

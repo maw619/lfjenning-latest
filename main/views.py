@@ -606,7 +606,7 @@ def add_photos(request):
         if form.is_valid():
             form.save(commit=False)
             form.save()
-            return redirect('reports')
+            return redirect('reporte_udp', pk = request.session['rep_key'])
         
     context = {'form':form,
                'ph_user_name': request.user.username,
@@ -622,7 +622,7 @@ def add_photo(request):
         if form.is_valid():
             form.save(commit=False)
             form.save()
-            return redirect('reports')
+            return redirect('reporte_udp', pk = request.session['rep_key'])
         
     context = {'form':form,
                'ph_user_name': request.user.username,
@@ -644,7 +644,7 @@ def add_photo2(request, ph_fk_ph_key):
         if form.is_valid():
             form.save(commit=False)
             form.save()
-            return redirect('home')
+            return redirect('reporte_udp')
         
     context = {'form':form,
                'ph_user_name': request.user.username,

@@ -9,4 +9,5 @@ login_app/_pycache_
 app/
 git/
 env/
-
+static/
+img/
