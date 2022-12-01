@@ -54,7 +54,7 @@ def add_project(request):
         form = AddProjectsForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('projects')
+            return redirect('home')
     context = {'form':form, 'tabletitle':'add project'.upper() }     
     return render(request, 'main/add_project.html', context )
 
@@ -92,7 +92,7 @@ def add_employees(request):
         form = AddEmployeesForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('add_report')  
+            return redirect('home')  
     context = { 'form':form, 'tabletitle':'add employees'.upper()  }
     return render(request, 'main/add_employee.html', context)
 

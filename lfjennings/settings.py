@@ -12,24 +12,17 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-lxa(o7e6+i6_gbpt3g+l2^^p0lc1!$jw%+zpuxt8e-2^y=xx(4'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# SECURITY WARNING: don't run with debug turned on in production
 DEBUG = True
 
 ALLOWED_HOSTS = ['*','marcowolff.me']
-
-
-# Application definition
 
 INSTALLED_APPS = [
     'login_app',
@@ -41,6 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -81,14 +75,27 @@ WSGI_APPLICATION = 'lfjennings.wsgi.application'
 #aws user admin and pass Charlie23##
  
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         'NAME': "wolffdb",
+#         'USER': "admin",
+#         'PASSWORD': "Charlie23##$$%%",
+#         'HOST': "wolffdb.cvopqdkkwgwq.us-east-1.rds.amazonaws.com",
+#         'PORT': "3306",
+#     	'OPTIONS': {
+#             'sql_mode': 'traditional',
+#         }
+#     }
+# }
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        'NAME': "wolffdb",
-        'USER': "admin",
-        'PASSWORD': "Charlie23##$$%%",
-        'HOST': "wolffdb.cvopqdkkwgwq.us-east-1.rds.amazonaws.com",
-        'PORT': "3306",
+        'NAME': os.getenv('NAME'),
+        'USER': os.getenv('USER'),
+        'PASSWORD': os.getenv('PASSWORD'),
+        'HOST': os.getenv('HOST'),
+        'PORT': os.getenv('PORT'),
     	'OPTIONS': {
             'sql_mode': 'traditional',
         }
@@ -139,11 +146,34 @@ LOGOUT_REDIRECT_URL = 'logout'
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
 MEDIA_URL = '/images/'
-
-
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+
+load_dotenv()
+
+
+USE_S3 = os.getenv('USE_S3') == 'TRUE'
+
+if USE_S3:
+    # aws settings
+    print('using S3 storage')
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+    AWS_S3_CUSTOM_DOMAIN = os.getenv('AWS_S3_CUSTOM_DOMAIN')
+    AWS_S3_OBJECT_PARAMETERS = os.getenv('AWS_S3_OBJECT_PARAMETERS')
+    # s3 static settings
+    AWS_LOCATION = os.getenv('AWS_LOCATION')
+    STATIC_URL = os.getenv('STATIC_URL')
+    STATICFILES_STORAGE = os.getenv('STATICFILES_STORAGE')
+
+else:
+    print('using static storage')
+    STATIC_URL = '/staticfiles/'
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+
+
 
 CSRF_TRUSTED_ORIGINS = ['https://marcowolff.me/*']
 # Default primary key field type
