@@ -149,26 +149,16 @@ LOGOUT_REDIRECT_URL = 'logout'
 STATIC_URL = '/static/'
 MEDIA_URL = '/img/'
 
-
-
-
 USE_S3 = os.getenv('USE_S3') == 'TRUE'
-
 AWS_ACCESS_KEY_ID = 'AKIAURUAQBNXSNYUCBUW' 
 AWS_SECRET_ACCESS_KEY = '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'
 AWS_STORAGE_BUCKET_NAME = 'lfj'
-# s3 static settings
-
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-
-
-print('using static storage')
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 
 
-CSRF_TRUSTED_ORIGINS = ['https://marcowolff.me/*']
+CSRF_TRUSTED_ORIGINS = ['https://marcowolff.me/*','https://keybyme.net','http://keybyme.net']
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 

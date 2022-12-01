@@ -83,7 +83,6 @@ def delete_project(request, pk):
 ######################### employees ###########################
 @login_required(login_url='login')
 def add_employees(request):
-    
     fullname = request.user.first_name +" "+ request.user.last_name
     strFullname = fullname.strip('\"')
     
@@ -349,11 +348,7 @@ def reporte_udp2(request, rep_key):
             request.session['rep_fk_emp_key'] = data[0].rep_fk_emp_key
             request.session['emp_key'] = dataEmp[0].emp_key
             request.session['date'] = date.today().strftime(f"%B %d,%Y")
-            # print(f"Rep Key is::::::::::: ",{request.session['rep_key']})
-            # print("rep_fk_emp_key:",request.session['rep_fk_emp_key'])
-            # print("emp_key:",request.session['emp_key'])
-            # print("date: ",request.session['date'])
-            
+
         get_rep = Lf_Reportes.objects.raw(f"""
             Select * From lf_reportes inner join lf_projects on 
             rep_fk_pr_key = pr_key inner join lf_employees on
@@ -631,12 +626,6 @@ def add_photo(request):
 
 @login_required(login_url='login')
 def add_photo2(request, ph_fk_ph_key):
-    # photos2 = Lf_Photos.objects.raw(
-    #     f"""
-    #     select * from photos where ph_key = {request.session['ph_key']}
-    #     AND 
-    #     ph_fk_rep_key = {request.session['rep_key']}
-    #     """)
     form = AddPhotosForm2(initial={'ph_fk_ph_key2': request.session['rep_key'],'ph_fk_ph_key':ph_fk_ph_key}) 
     if(request.method == "POST"):
         form = AddPhotosForm2(request.POST, request.FILES)

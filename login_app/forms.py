@@ -30,6 +30,13 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
         
         widgets = {
+            # 'username' : forms.HiddenInput(),
+            # 'first_name' : forms.HiddenInput(),
+            # 'last_name' : forms.HiddenInput(),
+            # 'email' : forms.HiddenInput(),
+            # 'password1' : forms.HiddenInput(),
+            # 'password2' : forms.HiddenInput(),
+            
             'username' : forms.widgets.TextInput(attrs={'class':'form-control'}),
             'first_name' : forms.widgets.TextInput(attrs={'class':'form-control'}),
             'last_name' : forms.widgets.TextInput(attrs={'class':'form-control'}),

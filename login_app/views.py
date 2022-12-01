@@ -65,16 +65,14 @@ def logout_user(request):
     logout(request)
     messages.success(request, 'You have logged out')
     return redirect('login')
-
+#['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
 def register_user(request):
-
+    employees = Lf_Employees.objects.all()
     form = CustomUserCreationForm()
-    
     if request.method == "POST":
+        
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-
-            
             form.save(commit=False)
             form.save()
             return redirect('login')
