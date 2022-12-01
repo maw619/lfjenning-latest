@@ -141,7 +141,7 @@ def reports(request):
         request.session['rep_fk_emp_key'] = data[0].rep_fk_emp_key
     except:
         messages.success(request, 'You need to add at least one record')
-        return redirect('add_report')
+        return render(request, 'main/reports.html')
     
     emails = Lf_Employees.objects.all()
     context = {'data': data, 'data2':dataEmp, 'emails':emails ,'tabletitle':'reports'.upper() }
@@ -244,10 +244,7 @@ def reporte_udp(request, pk):
         where rep_key = '{pk}';
         """)
         
-        counter = 0
-        for x in data:
-            counter = counter + 1
-        print("count:",counter)
+
         
         try:
             
