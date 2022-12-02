@@ -32,7 +32,7 @@
     </tr>
   </table>
  
-  {{x.ph_link}}
+ 
   {% for x in get_photo %}
  
   {% if x.ph_link2 %}
@@ -55,7 +55,7 @@
               <a href=""
                 ><img
                   class="img-fluid"
-                  src="https://lfj.s3.amazonaws.com/img/{{x.ph_link}}"
+                  src="https://lfj.s3.amazonaws.com/{{x.ph_link}}"
                   id="resize"
                   style="height: 300px"
               /></a>
@@ -65,7 +65,7 @@
               <a href=""
                 ><img
                   class="img-fluid"
-                  src="https://lfj.s3.amazonaws.com/img/{{x.ph_link2}}"
+                  src="https://lfj.s3.amazonaws.com/{{x.ph_link2}}"
                   id="resize"
                   style="height: 300px"
               /></a>
@@ -94,7 +94,7 @@
             <a href=""
               ><img
                 class="img-fluid"
-                src="https://lfj.s3.amazonaws.com/img/{{x.ph_link}}"
+                src="https://lfj.s3.amazonaws.com/{{x.ph_link}}"
                 id="resize"
                 style="height: 400px"
             /></a>
