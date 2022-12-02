@@ -112,7 +112,7 @@ class AddPhotosForm(ModelForm):
             'ph_link': ClearableFileInput(attrs={'class':'form-control','multiple': False, 'required':True}),
             'ph_obs': forms.TextInput(attrs={'class':'form-control'}),
             'ph_desc': forms.TextInput(attrs={'class':'form-control'}),
-            'ph_fk_rep_key': forms.TextInput(attrs={'class':'form-control'}),
+            'ph_fk_rep_key': forms.HiddenInput(),
             'ph_yyyymmdd': forms.HiddenInput(),
             'ph_user_name': forms.HiddenInput(),
          

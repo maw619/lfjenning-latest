@@ -555,7 +555,7 @@ def add_photos(request):
     for x in data:
         last = x.rep_key
     
-    print("last iterated:::::",last)
+    #print("last iterated:::::",last)
     request.session['rep_key'] = last
     form = AddPhotosForm(initial={'ph_user_name': request.user.username,'ph_fk_rep_key': last}) 
     print(" request.session['ph_fk_rep_key'] = ", request.session['rep_key'])
