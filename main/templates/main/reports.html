@@ -48,6 +48,73 @@
             <a href="reporte_udp/{{x.rep_key}}" data-mdb-toggle="tooltip" title="Preview PDF"><i class="fa fa-magnifying-glass" class=""></i></a>
       </td>
    
+
+
+      <div
+      class="modal fade"
+      id="staticBackdrop"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel"></h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form action="" method="post" id="login-form" width="100%;">
+              {% csrf_token %}
+              <select
+                class="form-control"
+                id="single4"
+                name="rep_fk_emp_key_sup"
+                size="1"
+                multiple="multiple"
+                style="width: 100%"
+              >
+                {% for x in emails %}
+                <option value="{{x.emp_email}}">{{x.emp_email}}</option>
+                {% endfor %}
+              </select>
+    
+              <button
+                type="submit"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+                onclick="redirect();"
+              >
+                Send <i class="fa-solid fa-paper-plane"></i>
+              </button>
+              <button
+                class="btn btn-secondary"
+                data-bs-dismiss="modal" aria-label="Close"
+                {% comment  %} onclick="redirect();" {% endcomment %}
+              >
+                cancel <i class="fa-solid fa-circle-xmark"></i>
+              </button>
+              
+            </form>
+    
+          
+            
+          </div>
+          <div class="modal-footer"></div>
+        </div>
+      </div>
+    </div>
+    
+
+
+
       <td>
         <a href="load_update_report_form/{{x.rep_key}}">
           <i class="fa fa-edit" aria-hidden="true" ></i></a>
@@ -86,7 +153,7 @@
     </script>
     <script>
       function redirect() {
-        window.location.href = "{% url 'emailMessage' %}";
+        window.location.href = f"{% url 'reports' %}";
       }
     </script>
     {% endfor %}
@@ -98,67 +165,6 @@
 <!-- Button trigger modal -->
 
 <!-- Modal 1-->
-<div
-  class="modal fade"
-  id="staticBackdrop"
-  data-bs-backdrop="static"
-  data-bs-keyboard="false"
-  tabindex="-1"
-  aria-labelledby="staticBackdropLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel"></h1>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <form action="" method="post" id="login-form" width="100%;">
-          {% csrf_token %}
-          <select
-            class="form-control"
-            id="single4"
-            name="rep_fk_emp_key_sup"
-            size="1"
-            multiple="multiple"
-            style="width: 100%"
-          >
-            {% for x in emails %}
-            <option value="{{x.emp_email}}">{{x.emp_email}}</option>
-            {% endfor %}
-          </select>
-
-          <button
-            type="submit"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-            onclick="redirect();"
-          >
-            Send <i class="fa-solid fa-paper-plane"></i>
-          </button>
-          <button
-            class="btn btn-secondary"
-            data-bs-dismiss="modal" aria-label="Close"
-            {% comment  %} onclick="redirect();" {% endcomment %}
-          >
-            cancel <i class="fa-solid fa-circle-xmark"></i>
-          </button>
-          
-        </form>
-
-      
-        
-      </div>
-      <div class="modal-footer"></div>
-    </div>
-  </div>
-</div>
 
 
 

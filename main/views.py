@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect,HttpResponse
 from .models import *
-from .forms import AddProjectsForm, AddReportsForm, AddEmployeesForm, AddPhotosForm, AddCertsForm, AddChargsForm, AddPhotosForm2
+from .forms import *
 from django.db import connection
 from datetime import date, datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 from django.conf import settings 
-#from django_xhtml2pdf.utils import pdf_decorator
-#from django_xhtml2pdf.utils import pdf_decorator
+from django_xhtml2pdf.utils import pdf_decorator
+from django_xhtml2pdf.utils import pdf_decorator
 import pdfkit
 from django.contrib.auth import authenticate, login
 import os
@@ -54,7 +54,7 @@ def add_project(request):
         form = AddProjectsForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('home')
+            return redirect('projects')
     context = {'form':form, 'tabletitle':'add project'.upper() }     
     return render(request, 'main/add_project.html', context )
 
@@ -85,14 +85,14 @@ def delete_project(request, pk):
 def add_employees(request):
     fullname = request.user.first_name +" "+ request.user.last_name
     strFullname = fullname.strip('\"')
-    
-    form = AddEmployeesForm(initial={"emp_name": strFullname, "emp_email":request.user.email})
+    # form = AddEmployeesForm(initial={"emp_name": strFullname, "emp_email":request.user.email})
+    form = AddEmployeesForm()
     if request.method == 'POST':
         form = AddEmployeesForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('home')  
-    context = { 'form':form, 'tabletitle':'add employees'.upper()  }
+    context = { 'form':form, 'tabletitle':'add employee'.upper()  }
     return render(request, 'main/add_employee.html', context)
 
 @login_required(login_url='login')
@@ -132,17 +132,18 @@ def reports(request):
         rep_fk_emp_key = emp_key
         where rep_user_name = '{request.user.username}';
         """)
+ 
         dataEmp = Lf_Employees.objects.raw(f"""
         Select *
         From lf_employees
         where emp_key = {data[0].rep_fk_emp_key_sup}
         """)
-        
-        request.session['rep_fk_emp_key'] = data[0].rep_fk_emp_key
+  
+         
     except:
         messages.success(request, 'You need to add at least one record')
         return render(request, 'main/reports.html')
-    
+      
     emails = Lf_Employees.objects.all()
     context = {'data': data, 'data2':dataEmp, 'emails':emails ,'tabletitle':'reports'.upper() }
     return render(request, 'main/reports.html', context)
@@ -154,50 +155,17 @@ def delete_report(request, pk):
     return redirect('reports')
 
 @login_required(login_url='login')
-def update_report(request, pk):
-    rep_fk_pr_key = request.POST['rep_fk_pr_key']
-    rep_fk_emp_key = request.POST['rep_fk_emp_key']
-    rep_fk_emp_key_sup = request.POST['rep_fk_emp_key_sup']
-    rep_notes = request.POST['rep_notes']
-    rep_desc = request.POST['rep_desc']
-    
-    report = Lf_Reportes.objects.get(rep_key=pk) 
-    report.rep_fk_pr_key = rep_fk_pr_key
-    report.rep_fk_emp_key_sup = rep_fk_emp_key_sup
-    report.rep_fk_emp_key = rep_fk_emp_key
-    report.rep_notes = rep_notes
-    report.rep_desc = rep_desc
-    report.save()
-
-    messages.success(request, 'report updated')
-    return redirect('reports')
-
-@login_required(login_url='login')
 def load_update_report_form(request, pk):
-    form = AddReportsForm()
-    report = Lf_Reportes.objects.get(rep_key=pk) 
-    data = Lf_Reportes.objects.raw(f"""
-    Select *
-    From lf_reportes inner join lf_projects on 
-    rep_fk_pr_key = pr_key inner join lf_employees on
-    rep_fk_emp_key = emp_key
-    where rep_user_name = '{request.user.username}';
-    """)
-    rep_key = request.session['rep_key'] = data[0].rep_key
+    reports = Lf_Reportes.objects.get(rep_key=pk)
+    form = UpdateReportsForm(instance=reports)
+    if request.method == 'POST':
+        form = AddReportsForm(request.POST, instance=reports)
+        form.save()
+        messages.success(request, 'report updated')
+        return redirect('reports')
+    return render(request, 'main/load_update_report_form.html', {'form':form})
 
-    context = { 
-    'rep_key':rep_key,
-    'getPro': Lf_Projects.objects.all(),
-    'empList': Lf_Employees.objects.all(),
-    'supList': Lf_Employees.objects.all(),
-    'rep_user_name': request.user.username,
-    'tabletitle':'update reports'.upper(),
-    'report':report,
-    'form':form,
-    'prime': pk
-    } 
-  
-    return render(request, 'main/load_update_report_form.html', context)
+
 
 @login_required(login_url='login')
 def add_reports(request):
@@ -230,7 +198,7 @@ def add_reports(request):
     }  
     return render(request, 'main/add_report.html', context)
 
-#@pdf_decorator
+
 def reporte_udp(request, pk):
         user = authenticate(request, username=request.user.username,password=request.user.password)        
         login(request,user)
@@ -308,94 +276,92 @@ def reporte_udp(request, pk):
 
             mail = EmailMultiAlternatives('subject', 'message', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
             mail.attach_file('fname.pdf')
-            #mail.send()
+           # mail.send()
         except:
             messages.success(request, 'something went wrong')
             return render(request, 'main/reports.html')
         return render(request, 'main/reporte_udp.html', context)
 
 
-#@pdf_decorator  
+@pdf_decorator  
 def reporte_udp2(request, rep_key):
         user = authenticate(request, username=request.user.username,password=request.user.password)        
         login(request,user)
-        request.session['first_name'] = request.user.first_name
-        request.session['last_name'] = request.user.last_name
-        data = Lf_Reportes.objects.raw(f"""
-        Select * From lf_reportes inner join lf_projects on 
-        rep_fk_pr_key = pr_key inner join lf_employees on
-        rep_fk_emp_key = emp_key
-        where rep_key = '{rep_key}';
-        """)
         
-        counter = 0
-        for x in data:
-            counter = counter + 1
-        print("count:",counter)
-        if(counter > 0):
-            dataEmp = Lf_Employees.objects.raw(f"""
-            Select *
-            From lf_employees
-            where emp_key = {data[0].rep_fk_emp_key_sup}
-            """)
-            
-            for x in data:
-                print(x)
-            request.session['rep_key'] = data[0].rep_key
-            request.session['rep_fk_emp_key'] = data[0].rep_fk_emp_key
-            request.session['emp_key'] = dataEmp[0].emp_key
-            request.session['date'] = date.today().strftime(f"%B %d,%Y")
-
-        get_rep = Lf_Reportes.objects.raw(f"""
+        if request.method == 'POST':
+            request.session['first_name'] = request.user.first_name
+            request.session['last_name'] = request.user.last_name
+            data = Lf_Reportes.objects.raw(f"""
             Select * From lf_reportes inner join lf_projects on 
             rep_fk_pr_key = pr_key inner join lf_employees on
             rep_fk_emp_key = emp_key
-            Where rep_key = '{request.session['rep_key']}'
-        """)
-        
-        get_emp = Lf_Reportes.objects.raw(f"""
-            Select * From lf_reportes inner join lf_employees on
-            rep_fk_emp_key_sup = emp_key
-            inner join lf_projects on 
-            rep_fk_pr_key = pr_key
-            Where rep_key = '{request.session['rep_key']}'  
-            order by emp_name;
-        """)
-        
-        get_photo = Lf_Photos.objects.raw(f"""
-            Select *
-            From lf_photos left join lf_reportes on 
-            ph_fk_rep_key = rep_key
-            left join lf_photos2 on 
-            ph_key = ph_fk_ph_key  
-            where ph_fk_rep_key = '{request.session['rep_key']}'
-            and rep_user_name = '{request.user.username}'   
-            and ph_user_name = '{request.user.username}'
-        """)
+            where rep_key = '{rep_key}';
+            """)
+            
+            counter = 0
+            for x in data:
+                counter = counter + 1
+            print("count:",counter)
+            if(counter > 0):
+                dataEmp = Lf_Employees.objects.raw(f"""
+                Select *
+                From lf_employees
+                where emp_key = {data[0].rep_fk_emp_key_sup}
+                """)
+                
+                for x in data:
+                    print(x)
+                request.session['rep_key'] = data[0].rep_key
+                request.session['rep_fk_emp_key'] = data[0].rep_fk_emp_key
+                request.session['emp_key'] = dataEmp[0].emp_key
+                request.session['date'] = date.today().strftime(f"%B %d,%Y")
 
-        emails = Lf_Employees.objects.all()
-        rep_fk_emp_key_sup = request.POST.getlist('rep_fk_emp_key_sup')
-       
-        for x in rep_fk_emp_key_sup:
-           print(x)
-           
+            get_rep = Lf_Reportes.objects.raw(f"""
+                Select * From lf_reportes inner join lf_projects on 
+                rep_fk_pr_key = pr_key inner join lf_employees on
+                rep_fk_emp_key = emp_key
+                Where rep_key = '{request.session['rep_key']}'
+            """)
+            
+            get_emp = Lf_Reportes.objects.raw(f"""
+                Select * From lf_reportes inner join lf_employees on
+                rep_fk_emp_key_sup = emp_key
+                inner join lf_projects on 
+                rep_fk_pr_key = pr_key
+                Where rep_key = '{request.session['rep_key']}'  
+                order by emp_name;
+            """)
+            
+            get_photo = Lf_Photos.objects.raw(f"""
+                Select *
+                From lf_photos left join lf_reportes on 
+                ph_fk_rep_key = rep_key
+                left join lf_photos2 on 
+                ph_key = ph_fk_ph_key  
+                where ph_fk_rep_key = '{request.session['rep_key']}'
+                and rep_user_name = '{request.user.username}'   
+                and ph_user_name = '{request.user.username}'
+            """)
+
+            emails = Lf_Employees.objects.all()
+            rep_fk_emp_key_sup = request.POST.getlist('rep_fk_emp_key_sup')
+            
         
-       
-        context = {'date': request.session['date'],
-                'rep_ws_to':get_emp[0].rep_ws_to,
-                'emp_name': get_emp[0].emp_name,
-                'emp_email':emails[0],
-                'emp_phone':get_rep[0].emp_phone,
-                'get_photo':get_photo,
-                'get_rep': get_rep[0],
-                'pr_desc': get_rep[0].pr_desc
-            }
-        
-        #filename = f"{request.user.username}-{datetime.now()}.pdf"
-        print("inside the reporte_udp2 view")
-        mail = EmailMultiAlternatives('subject', 'message', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
-        mail.attach_file('fname.pdf')
-        mail.send()
+            context = {'date': request.session['date'],
+                    'rep_ws_to':get_emp[0].rep_ws_to,
+                    'emp_name': get_emp[0].emp_name,
+                    'emp_email':emails[0],
+                    'emp_phone':get_rep[0].emp_phone,
+                    'get_photo':get_photo,
+                    'get_rep': get_rep[0],
+                    'pr_desc': get_rep[0].pr_desc
+                }
+            
+            #filename = f"{request.user.username}-{datetime.now()}.pdf"
+            print("inside the reporte_udp2 view")
+            mail = EmailMultiAlternatives('subject', 'message', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
+            mail.attach_file('fname.pdf')
+            mail.send()
         
         return render(request, 'main/reporte_udp2.html', context)
                 
@@ -687,9 +653,9 @@ def delete_cert(request, pk):
     messages.success(request, 'Certification Deleted')
     return redirect('certification')
 
-def emailMessage(request):
+def emailMessage(request,pk):
     messages.success(request, 'email sent successfully')
-    return redirect('reports')
+    return redirect('reporte_udp', pk = pk)
  
 def venue_pdf(request):
     # Create Bytestream buffer

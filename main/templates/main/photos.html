@@ -31,23 +31,26 @@
       <td>{{ x.ph_obs }}</td>
       <td>{{ x.ph_desc }}</td>
       <td>
-        {% if x.ph_link2 is None %}
+       
+        {% if x.ph_link2 is not None %}
         <img
-          class="img-fluid"
-          src="https://lfj.s3.amazonaws.com/{{ x.ph_link }}"
-          style="max-height: 300px"
-        />
-        {% else %}
-        <img
-          class="img-fluid"
-          src="https://lfj.s3.amazonaws.com/{{ x.ph_link }}"
-          style="max-height: 300px"
-        />
+        class="img-fluid"
+        src="https://lfj.s3.amazonaws.com/{{ x.ph_link }}"
+        style="max-height: 300px"
+      />
         <img
           class="img-fluid"
           src="https://lfj.s3.amazonaws.com/{{ x.ph_link2 }}"
+          style="max-height: 300px; border: 1px solid orange;"
+        />
+        {% else %}
+         
+        <img
+          class="img-fluid"
+          src="https://lfj.s3.amazonaws.com/{{ x.ph_link }}"
           style="max-height: 300px"
         />
+        {% endif %}
       </td>
       <td><a href="update_photo/{{x.ph_key}}"> <i class="fa fa-edit" aria-hidden="true"></i></a></td>
      <td><a href="delete_photo/{{x.ph_key}}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>

@@ -1,7 +1,11 @@
 from django.db import models
 from datetime import date  
 from django.http import request
+from django.contrib.auth.models import User
+from django.conf import settings 
 
+
+    
 class Lf_Cargos(models.Model):
     ch_key = models.AutoField(primary_key=True)
     ch_desc = models.CharField(max_length=50, blank=True, null=True)

@@ -18,7 +18,7 @@ urlpatterns = [
     path('update_employee/<int:pk>', views.update_employee, name='update_employee'),
     path('reports', views.reports, name="reports"),
     path('reporte_udp/<int:pk>', views.reporte_udp, name="reporte_udp"),
-    path('reporte_udp/reporte_udp2/<int:rep_key>', views.reporte_udp2, name="reporte_udp2"),
+    path('reporte_udp2/<int:rep_key>', views.reporte_udp2, name="reporte_udp2"),
     path('charges', views.charges, name="charges"),
     path('add_charge', views.add_charge, name="add_charge"),
     path('update_charge/<int:pk>', views.update_charge, name="update_charge"),
@@ -34,9 +34,9 @@ urlpatterns = [
     path('update_cert/<int:pk>', views.update_cert, name="update_cert"),
     path('delete_cert/<int:pk>', views.delete_cert, name="delete_cert"),
     path('delete_report/<int:pk>', views.delete_report),
-    path('load_update_report_form/<int:pk>', views.load_update_report_form ),
-    path('load_update_report_form/update_report/<int:pk>', views.update_report, name="update_report"),
-    path('emailMessage', views.emailMessage, name="emailMessage"),
+    path('load_update_report_form/<int:pk>', views.load_update_report_form, name='load_update_report_form' ),
+    #path('load_update_report_form/update_report/<int:pk>', views.update_report, name="update_report"),
+    path('emailMessage/<pk>', views.emailMessage, name="emailMessage"),
  
     
  ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

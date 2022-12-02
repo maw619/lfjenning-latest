@@ -1,6 +1,8 @@
 from django.forms import ModelForm, widgets
 from django import forms
+from main.models import *
 from django.contrib.auth.models import User
+from django.conf import settings 
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
@@ -29,14 +31,7 @@ class CustomUserCreationForm(UserCreationForm):
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
         
-        widgets = {
-            # 'username' : forms.HiddenInput(),
-            # 'first_name' : forms.HiddenInput(),
-            # 'last_name' : forms.HiddenInput(),
-            # 'email' : forms.HiddenInput(),
-            # 'password1' : forms.HiddenInput(),
-            # 'password2' : forms.HiddenInput(),
-            
+        widgets = {           
             'username' : forms.widgets.TextInput(attrs={'class':'form-control'}),
             'first_name' : forms.widgets.TextInput(attrs={'class':'form-control'}),
             'last_name' : forms.widgets.TextInput(attrs={'class':'form-control'}),
@@ -44,4 +39,3 @@ class CustomUserCreationForm(UserCreationForm):
             'password1' : forms.widgets.TextInput(attrs={'class':'form-control'}),
             'password2' : forms.widgets.TextInput(attrs={'class':'form-control'}),
         }
-

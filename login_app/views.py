@@ -20,9 +20,6 @@ def login_user(request):
             request.session['first_name'] = request.user.first_name
             request.session['last_name'] = request.user.last_name
             
-            
-            
-           
        
             if(Lf_Reportes.objects.filter(rep_name=request.user.username).first()):
             
@@ -32,8 +29,7 @@ def login_user(request):
                 rep_fk_emp_key = emp_key
                 where rep_user_name = '{request.user.username}';
                 """)
-            
-           
+        
                 dataEmp = Lf_Employees.objects.raw(f"""
                 Select *
                 From lf_employees
@@ -65,7 +61,7 @@ def logout_user(request):
     logout(request)
     messages.success(request, 'You have logged out')
     return redirect('login')
-#['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
+
 def register_user(request):
     employees = Lf_Employees.objects.all()
     form = CustomUserCreationForm()
@@ -80,4 +76,5 @@ def register_user(request):
              messages.success(request, 'You have errors. Try again')
              return redirect('register')
     return render(request, 'authenticate/register.html', {'form':form})
+
 

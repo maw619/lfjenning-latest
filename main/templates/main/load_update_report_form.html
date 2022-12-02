@@ -7,45 +7,7 @@
 
   {% csrf_token %} {{ form.as_p }}
 
-  
-  <select id="single1" name="rep_fk_pr_key" class="form-select" size="1">
-    <option value="0" selected>Project</option>
-    {% for x in getPro %}
-    <option value="{{x.pr_key}}">{{x.pr_desc}}</option>
-    {% endfor %}
-  </select>
-  <select id="single2" name="rep_fk_emp_key" class="form-select" size="1">
-    <option value="0" selected>Reported By</option>
-    {% for x in empList %}
-    <option value="{{x.emp_key}}">{{x.emp_name}}</option>
-    {% endfor %}
-  </select>
-  <select id="single3" name="rep_fk_emp_key_sup" class="form-select" size="1">
-    <option value="0" selected>Supervisor</option>
-    {% for x in supList %}
-    <option value="{{x.emp_key}}">{{x.emp_name}}</option>
-    {% endfor %}
-  </select>
 
-  <div class="form-outline mb-3">
-    <textarea
-      class="form-control"
-      name="rep_notes"
-      id="textAreaExample"
-      rows="3"
-    ></textarea>
-    <label class="form-label" for="textAreaExample">Notes</label>
-  </div>
-
-  <div class="form-outline">
-    <textarea
-      class="form-control"
-      name="rep_desc"
-      id="textAreaExample"
-      rows="4"
-    ></textarea>
-    <label class="form-label" for="textAreaExample">Scope of Inspection</label>
-  </div>
   <div class="d-grid gap-2">
     <button type="submit" class="btn btn-primary">Submit</button>
   </div>

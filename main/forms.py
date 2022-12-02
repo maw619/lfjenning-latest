@@ -17,6 +17,33 @@ class AddProjectsForm(ModelForm):
         'pr_desc': forms.TextInput(attrs={'class':'form-control'}),
         'pr_address': forms.TextInput(attrs={'class':'form-control'}),
        }  
+ 
+ 
+class UpdateReportsForm(ModelForm):
+    class Meta:
+        model = Lf_Reportes
+        fields = ['rep_name','rep_fk_emp_key','rep_fk_emp_key_sup',
+                  'rep_notes','rep_user_name','rep_fk_pr_key','rep_desc',
+                  'rep_yyyymmdd']
+        labels = {
+            "rep_fk_pr_key": 'Project',
+            'rep_fk_emp_key': "Report By:",
+            'rep_fk_emp_key_sup': "Supervisor", 
+            'rep_notes': "Scope of Inspection", 
+            
+        }
+ 
+        widgets = {
+            'rep_name': forms.TextInput(attrs={'class':'form-control'}),
+            'rep_fk_emp_key': forms.TextInput(attrs={'class':'form-control'}),
+            'rep_fk_emp_key_sup': forms.TextInput(attrs={'class':'form-control'}),
+            'rep_notes': forms.TextInput(attrs={'class':'form-control'}),
+            'rep_user_name': forms.TextInput(attrs={'class':'form-control'}),
+            'rep_fk_pr_key': forms.HiddenInput(),
+            'rep_desc': forms.TextInput(attrs={'class':'form-control'}),
+            'rep_yyyymmdd': forms.TextInput(attrs={'class':'form-control'}),
+           
+        }
         
         
         
