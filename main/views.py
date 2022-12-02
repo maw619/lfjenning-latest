@@ -163,7 +163,7 @@ def load_update_report_form(request, pk):
         form.save()
         messages.success(request, 'report updated')
         return redirect('reports')
-    return render(request, 'main/load_update_report_form.html', {'form':form})
+    return render(request, 'main/reports', {'form':form})
 
 
 
