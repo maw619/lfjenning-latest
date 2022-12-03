@@ -33,15 +33,16 @@
     </tr>
   </thead>
   <tbody>
+    
  
     {% for x in data %}
       <tr>
       
       <td>{{ x.rep_yyyymmdd }}</td>
       <td>{{ x.pr_desc }}</td>
-      <td>{{ x.rep_fk_emp_key }}</td>
-      <td>{{ x.rep_fk_emp_key_sup }}</td>
-      <td>{{ x.pr_desc }}</td>
+      <td></td>
+      <td></td>
+      <td>{{ x.rep_desc }}</td>
       
       <td>
          <a href="" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-mdb-toggle="tooltip" title="email this report" class=""><i class="fa fa-envelope" aria-hidden="true" ></i></a> | 
@@ -116,8 +117,9 @@
 
 
       <td>
-        <a href="load_update_report_form/{{x.rep_key}}">
-          <i class="fa fa-edit" aria-hidden="true" ></i></a>
+        <a href="load_update_form/{{x.rep_key}}">
+          <i class="fa fa-edit" aria-hidden="true" ></i>
+        </a>
       </td>
       <td>
         <a href="delete_report/{{x.rep_key}}">
@@ -156,6 +158,7 @@
         window.location.href = f"{% url 'reports' %}";
       }
     </script>
+
     {% endfor %}
 
   </tbody>

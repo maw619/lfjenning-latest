@@ -1,11 +1,4 @@
 main/migrations
-migrations
-migrations/
-main/migrations
-_pycache
-main/_pycache
-login_app/_pycache_
-*_pycache_*
 app/
 git/
 env/

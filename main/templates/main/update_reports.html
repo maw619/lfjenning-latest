@@ -1,0 +1,80 @@
+{% extends 'base.html' %} {% block content %}
+<script>
+  $("#single1").select2({
+    placeholder: "{{project.pr_desc}}",
+    allowClear: true,
+    
+  });
+  $("#single2").select2({
+    placeholder: "{{emp.emp_name}}",
+    allowClear: true,
+  });
+  $("#single3").select2({
+    placeholder: "{{supname.emp_name}}",
+    allowClear: true,
+  });
+</script>
+
+<h3><center>{{tabletitle }}</center></h3>
+
+
+
+<form action="update_report/{{reports.rep_key}}" method="POST">
+
+
+
+
+  {% csrf_token %} {{ form.as_p }}
+
+  <input type="hidden" name="rep_user_name" value="{{rep_user_name}}" />
+
+
+  <select id="single1" name="rep_fk_pr_key" class="form-select" size="1" required>
+    {% for x in getPro %}
+    <option value="{{x.pr_key}}">{{x.pr_desc}}</option>
+    {% endfor %}
+  </select>
+  <select id="single2" name="rep_fk_emp_key" class="form-select" size="1" required>
+ 
+    {% for x in empList %}
+    <option value="{{x.emp_key}}">{{x.emp_name}}</option>
+    {% endfor %}
+  </select>
+  <select id="single3" name="rep_fk_emp_key_sup" class="form-select" size="1" required>
+   
+    {% for x in supList %}
+    <option value="{{x.emp_key}}">{{x.emp_name}}</option>
+    {% endfor %}
+  </select>
+
+  <div class="form-outline mb-3">
+    <textarea
+      class="form-control"
+      name="rep_notes"
+      id="textAreaExample"
+      rows="3"
+    >
+    {{reports.rep_notes}}
+  </textarea>
+    <label class="form-label" for="textAreaExample">Notes</label>
+  </div>
+
+  <div class="form-outline">
+    <textarea
+      class="form-control"
+      name="rep_desc"
+      id="textAreaExample"
+      rows="4"
+    >
+    {{reports.rep_desc}}
+  </textarea>
+    <label class="form-label" for="textAreaExample">Scope of Inspection</label>
+  </div>
+  <div class="d-grid gap-2">
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+</form>
+
+
+
+{% endblock content %}

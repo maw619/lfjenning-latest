@@ -123,7 +123,7 @@ def delete_employee(request, pk):
 
 @login_required(login_url='login')
 def reports(request):
-    check_report= Lf_Reportes.objects.filter(rep_user_name=request.user.username).first()
+ 
     try:
         data = Lf_Reportes.objects.raw(f"""
         Select *
@@ -138,14 +138,26 @@ def reports(request):
         From lf_employees
         where emp_key = {data[0].rep_fk_emp_key_sup}
         """)
-  
+        
+        dataEmp2 = Lf_Employees.objects.raw(f"""
+        Select *
+        From lf_employees
+        where emp_key = {data[0].rep_fk_emp_key_sup}
+        """)
+
+        employee = Lf_Employees.objects.get(emp_key=data[0].rep_fk_emp_key_sup)
+       #employee = Lf_Employees.objects.get(emp_key=data[0].rep_fk_emp_key)
+       #supname = Lf_Employees.objects.get(emp_key=data[0].rep_fk_emp_key_sup)
          
     except:
         messages.success(request, 'You need to add at least one record')
         return render(request, 'main/reports.html')
-      
-    emails = Lf_Employees.objects.all()
-    context = {'data': data, 'data2':dataEmp, 'emails':emails ,'tabletitle':'reports'.upper() }
+    
+    context = {'data': data,
+               'data2':dataEmp,
+               'data3':dataEmp2,
+               'employee':employee,
+               'tabletitle':'reports'.upper()}
     return render(request, 'main/reports.html', context)
  
 def delete_report(request, pk):
@@ -155,15 +167,44 @@ def delete_report(request, pk):
     return redirect('reports')
 
 @login_required(login_url='login')
-def load_update_report_form(request, pk):
+def load_update_form(request, pk):
     reports = Lf_Reportes.objects.get(rep_key=pk)
-    form = UpdateReportsForm(instance=reports)
+    employee = Lf_Employees.objects.get(emp_key=reports.rep_fk_emp_key)
+    supname = Lf_Employees.objects.get(emp_key=reports.rep_fk_emp_key_sup)
+    project = Lf_Projects.objects.get(pr_key=reports.rep_fk_pr_key)
+    context = { 'reports':reports,
+                'getPro': Lf_Projects.objects.all(),
+                'empList': Lf_Employees.objects.all(),
+                'supList': Lf_Employees.objects.all(),
+                'emp':employee,
+                'project': project,
+                'supname': supname,
+                'rep_user_name': request.user.username,
+                'tabletitle':'update reports'.upper()}
+    
+    return render(request, 'main/update_reports.html', context)
+
+@login_required(login_url='login')
+def update_report(request, pk):
+    reports = Lf_Reportes.objects.get(rep_key=pk)
     if request.method == 'POST':
-        form = AddReportsForm(request.POST, instance=reports)
-        form.save()
-        messages.success(request, 'report updated')
+       # rep_name = request.POST['rep_name']
+        rep_fk_emp_key =  request.POST['rep_fk_emp_key']
+        rep_fk_pr_key = request.POST['rep_fk_pr_key']
+        rep_fk_emp_key_sup =  request.POST['rep_fk_emp_key_sup']
+        rep_desc =  request.POST['rep_desc']
+        rep_notes = request.POST['rep_notes']
+        #reports.rep_name = rep_name
+        reports.rep_fk_emp_key = rep_fk_emp_key
+        reports.rep_fk_pr_key = rep_fk_pr_key
+        reports.rep_fk_emp_key_sup = rep_fk_emp_key_sup
+        reports.rep_desc = rep_desc
+        #reports.rep_yyyymmdd = request.POST['rep_yyyymmdd']
+        reports.rep_notes = rep_notes
+        reports.save()       
+        messages.success(request, "record updated") 
         return redirect('reports')
-    return render(request, 'main/reports', {'form':form})
+    return render(request, 'main/update_reports.html')
 
 
 
@@ -194,7 +235,8 @@ def add_reports(request):
     'empList': Lf_Employees.objects.all(),
     'supList': Lf_Employees.objects.all(),
     'rep_user_name': request.user.username,
-    'tabletitle':'add reports'.upper()
+    'tabletitle':'add reports'.upper(),
+
     }  
     return render(request, 'main/add_report.html', context)
 

@@ -34,8 +34,8 @@ urlpatterns = [
     path('update_cert/<int:pk>', views.update_cert, name="update_cert"),
     path('delete_cert/<int:pk>', views.delete_cert, name="delete_cert"),
     path('delete_report/<int:pk>', views.delete_report),
-    path('load_update_report_form/<int:pk>', views.load_update_report_form, name='load_update_report_form' ),
-    #path('load_update_report_form/update_report/<int:pk>', views.update_report, name="update_report"),
+    path('load_update_form/update_report/<int:pk>', views.update_report, name='update_report' ),
+    path('load_update_form/<int:pk>', views.load_update_form, name="load_update_form"),
     path('emailMessage/<pk>', views.emailMessage, name="emailMessage"),
  
     
