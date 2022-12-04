@@ -55,13 +55,12 @@ class Lf_Employees(models.Model):
 
 class Lf_Photos(models.Model):
     ph_key = models.AutoField(primary_key=True)
-    ph_fk_rep_key = models.IntegerField(blank=True, null=True)
     ph_link = models.FileField(upload_to='img/',null=True, blank=True)
     ph_yyyymmdd = models.CharField(max_length=45,default=date.today())
     ph_desc = models.CharField(max_length=5000, blank=True, null=True)
     ph_user_name = models.CharField(max_length=50, blank=True, null=True)
     ph_obs = models.CharField(max_length=5000, blank=True, null=True)
-    report = models.ForeignKey('Lf_Reportes', on_delete=models.SET_NULL, null=True)
+    ph_fk_rep_key = models.ForeignKey('Lf_Reportes', on_delete=models.SET_NULL, null=True)
     
     class Meta:
         managed = True

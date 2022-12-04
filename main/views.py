@@ -223,7 +223,7 @@ def add_reports(request):
                 last = x.rep_key
                 print("iterated:::::",x.rep_key)
             request.session['rep_key'] = last
-            return redirect('add_photo_single')             
+            return redirect('add_photos_by_id',pk=last)             
     context = {'form':form, 
     'getPro': Lf_Projects.objects.all(),
     'empList': Lf_Employees.objects.all(),
@@ -236,6 +236,7 @@ def add_reports(request):
 
 
 def reporte_udp(request, pk):
+        request.session['rep_key'] = pk
         user = authenticate(request, username=request.user.username,password=request.user.password)        
         login(request,user)
         request.session['first_name'] = request.user.first_name
@@ -271,7 +272,7 @@ def reporte_udp(request, pk):
         Select * From lf_reportes inner join lf_projects on 
         rep_fk_pr_key_id = pr_key inner join lf_employees on
         rep_fk_emp_key_id = emp_key
-        Where rep_key = '{request.session['rep_key']}'
+        Where rep_key = '{pk}'
     """)
     
         get_emp = Lf_Reportes.objects.raw(f"""
@@ -279,20 +280,21 @@ def reporte_udp(request, pk):
         rep_fk_emp_key_id = emp_key
         inner join lf_projects on 
         rep_fk_pr_key_id = pr_key
-        Where rep_key = '{request.session['rep_key']}'  
+        Where rep_key = '{pk}'  
         order by emp_name;
     """)
     
         get_photo = Lf_Photos.objects.raw(f"""
         Select *
         From lf_photos left join lf_reportes on 
-        ph_fk_rep_key = rep_key
+        ph_fk_rep_key_id = rep_key
         left join lf_photos2 on 
         ph_key = ph_fk_ph_key  
-        where ph_fk_rep_key = '{request.session['rep_key']}'
-        and rep_user_name = '{request.user.username}'   
-        and ph_user_name = '{request.user.username}'
+        where ph_fk_rep_key_id = '{pk}'
+       
     """)
+        # and rep_user_name = '{request.user.username}'   
+        # and ph_user_name = '{request.user.username}'
 
         rep_fk_emp_key_sup = request.POST.getlist('rep_fk_emp_key_sup')
         print("ooooooooooooooooo",get_rep[0].pr_desc)
@@ -365,10 +367,10 @@ def reporte_udp2(request, rep_key):
         get_photo = Lf_Photos.objects.raw(f"""
             Select *
             From lf_photos left join lf_reportes on 
-            ph_fk_rep_key = rep_key
+            ph_fk_rep_key_id = rep_key
             left join lf_photos2 on 
-            ph_key = ph_fk_rep_key  
-            where ph_fk_rep_key = '{request.session['rep_key']}'
+            ph_key = ph_fk_rep_key_id  
+            where ph_fk_rep_key_id = '{request.session['rep_key']}'
             and rep_user_name = '{request.user.username}'   
             and ph_user_name = '{request.user.username}'
         """)
@@ -457,10 +459,10 @@ def reporte_udp3(request,pk):
             get_photo = Lf_Photos.objects.raw(f"""
             Select *
             From lf_photos left join lf_reportes on 
-            ph_fk_rep_key = rep_key
+            ph_fk_rep_key_id = rep_key
             left join lf_photos2 on 
             ph_key = ph_fk_ph_key  
-            where ph_fk_rep_key = '{request.session['rep_key']}'
+            where ph_fk_rep_key_id = '{request.session['rep_key']}'
             and rep_user_name = '{request.user.username}'   
             and ph_user_name = '{request.user.username}'
         """)
@@ -586,11 +588,8 @@ def add_photos(request, pk):
     last = ''
     for x in data:
         last = x.rep_key
-    
-    #print("last iterated:::::",last)
     request.session['rep_key'] = last
-    form = AddPhotosForm(initial={'ph_user_name': request.user.username,'ph_fk_rep_key': last}) 
-    print(" request.session['ph_fk_rep_key'] = ", request.session['rep_key'])
+    form = AddPhotosForm(initial={'ph_user_name': request.user.username,'ph_fk_rep_key_id': last}) 
     if(request.method == "POST"):
         form = AddPhotosForm(request.POST, request.FILES)
         if form.is_valid():
@@ -604,9 +603,27 @@ def add_photos(request, pk):
             }
     return render(request, 'main/add_photo.html', context)
 
+
 @login_required(login_url='login')
-def add_photo(request):
-    form = AddPhotosForm(initial={'ph_fk_rep_key':request.session['rep_key'], 'ph_user_name':request.user.username}) 
+def add_photos_by_id(request, pk):
+    form = AddPhotosForm(initial={'ph_user_name': request.user.username, 'ph_fk_rep_key': pk}) 
+    print(" request.session['ph_fk_rep_key_id'] = ", request.session['rep_key'])
+    if(request.method == "POST"):
+        form = AddPhotosForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save(commit=False)
+            form.save()
+            return redirect('reporte_udp', pk = pk)
+        
+    context = {'form':form,
+               'ph_user_name': request.user.username,
+               'tabletitle':'add photo'.upper()
+            }
+    return render(request, 'main/add_photo.html', context)
+
+@login_required(login_url='login')
+def add_photo(request, pk):
+    form = AddPhotosForm(initial={'ph_fk_rep_key_id':request.session['rep_key'], 'ph_user_name':request.user.username}) 
     if(request.method == "POST"):
         form = AddPhotosForm(request.POST, request.FILES)
         if form.is_valid():
@@ -620,8 +637,8 @@ def add_photo(request):
     return render(request, 'main/add_photo.html', context)
 
 @login_required(login_url='login')
-def add_photo2(request, ph_fk_ph_key):
-    form = AddPhotosForm2(initial={'ph_fk_ph_key2': request.session['rep_key'],'ph_fk_ph_key':ph_fk_ph_key}) 
+def add_photo2(request, pk, ph_fk_ph_key):
+    form = AddPhotosForm2(initial={'ph_fk_rep_key2': pk,'ph_fk_ph_key':ph_fk_ph_key}) 
     if(request.method == "POST"):
         form = AddPhotosForm2(request.POST, request.FILES)
      
