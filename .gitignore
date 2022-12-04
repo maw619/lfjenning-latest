@@ -1,7 +1,5 @@
 main/migrations
-app/
 git/
-env/
 static/
 img/
 lfjennings/settings.py
