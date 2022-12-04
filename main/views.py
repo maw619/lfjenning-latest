@@ -292,12 +292,8 @@ def reporte_udp(request, pk):
                 'get_rep': get_rep[0],
                 'pr_desc': get_rep[0].pr_desc
             }
-    #filename = f"{request.user.username}-{datetime.now()}.pdf"
-
-        mail = EmailMultiAlternatives('subject', 'message', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
-        mail.attach_file('fname.pdf')
-        #mail.send()
-        return render(request, 'main/reporte_udp2.html', context)
+ 
+        return render(request, 'main/reporte_udp.html', context)
 
 
 
