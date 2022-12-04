@@ -46,7 +46,7 @@
       <td>{{ x.rep_desc }}</td>
   
       <td>
-         <a href="" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-mdb-toggle="tooltip" title="email this report" class=""><i class="fa fa-envelope" aria-hidden="true" ></i></a> | 
+          <a href="reporte_udp2/{{x.rep_key}}" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-mdb-toggle="tooltip" title="email this report" ><i class="fa fa-envelope" aria-hidden="true" ></i></a> | 
             <a href="reporte_udp/{{x.rep_key}}" data-mdb-toggle="tooltip" title="Preview PDF"><i class="fa fa-magnifying-glass" class=""></i></a>
       </td>
    
@@ -131,7 +131,7 @@
     </td>
     </tr>
 
-    {% endfor %}
+
     <script>
       //get the form from DOM (Document object model)
       var form = document.getElementById("login-form");
@@ -141,7 +141,7 @@
         //Add extra data to form before submission.
         //data.append("referer","https://example.com");
         //open the request
-        xhr.open("POST", "reporte_udp2/{{x.rep_key}}");
+        xhr.open("POST", "/reporte_udp2/{{x.rep_key}}");
         //send the form data
         xhr.send(data);
     
@@ -157,9 +157,11 @@
     </script>
     <script>
       function redirect() {
-        window.location.href = "/reporte_udp2/{{rep_key}}";
+        window.location.href = "/reporte_udp2/{{x.rep_key}}";
       }                       
     </script>
+    {% endfor %}
+
 
     
 
