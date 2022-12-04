@@ -303,7 +303,7 @@ def reporte_udp(request, pk):
 
 @pdf_decorator  
 def reporte_udp2(request, rep_key):
-        time.sleep(3)
+        
         user = authenticate(request, username=request.user.username,password=request.user.password)        
         login(request,user)
         
@@ -377,9 +377,10 @@ def reporte_udp2(request, rep_key):
             }
         
         #filename = f"{request.user.username}-{datetime.now()}.pdf"
+        time.sleep(3)
         print("inside the reporte_udp2 view")
         mail = EmailMultiAlternatives('subject', 'message', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
-        mail.attach_file('fname.pdf', 'application/pdf')
+        mail.attach_file('file.pdf')
         mail.send()
             
         return render(request, 'main/reporte_udp2.html', context)
