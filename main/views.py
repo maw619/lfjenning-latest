@@ -157,9 +157,9 @@ def reports(request):
     except:
         return render(request, 'main/reports.html')
     total = list(chain(dataEmp,dataSup))
- 
+    print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',data[0].rep_key)
     context = {'data': data,
-                
+               'rep_key':data[0].rep_key,
                'emails':Lf_Employees.objects.all(),
                'tabletitle':'reports'.upper()}
     return render(request, 'main/reports.html', context)
@@ -391,11 +391,11 @@ def reporte_udp2(request, rep_key):
             }
         
         #filename = f"{request.user.username}-{datetime.now()}.pdf"
-        #time.sleep(3)
+        time.sleep(3)
         print("inside the reporte_udp2 view")
         mail = EmailMultiAlternatives('subject', 'message', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
         mail.attach_file('file.pdf')
-        #mail.send()
+        mail.send()
             
         return render(request, 'main/reporte_udp2.html', context)
                 
