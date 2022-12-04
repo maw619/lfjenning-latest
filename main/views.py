@@ -30,7 +30,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 import csv
 from django.contrib import messages
-
+from itertools import chain
 # Import PDF Stuff
 from django.http import FileResponse
 import io
@@ -99,7 +99,11 @@ def add_employees(request):
 
 @login_required(login_url='login')
 def employees(request):
-    employee = Lf_Employees.objects.all()
+    employee = Lf_Employees.objects.raw(f"""
+        SELECT * FROM wolffdb.lf_employees inner join lf_cargos
+        on ch_key = emp_fk_ch_key_id
+""")
+    
     context = { 'employees': employee,
                 'tabletitle':'employees'.upper()
             }
@@ -140,13 +144,22 @@ def reports(request):
         From lf_employees
         where emp_key = '{data[0].rep_fk_emp_key_sup}';
         """)
-          
+        
+        dataSup = Lf_Employees.objects.raw(f"""
+        Select *
+        From lf_reportes inner join  lf_employees on
+        rep_fk_emp_key_sup_id = emp_key
+        Where rep_user_name =  '{request.user.username}';
+        """)
+        
+      
+        
     except:
-        messages.success(request, 'You need to add at least one record')
         return render(request, 'main/reports.html')
-    
+    total = list(chain(dataEmp,dataSup))
+ 
     context = {'data': data,
-               'dataEmp':dataEmp,
+                
                'emails':Lf_Employees.objects.all(),
                'tabletitle':'reports'.upper()}
     return render(request, 'main/reports.html', context)
@@ -290,7 +303,9 @@ def reporte_udp(request, pk):
                 'emp_phone':get_rep[0].emp_phone,
                 'get_photo':get_photo,
                 'get_rep': get_rep[0],
-                'pr_desc': get_rep[0].pr_desc
+                'pr_desc': get_rep[0].pr_desc,
+                'emails':Lf_Employees.objects.all(),
+                'rep_key':pk,
             }
  
         return render(request, 'main/reporte_udp.html', context)
@@ -369,15 +384,16 @@ def reporte_udp2(request, rep_key):
                 'emp_phone':get_rep[0].emp_phone,
                 'get_photo':get_photo,
                 'get_rep': get_rep[0],
-                'pr_desc': get_rep[0].pr_desc
+                'pr_desc': get_rep[0].pr_desc,
+                
             }
         
         #filename = f"{request.user.username}-{datetime.now()}.pdf"
-        time.sleep(3)
+        #time.sleep(3)
         print("inside the reporte_udp2 view")
         mail = EmailMultiAlternatives('subject', 'message', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
         mail.attach_file('file.pdf')
-        mail.send()
+        #mail.send()
             
         return render(request, 'main/reporte_udp2.html', context)
                 
@@ -558,7 +574,7 @@ def photos(request):
     return render(request, 'main/photos.html', context)
 
 @login_required(login_url='login')
-def add_photos(request):
+def add_photos(request, pk):
     data = Lf_Reportes.objects.raw(f"""
             Select *
             From lf_reportes inner join lf_projects on 

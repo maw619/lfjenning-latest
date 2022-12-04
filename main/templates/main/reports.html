@@ -36,16 +36,15 @@
     
  
     {% for x in data %}
+
  
       <tr>
       <td>{{ x.rep_yyyymmdd }}</td>
       <td>{{ x.pr_desc }}</td>
       <td>{{ x.emp_name}}</td>
-      
-      <td>{{ x.rep_fk_emp_key_sup_id}}</td>
-      
+      <td>{{ x.emp_name }}</td>
       <td>{{ x.rep_desc }}</td>
-      
+  
       <td>
          <a href="" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-mdb-toggle="tooltip" title="email this report" class=""><i class="fa fa-envelope" aria-hidden="true" ></i></a> | 
             <a href="reporte_udp/{{x.rep_key}}" data-mdb-toggle="tooltip" title="Preview PDF"><i class="fa fa-magnifying-glass" class=""></i></a>
@@ -131,7 +130,8 @@
       </a>
     </td>
     </tr>
- 
+
+    {% endfor %}
     <script>
       //get the form from DOM (Document object model)
       var form = document.getElementById("login-form");
@@ -162,7 +162,7 @@
     </script>
 
     
-  {% endfor %}
+
 
   </tbody>
   <tfoot></tfoot>

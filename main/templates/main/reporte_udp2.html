@@ -1,13 +1,25 @@
 
 
 <style>
-  @page {
-    size:    A4 portrait;
-    margin: 20mm;
+ 
+  header{
+    height: 10vh;
+  }
+  .box {
+    height:80vh;
+
+  }
+
+  footer{
+    height:10vh;
+  }
+  .container{
+    page-break-inside: avoid;
   }
 </style>
 <body>
 <div class="container">
+  <div class="box">
   <header class="mt-3">
     <div class="hstack gap-3" id="header-img-container">
       <div>
@@ -51,14 +63,15 @@
       <br />{{emp_phone}}<br />{{emp_email}}
     </p>
   </div>
-
+</div>
   <footer>
     <div class="card-footer text-muted"></div>
   </footer>
-
+<div style="page-break-after: always"></div>
   {% for x in get_photo %}
   {% if x.ph_link2 != None %}
 
+<div class="box">
 
   <header class="mt-3">
     <div class="hstack gap-3" id="header-img-container">
@@ -105,12 +118,14 @@
       </div>
     </div>
   </div>
-
+  
+</div>
   <footer>
     <div class="card-footer text-muted"></div>
   </footer>
 
   {% else %}
+  <div class="box">
   <header class="mt-3">
     <div class="hstack gap-3" id="header-img-container">
       <div>
@@ -148,10 +163,11 @@
       </div>
     </div>
   </div>
-
+</div>
   <footer>
     <div class="card-footer text-muted"></div>
   </footer>
+  
 
   {% endif %} {% endfor %} {% endblock content %}
 </div>
