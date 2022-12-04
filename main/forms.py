@@ -104,7 +104,8 @@ class AddPhotosForm(ModelForm):
             "ph_link" : "Choose File",
             "ph_obs": "Observations",
             "ph_desc": "Description",
-            'ph_user_name':''
+            'ph_fk_rep_key':'Report ID'
+            
         }
         
         widgets = {
@@ -115,8 +116,33 @@ class AddPhotosForm(ModelForm):
             'ph_fk_rep_key_id': forms.TextInput(attrs={'class':'form-control'}),
             'ph_yyyymmdd': forms.HiddenInput(),
             'ph_user_name': forms.HiddenInput(),
-         
+            
         }
+    
+class AddPhotosFormById(ModelForm):
+     class Meta:
+        model = Lf_Photos
+        fields = {'ph_key','ph_link','ph_yyyymmdd','ph_user_name','ph_fk_rep_key','ph_desc','ph_obs'}
+        labels = {
+            "ph_link" : "Choose File",
+            "ph_obs": "Observations",
+            "ph_desc": "Description",
+            'ph_fk_rep_key':'Report ID'
+            
+        }
+        
+        widgets = {
+           
+            'ph_link': ClearableFileInput(attrs={'class':'form-control','multiple': False, 'required':True}),
+            'ph_obs': forms.TextInput(attrs={'class':'form-control'}),
+            'ph_desc': forms.TextInput(attrs={'class':'form-control'}),
+            'ph_fk_rep_key_id': forms.TextInput(attrs={'class':'form-control'}),
+            'ph_yyyymmdd': forms.HiddenInput(),
+            'ph_user_name': forms.HiddenInput(),
+            'ph_fk_rep_key': forms.HiddenInput(),
+        }
+
+
     
 class AddPhotosForm2(ModelForm):
      class Meta:

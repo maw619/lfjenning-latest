@@ -5,7 +5,7 @@
 
 <div class="col-md-2">
   <a
-    href="add_photos"
+    href="add_photo"
     type="button"
     class="btn btn-primary btn-sm my-3"
     data-mdb-ripple-color="#ffffff"
@@ -18,9 +18,11 @@
 <table  class="table table-striped" style="width:100%;">
   <thead>
     <tr>
+      <th>Report ID</th>
       <th>Observations</th>
       <th>Description</th>
       <th>Photo</th>
+      
       <th></th>
       <th></th>
     </tr>
@@ -28,6 +30,7 @@
   <tbody>
     {% for x in photo %}
     <tr>
+      <td>{{x.ph_fk_rep_key_id}}</td>
       <td>{{ x.ph_obs }}</td>
       <td>{{ x.ph_desc }}</td>
       <td>
@@ -52,6 +55,7 @@
         />
         {% endif %}
       </td>
+      
       <td><a href="update_photo/{{x.ph_key}}"> <i class="fa fa-edit" aria-hidden="true"></i></a></td>
      <td><a href="delete_photo/{{x.ph_key}}"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
 

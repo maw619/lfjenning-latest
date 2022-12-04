@@ -60,7 +60,7 @@ class Lf_Photos(models.Model):
     ph_desc = models.CharField(max_length=5000, blank=True, null=True)
     ph_user_name = models.CharField(max_length=50, blank=True, null=True)
     ph_obs = models.CharField(max_length=5000, blank=True, null=True)
-    ph_fk_rep_key = models.ForeignKey('Lf_Reportes', on_delete=models.SET_NULL, null=True)
+    ph_fk_rep_key = models.ForeignKey('Lf_Reportes', on_delete=models.CASCADE, null=True)
     
     class Meta:
         managed = True
@@ -103,8 +103,8 @@ class Lf_Reportes(models.Model):
         managed = True
         db_table = 'lf_reportes'
         
-        def __str__(self) -> str:
-            return self.rep_name,' ',self.rep_fk_emp_key,' ',self.rep_fk_pr_key
+    def __str__(self) -> str:
+        return f"{self.rep_key}"
         
         
 class Lf_Projects(models.Model):

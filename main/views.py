@@ -576,26 +576,26 @@ def photos(request):
     return render(request, 'main/photos.html', context)
 
 @login_required(login_url='login')
-def add_photos(request, pk):
-    data = Lf_Reportes.objects.raw(f"""
-            Select *
-            From lf_reportes inner join lf_projects on 
-            rep_fk_pr_key_id = pr_key inner join lf_employees on
-            rep_fk_emp_key_id = emp_key
-            where rep_user_name = '{request.user.username}';
-            """)
+def add_photo(request):
+    # data = Lf_Reportes.objects.raw(f"""
+    #         Select *
+    #         From lf_reportes inner join lf_projects on 
+    #         rep_fk_pr_key_id = pr_key inner join lf_employees on
+    #         rep_fk_emp_key_id = emp_key
+    #         where rep_user_name = '{request.user.username}';
+    #         """)
             
-    last = ''
-    for x in data:
-        last = x.rep_key
-    request.session['rep_key'] = last
-    form = AddPhotosForm(initial={'ph_user_name': request.user.username,'ph_fk_rep_key_id': last}) 
+    # last = ''
+    # for x in data:
+    #     last = x.rep_key
+    # request.session['rep_key'] = last
+    form = AddPhotosForm(initial={'ph_user_name': request.user.username}) 
     if(request.method == "POST"):
         form = AddPhotosForm(request.POST, request.FILES)
         if form.is_valid():
             form.save(commit=False)
             form.save()
-            return redirect('reporte_udp', pk = request.session['rep_key'])
+            return redirect('photos')
         
     context = {'form':form,
                'ph_user_name': request.user.username,
@@ -606,10 +606,10 @@ def add_photos(request, pk):
 
 @login_required(login_url='login')
 def add_photos_by_id(request, pk):
-    form = AddPhotosForm(initial={'ph_user_name': request.user.username, 'ph_fk_rep_key': pk}) 
+    form = AddPhotosFormById(initial={'ph_user_name': request.user.username, 'ph_fk_rep_key': pk}) 
     print(" request.session['ph_fk_rep_key_id'] = ", request.session['rep_key'])
     if(request.method == "POST"):
-        form = AddPhotosForm(request.POST, request.FILES)
+        form = AddPhotosFormById(request.POST, request.FILES)
         if form.is_valid():
             form.save(commit=False)
             form.save()
@@ -621,20 +621,20 @@ def add_photos_by_id(request, pk):
             }
     return render(request, 'main/add_photo.html', context)
 
-@login_required(login_url='login')
-def add_photo(request, pk):
-    form = AddPhotosForm(initial={'ph_fk_rep_key_id':request.session['rep_key'], 'ph_user_name':request.user.username}) 
-    if(request.method == "POST"):
-        form = AddPhotosForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save(commit=False)
-            form.save()
-            return redirect('reporte_udp', pk = request.session['rep_key'])
+# @login_required(login_url='login')
+# def add_photo(request, pk):
+#     form = AddPhotosForm(initial={'ph_fk_rep_key_id':request.session['rep_key'], 'ph_user_name':request.user.username}) 
+#     if(request.method == "POST"):
+#         form = AddPhotosForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             form.save(commit=False)
+#             form.save()
+#             return redirect('reporte_udp', pk = request.session['rep_key'])
         
-    context = {'form':form,
-               'ph_user_name': request.user.username,
-               'tabletitle':'add photo'.upper() }
-    return render(request, 'main/add_photo.html', context)
+#     context = {'form':form,
+#                'ph_user_name': request.user.username,
+#                'tabletitle':'add photo'.upper() }
+#     return render(request, 'main/add_photo.html', context)
 
 @login_required(login_url='login')
 def add_photo2(request, pk, ph_fk_ph_key):
