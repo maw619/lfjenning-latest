@@ -88,9 +88,9 @@ class Lf_Photos2(models.Model):
 class Lf_Reportes(models.Model):
     rep_key = models.AutoField(primary_key=True)
     rep_name = models.CharField(max_length=80, blank=True, null=True)
-    rep_fk_emp_key = models.IntegerField(blank=True, null=True)
-    rep_fk_pr_key = models.IntegerField(blank=True, null=True)
-    rep_fk_emp_key_sup = models.IntegerField(blank=True, null=True)
+    rep_fk_emp_key = models.ForeignKey('Lf_Employees', related_name='rep_fk_emp_key', on_delete=models.CASCADE)
+    rep_fk_pr_key = models.ForeignKey('Lf_Projects', related_name='rep_fk_emp_key' , on_delete=models.CASCADE)
+    rep_fk_emp_key_sup = models.ForeignKey('Lf_Employees',related_name='rep_fk_emp_key_sup', verbose_name = 'emp_name', on_delete=models.CASCADE)
     rep_desc = models.CharField(max_length=255, blank=True, null=True)
     rep_user_name = models.CharField(max_length=50, blank=True, null=True)
     rep_send = models.IntegerField(blank=True, null=True)

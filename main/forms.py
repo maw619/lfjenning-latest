@@ -34,9 +34,9 @@ class UpdateReportsForm(ModelForm):
         }
  
         widgets = {
-            'rep_name': forms.TextInput(attrs={'class':'form-control'}),
-            'rep_fk_emp_key': forms.TextInput(attrs={'class':'form-control'}),
-            'rep_fk_emp_key_sup': forms.TextInput(attrs={'class':'form-control'}),
+            'rep_name': forms.HiddenInput(),
+            'rep_fk_emp_key': forms.Select(attrs={'class':'form-select'}),
+            'rep_fk_emp_key_sup': forms.Select(attrs={'class':'form-select'}),
             'rep_notes': forms.TextInput(attrs={'class':'form-control'}),
             'rep_user_name': forms.TextInput(attrs={'class':'form-control'}),
             'rep_fk_pr_key': forms.HiddenInput(),

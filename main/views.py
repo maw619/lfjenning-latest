@@ -37,6 +37,8 @@ import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
+import time
+from xhtml2pdf import pisa
 
 # Import Pagination Stuff
 from django.core.paginator import Paginator
@@ -128,35 +130,24 @@ def reports(request):
         data = Lf_Reportes.objects.raw(f"""
         Select *
         From lf_reportes inner join lf_projects on 
-        rep_fk_pr_key = pr_key inner join lf_employees on
-        rep_fk_emp_key = emp_key
+        rep_fk_pr_key_id = pr_key inner join lf_employees on
+        rep_fk_emp_key_id = emp_key
         where rep_user_name = '{request.user.username}';
         """)
  
         dataEmp = Lf_Employees.objects.raw(f"""
         Select *
         From lf_employees
-        where emp_key = {data[0].rep_fk_emp_key_sup}
+        where emp_key = '{data[0].rep_fk_emp_key_sup}';
         """)
-        
-        dataEmp2 = Lf_Employees.objects.raw(f"""
-        Select *
-        From lf_employees
-        where emp_key = {data[0].rep_fk_emp_key_sup}
-        """)
-
-        employee = Lf_Employees.objects.get(emp_key=data[0].rep_fk_emp_key_sup)
-       #employee = Lf_Employees.objects.get(emp_key=data[0].rep_fk_emp_key)
-       #supname = Lf_Employees.objects.get(emp_key=data[0].rep_fk_emp_key_sup)
-         
+          
     except:
         messages.success(request, 'You need to add at least one record')
         return render(request, 'main/reports.html')
     
     context = {'data': data,
-               'data2':dataEmp,
-               'data3':dataEmp2,
-               'employee':employee,
+               'dataEmp':dataEmp,
+               'emails':Lf_Employees.objects.all(),
                'tabletitle':'reports'.upper()}
     return render(request, 'main/reports.html', context)
  
@@ -187,24 +178,14 @@ def load_update_form(request, pk):
 @login_required(login_url='login')
 def update_report(request, pk):
     reports = Lf_Reportes.objects.get(rep_key=pk)
+    form = UpdateReportsForm(instance=reports)
     if request.method == 'POST':
-       # rep_name = request.POST['rep_name']
-        rep_fk_emp_key =  request.POST['rep_fk_emp_key']
-        rep_fk_pr_key = request.POST['rep_fk_pr_key']
-        rep_fk_emp_key_sup =  request.POST['rep_fk_emp_key_sup']
-        rep_desc =  request.POST['rep_desc']
-        rep_notes = request.POST['rep_notes']
-        #reports.rep_name = rep_name
-        reports.rep_fk_emp_key = rep_fk_emp_key
-        reports.rep_fk_pr_key = rep_fk_pr_key
-        reports.rep_fk_emp_key_sup = rep_fk_emp_key_sup
-        reports.rep_desc = rep_desc
-        #reports.rep_yyyymmdd = request.POST['rep_yyyymmdd']
-        reports.rep_notes = rep_notes
-        reports.save()       
-        messages.success(request, "record updated") 
+        form = UpdateReportsForm(request.POST, instance=reports)
+        form.save()
         return redirect('reports')
-    return render(request, 'main/update_reports.html')
+     
+    return render(request, 'main/update_reports.html', {'form':form})
+
 
 
 
@@ -219,8 +200,8 @@ def add_reports(request):
             data = Lf_Reportes.objects.raw(f"""
             Select *
             From lf_reportes inner join lf_projects on 
-            rep_fk_pr_key = pr_key inner join lf_employees on
-            rep_fk_emp_key = emp_key
+            rep_fk_pr_key_id = pr_key inner join lf_employees on
+            rep_fk_emp_key_id = emp_key
             where rep_user_name = '{request.user.username}';
             """)
             
@@ -249,162 +230,158 @@ def reporte_udp(request, pk):
         
         data = Lf_Reportes.objects.raw(f"""
         Select * From lf_reportes inner join lf_projects on 
-        rep_fk_pr_key = pr_key inner join lf_employees on
-        rep_fk_emp_key = emp_key
+        rep_fk_pr_key_id = pr_key inner join lf_employees on
+        rep_fk_emp_key_id = emp_key
         where rep_key = '{pk}';
         """)
         
 
+        dataEmp = Lf_Employees.objects.raw(f"""
+        Select *
+        From lf_employees
+        where emp_key = {data[0].rep_fk_emp_key_sup_id}
+        """)
         
-        try:
-            
+        for x in data:
+            print(x)
+        request.session['rep_key'] = data[0].rep_key
+        request.session['rep_fk_emp_key_id'] = data[0].rep_fk_emp_key_id
+        request.session['emp_key'] = dataEmp[0].emp_key
+        request.session['date'] = date.today().strftime(f"%B %d,%Y")
+        print("inside reporte_udp ============")
+        print(f"Rep Key is::::::::::: ",{request.session['rep_key']})
+        print("rep_fk_emp_key_id:",request.session['rep_fk_emp_key_id'])
+        print("emp_key:",request.session['emp_key'])
+        print("date: ",request.session['date'])
+        print("inside reporte_udp ============")
+        get_rep = Lf_Reportes.objects.raw(f"""
+        Select * From lf_reportes inner join lf_projects on 
+        rep_fk_pr_key_id = pr_key inner join lf_employees on
+        rep_fk_emp_key_id = emp_key
+        Where rep_key = '{request.session['rep_key']}'
+    """)
+    
+        get_emp = Lf_Reportes.objects.raw(f"""
+        Select * From lf_reportes inner join lf_employees on
+        rep_fk_emp_key_id = emp_key
+        inner join lf_projects on 
+        rep_fk_pr_key_id = pr_key
+        Where rep_key = '{request.session['rep_key']}'  
+        order by emp_name;
+    """)
+    
+        get_photo = Lf_Photos.objects.raw(f"""
+        Select *
+        From lf_photos left join lf_reportes on 
+        ph_fk_rep_key = rep_key
+        left join lf_photos2 on 
+        ph_key = ph_fk_ph_key  
+        where ph_fk_rep_key = '{request.session['rep_key']}'
+        and rep_user_name = '{request.user.username}'   
+        and ph_user_name = '{request.user.username}'
+    """)
+
+        rep_fk_emp_key_sup = request.POST.getlist('rep_fk_emp_key_sup')
+        print("ooooooooooooooooo",get_rep[0].pr_desc)
+        context = {'date': request.session['date'],
+                'rep_ws_to':get_emp[0].rep_ws_to,
+                'emp_name': get_emp[0].emp_name,
+                'emp_email':get_rep[0].emp_email,
+                'emp_phone':get_rep[0].emp_phone,
+                'get_photo':get_photo,
+                'get_rep': get_rep[0],
+                'pr_desc': get_rep[0].pr_desc
+            }
+    #filename = f"{request.user.username}-{datetime.now()}.pdf"
+
+        mail = EmailMultiAlternatives('subject', 'message', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
+        mail.attach_file('fname.pdf')
+        #mail.send()
+        return render(request, 'main/reporte_udp2.html', context)
+
+
+
+@pdf_decorator  
+def reporte_udp2(request, rep_key):
+        time.sleep(3)
+        user = authenticate(request, username=request.user.username,password=request.user.password)        
+        login(request,user)
+        
+         
+        request.session['first_name'] = request.user.first_name
+        request.session['last_name'] = request.user.last_name
+        data = Lf_Reportes.objects.raw(f"""
+        Select * From lf_reportes inner join lf_projects on 
+        rep_fk_pr_key_id = pr_key inner join lf_employees on
+        rep_fk_emp_key_id = emp_key
+        where rep_key = '{rep_key}';
+        """)
+        
+        counter = 0
+        for x in data:
+            counter = counter + 1
+        print("count:",counter)
+        if(counter > 0):
             dataEmp = Lf_Employees.objects.raw(f"""
             Select *
             From lf_employees
-            where emp_key = {data[0].rep_fk_emp_key_sup}
+            where emp_key = {data[0].rep_fk_emp_key_id}
             """)
             
             for x in data:
                 print(x)
             request.session['rep_key'] = data[0].rep_key
-            request.session['rep_fk_emp_key'] = data[0].rep_fk_emp_key
+            request.session['rep_fk_emp_key_id'] = data[0].rep_fk_emp_key_id
             request.session['emp_key'] = dataEmp[0].emp_key
             request.session['date'] = date.today().strftime(f"%B %d,%Y")
-            print("inside reporte_udp ============")
-            print(f"Rep Key is::::::::::: ",{request.session['rep_key']})
-            print("rep_fk_emp_key:",request.session['rep_fk_emp_key'])
-            print("emp_key:",request.session['emp_key'])
-            print("date: ",request.session['date'])
-            print("inside reporte_udp ============")
-            get_rep = Lf_Reportes.objects.raw(f"""
+
+        get_rep = Lf_Reportes.objects.raw(f"""
             Select * From lf_reportes inner join lf_projects on 
-            rep_fk_pr_key = pr_key inner join lf_employees on
-            rep_fk_emp_key = emp_key
+            rep_fk_pr_key_id = pr_key inner join lf_employees on
+            rep_fk_emp_key_id = emp_key
             Where rep_key = '{request.session['rep_key']}'
         """)
         
-            get_emp = Lf_Reportes.objects.raw(f"""
+        get_emp = Lf_Reportes.objects.raw(f"""
             Select * From lf_reportes inner join lf_employees on
-            rep_fk_emp_key_sup = emp_key
+            rep_fk_emp_key_id = emp_key
             inner join lf_projects on 
-            rep_fk_pr_key = pr_key
+            rep_fk_pr_key_id = pr_key
             Where rep_key = '{request.session['rep_key']}'  
             order by emp_name;
         """)
         
-            get_photo = Lf_Photos.objects.raw(f"""
+        get_photo = Lf_Photos.objects.raw(f"""
             Select *
             From lf_photos left join lf_reportes on 
             ph_fk_rep_key = rep_key
             left join lf_photos2 on 
-            ph_key = ph_fk_ph_key  
+            ph_key = ph_fk_rep_key  
             where ph_fk_rep_key = '{request.session['rep_key']}'
             and rep_user_name = '{request.user.username}'   
             and ph_user_name = '{request.user.username}'
         """)
 
-            rep_fk_emp_key_sup = request.POST.getlist('rep_fk_emp_key_sup')
-            print("ooooooooooooooooo",get_rep[0].pr_desc)
-            context = {'date': request.session['date'],
-                    'rep_ws_to':get_emp[0].rep_ws_to,
-                    'emp_name': get_emp[0].emp_name,
-                    'emp_email':get_rep[0].emp_email,
-                    'emp_phone':get_rep[0].emp_phone,
-                    'get_photo':get_photo,
-                    'get_rep': get_rep[0],
-                    'pr_desc': get_rep[0].pr_desc
-                }
+        emails = Lf_Employees.objects.all()
+        rep_fk_emp_key_sup = request.POST.getlist('rep_fk_emp_key_sup')
+        
+    
+        context = {'date': request.session['date'],
+                'rep_ws_to':get_emp[0].rep_ws_to,
+                'emp_name': get_emp[0].emp_name,
+                'emp_email':emails[0],
+                'emp_phone':get_rep[0].emp_phone,
+                'get_photo':get_photo,
+                'get_rep': get_rep[0],
+                'pr_desc': get_rep[0].pr_desc
+            }
+        
         #filename = f"{request.user.username}-{datetime.now()}.pdf"
-
-            mail = EmailMultiAlternatives('subject', 'message', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
-            mail.attach_file('fname.pdf')
-           # mail.send()
-        except:
-            messages.success(request, 'something went wrong')
-            return render(request, 'main/reports.html')
-        return render(request, 'main/reporte_udp.html', context)
-
-
-@pdf_decorator  
-def reporte_udp2(request, rep_key):
-        user = authenticate(request, username=request.user.username,password=request.user.password)        
-        login(request,user)
-        
-        if request.method == 'POST':
-            request.session['first_name'] = request.user.first_name
-            request.session['last_name'] = request.user.last_name
-            data = Lf_Reportes.objects.raw(f"""
-            Select * From lf_reportes inner join lf_projects on 
-            rep_fk_pr_key = pr_key inner join lf_employees on
-            rep_fk_emp_key = emp_key
-            where rep_key = '{rep_key}';
-            """)
+        print("inside the reporte_udp2 view")
+        mail = EmailMultiAlternatives('subject', 'message', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
+        mail.attach_file('fname.pdf', 'application/pdf')
+        mail.send()
             
-            counter = 0
-            for x in data:
-                counter = counter + 1
-            print("count:",counter)
-            if(counter > 0):
-                dataEmp = Lf_Employees.objects.raw(f"""
-                Select *
-                From lf_employees
-                where emp_key = {data[0].rep_fk_emp_key_sup}
-                """)
-                
-                for x in data:
-                    print(x)
-                request.session['rep_key'] = data[0].rep_key
-                request.session['rep_fk_emp_key'] = data[0].rep_fk_emp_key
-                request.session['emp_key'] = dataEmp[0].emp_key
-                request.session['date'] = date.today().strftime(f"%B %d,%Y")
-
-            get_rep = Lf_Reportes.objects.raw(f"""
-                Select * From lf_reportes inner join lf_projects on 
-                rep_fk_pr_key = pr_key inner join lf_employees on
-                rep_fk_emp_key = emp_key
-                Where rep_key = '{request.session['rep_key']}'
-            """)
-            
-            get_emp = Lf_Reportes.objects.raw(f"""
-                Select * From lf_reportes inner join lf_employees on
-                rep_fk_emp_key_sup = emp_key
-                inner join lf_projects on 
-                rep_fk_pr_key = pr_key
-                Where rep_key = '{request.session['rep_key']}'  
-                order by emp_name;
-            """)
-            
-            get_photo = Lf_Photos.objects.raw(f"""
-                Select *
-                From lf_photos left join lf_reportes on 
-                ph_fk_rep_key = rep_key
-                left join lf_photos2 on 
-                ph_key = ph_fk_ph_key  
-                where ph_fk_rep_key = '{request.session['rep_key']}'
-                and rep_user_name = '{request.user.username}'   
-                and ph_user_name = '{request.user.username}'
-            """)
-
-            emails = Lf_Employees.objects.all()
-            rep_fk_emp_key_sup = request.POST.getlist('rep_fk_emp_key_sup')
-            
-        
-            context = {'date': request.session['date'],
-                    'rep_ws_to':get_emp[0].rep_ws_to,
-                    'emp_name': get_emp[0].emp_name,
-                    'emp_email':emails[0],
-                    'emp_phone':get_rep[0].emp_phone,
-                    'get_photo':get_photo,
-                    'get_rep': get_rep[0],
-                    'pr_desc': get_rep[0].pr_desc
-                }
-            
-            #filename = f"{request.user.username}-{datetime.now()}.pdf"
-            print("inside the reporte_udp2 view")
-            mail = EmailMultiAlternatives('subject', 'message', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
-            mail.attach_file('fname.pdf')
-            mail.send()
-        
         return render(request, 'main/reporte_udp2.html', context)
                 
                 
@@ -588,8 +565,8 @@ def add_photos(request):
     data = Lf_Reportes.objects.raw(f"""
             Select *
             From lf_reportes inner join lf_projects on 
-            rep_fk_pr_key = pr_key inner join lf_employees on
-            rep_fk_emp_key = emp_key
+            rep_fk_pr_key_id = pr_key inner join lf_employees on
+            rep_fk_emp_key_id = emp_key
             where rep_user_name = '{request.user.username}';
             """)
             

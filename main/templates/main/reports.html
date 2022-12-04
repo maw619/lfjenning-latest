@@ -36,12 +36,14 @@
     
  
     {% for x in data %}
+ 
       <tr>
-      
       <td>{{ x.rep_yyyymmdd }}</td>
       <td>{{ x.pr_desc }}</td>
-      <td></td>
-      <td></td>
+      <td>{{ x.emp_name}}</td>
+      
+      <td>{{ x.rep_fk_emp_key_sup_id}}</td>
+      
       <td>{{ x.rep_desc }}</td>
       
       <td>
@@ -117,7 +119,7 @@
 
 
       <td>
-        <a href="load_update_form/{{x.rep_key}}">
+        <a href="update_reports/{{x.rep_key}}">
           <i class="fa fa-edit" aria-hidden="true" ></i>
         </a>
       </td>
@@ -129,7 +131,7 @@
       </a>
     </td>
     </tr>
-
+ 
     <script>
       //get the form from DOM (Document object model)
       var form = document.getElementById("login-form");
@@ -155,11 +157,12 @@
     </script>
     <script>
       function redirect() {
-        window.location.href = f"{% url 'reports' %}";
+        window.location.href = "reporte_udp2/{{x.rep_key}}";
       }
     </script>
 
-    {% endfor %}
+    
+  {% endfor %}
 
   </tbody>
   <tfoot></tfoot>
