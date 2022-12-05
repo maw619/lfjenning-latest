@@ -17,7 +17,7 @@
   </div>
   <div class="col-md-10"></div>
 </div>
-
+<a href="render_pdf_view">render_pdf_view</a>
 <div class="table-responsive">
 <table id="example" class="mdl-data-table" style="width: 100%">
   <thead>
@@ -84,7 +84,7 @@
                 style="width: 100%"
               >
                 {% for x in emails %}
-                <option value="{{x.emp_email}}">{{x.emp_name}}</option>
+                <option value="{{x.emp_email}}">{{x.emp_email}}</option>
                 {% endfor %}
               </select>
     
@@ -132,7 +132,7 @@
     </tr>
 
 
-    <script>
+        <script>
       //get the form from DOM (Document object model)
       var form = document.getElementById("login-form");
       form.onsubmit = function (event) {
@@ -157,7 +157,7 @@
     </script>
     <script>
       function redirect() {
-        window.location.href = "/reporte_udp2/{{x.rep_key}}";
+        window.location.href = "/reporte_udp2/{{rep_key}}";
       }                       
     </script>
     {% endfor %}
