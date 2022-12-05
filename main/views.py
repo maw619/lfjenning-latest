@@ -320,6 +320,7 @@ def reporte_udp2(request, rep_key):
         user = authenticate(request, username=request.user.username,password=request.user.password)        
         login(request,user)
         
+         
         request.session['first_name'] = request.user.first_name
         request.session['last_name'] = request.user.last_name
         data = Lf_Reportes.objects.raw(f"""
@@ -393,7 +394,7 @@ def reporte_udp2(request, rep_key):
         time.sleep(3)
         print("inside the reporte_udp2 view")
         mail = EmailMultiAlternatives('Safety Report Email', 'message', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
-        mail.attach_file('data.pdf')
+        mail.attach_file('file.pdf')
         mail.send()
         messages.success(request, 'email sent successfully')    
         return render(request, 'main/reporte_udp2.html', context)
