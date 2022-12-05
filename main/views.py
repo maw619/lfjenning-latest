@@ -39,6 +39,8 @@ from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
 import time
 from xhtml2pdf import pisa
+from io import BytesIO
+
 
 # Import Pagination Stuff
 from django.core.paginator import Paginator
@@ -314,6 +316,22 @@ def reporte_udp(request, pk):
 
 
 
+
+def render_to_pdf(template_src, context_dict={}):
+	template = get_template(template_src)
+	html  = template.render(context_dict)
+	result = BytesIO()
+	pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+	if not pdf.err:
+		return HttpResponse(result.getvalue(), content_type='application/pdf')
+	return None
+
+
+
+
+
+
+
 @pdf_decorator 
 def reporte_udp2(request, rep_key):
         
@@ -396,8 +414,25 @@ def reporte_udp2(request, rep_key):
         mail = EmailMultiAlternatives('Safety Report Email', 'message', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
         mail.attach_file('file.pdf')
         mail.send()
-        messages.success(request, 'email sent successfully')    
         return render(request, 'main/reporte_udp2.html', context)
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 
                 
 def reporte_udp3(request,pk):
