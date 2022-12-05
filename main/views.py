@@ -295,6 +295,7 @@ def reporte_udp(request, pk):
         where ph_fk_rep_key_id = '{pk}'
        
     """)
+        request.session['date'] = date.today().strftime(f"%B %d,%Y")
         # and rep_user_name = '{request.user.username}'   
         # and ph_user_name = '{request.user.username}'
 

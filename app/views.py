@@ -23,7 +23,7 @@ import time
 from django.http import HttpResponse
 import csv
 from django.contrib import messages
-
+import datetime 
 # Import PDF Stuff
 from django.http import FileResponse
 import io
@@ -136,7 +136,7 @@ def render_pdf_view(request,rep_key):
 				and rep_user_name = '{request.user.username}'   
 				and ph_user_name = '{request.user.username}'
 			""")
-
+			
 			emails = Lf_Employees.objects.all()
 			rep_fk_emp_key_sup = request.POST.getlist('rep_fk_emp_key_sup')
 			
@@ -152,12 +152,13 @@ def render_pdf_view(request,rep_key):
 					
 				}
 				
-			destination = "/Users/marco/PythonProjects/lf-jennings-latest/lfjenning-latest/app/"
-			#destination = "/home/ubuntu/mywebsite/lfjenning-latest/app/"
+			#destination = "/Users/marco/PythonProjects/lf-jennings-latest/lfjenning-latest/app/"
+			destination = "/home/ubuntu/mywebsite/lfjenning-latest/app/"
+			now = datetime.datetime.now()
+			date_string = now.strftime('%Y-%m-%d')
 			 
-            
 			#/Users/marco/PythonProjects/lf-jennings-latest/lfjenning-latest/app/
-			file = open(destination + 'filennname.pdf', "w+b")
+			file = open(destination + f'{date_string}.pdf', "w+b")
 			#context = {'myvar': 'this is your template context'}
 			# Create a Django response object, and specify content_type as pdf
 			response = HttpResponse(content_type='application/pdf')
@@ -177,7 +178,7 @@ def render_pdf_view(request,rep_key):
 			time.sleep(3)
 			print("inside the reporte_udp2 view")
 			mail = EmailMultiAlternatives('Safety Report Email', 'message', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
-			mail.attach_file(destination+'filennname.pdf')
+			mail.attach_file(destination+f'{date_string}.pdf')
 			mail.send()
 			if pisa_status.err:
 				return HttpResponse('We had some errors <pre>' + html + '</pre>')
