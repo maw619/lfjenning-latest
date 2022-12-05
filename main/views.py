@@ -157,7 +157,7 @@ def reports(request):
     except:
         return render(request, 'main/reports.html')
     total = list(chain(dataEmp,dataSup))
-    print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',data[0].rep_key)
+ 
     context = {'data': data,
                'rep_key':data[0].rep_key,
                'emails':Lf_Employees.objects.all(),
@@ -309,12 +309,12 @@ def reporte_udp(request, pk):
                 'emails':Lf_Employees.objects.all(),
                 'rep_key':pk,
             }
- 
+    
         return render(request, 'main/reporte_udp.html', context)
 
 
 
-@pdf_decorator  
+@pdf_decorator(pdfname='data.pdf')
 def reporte_udp2(request, rep_key):
         
         user = authenticate(request, username=request.user.username,password=request.user.password)        
@@ -393,10 +393,10 @@ def reporte_udp2(request, rep_key):
         #filename = f"{request.user.username}-{datetime.now()}.pdf"
         time.sleep(3)
         print("inside the reporte_udp2 view")
-        mail = EmailMultiAlternatives('subject', 'message', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
-        mail.attach_file('file.pdf')
+        mail = EmailMultiAlternatives('Safety Report Email', 'message', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
+        mail.attach_file('env/Lib/site-packagesfile.pdf')
         mail.send()
-            
+        messages.success(request, 'email sent successfully')    
         return render(request, 'main/reporte_udp2.html', context)
                 
                 
