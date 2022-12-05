@@ -18,8 +18,7 @@ urlpatterns = [
     path('update_employee/<int:pk>', views.update_employee, name='update_employee'),
     path('reports', views.reports, name="reports"),
     path('reporte_udp/<int:pk>', views.reporte_udp, name="reporte_udp"),
-    path('reporte_udp4', views.reporte_udp4, name="reporte_udp4"),
-    path('render_pdf_view', views.render_pdf_view, name="render_pdf_view"),
+    path('render_pdf_view/<pk>', views.render_pdf_view, name="render_pdf_view"),
     path('reporte_udp2/<int:rep_key>', views.reporte_udp2, name="reporte_udp2"),
     path('charges', views.charges, name="charges"),
     path('add_charge', views.add_charge, name="add_charge"),
@@ -39,7 +38,7 @@ urlpatterns = [
     path('delete_report/<int:pk>', views.delete_report),
     path('update_reports/<int:pk>', views.update_report, name='update_reports' ),
     path('load_update_form/<int:pk>', views.load_update_form, name="load_update_form"),
-    path('emailMessage/<pk>', views.emailMessage, name="emailMessage"),
+    path('emailMessage', views.emailMessage, name="emailMessage"),
  
     
  ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

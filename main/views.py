@@ -351,11 +351,9 @@ def link_callback(uri, rel):
 
 @pdf_decorator 
 def reporte_udp2(request, rep_key):
-        
         user = authenticate(request, username=request.user.username,password=request.user.password)        
         login(request,user)
-        
-         
+                 
         request.session['first_name'] = request.user.first_name
         request.session['last_name'] = request.user.last_name
         data = Lf_Reportes.objects.raw(f"""
@@ -429,14 +427,14 @@ def reporte_udp2(request, rep_key):
         time.sleep(3)
         print("inside the reporte_udp2 view")
         mail = EmailMultiAlternatives('Safety Report Email', 'message', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
-        mail.attach_file('./new.pdf')
+        mail.attach_file('new.pdf')
         mail.send()
         return render(request, 'main/reporte_udp2.html', context)
                 
                 
                 
-def reporte_udp4(request):
-        
+def render_pdf_view(request,pk):
+        template_path = 'main/reporte_udp2.html'
         user = authenticate(request, username=request.user.username,password=request.user.password)        
         login(request,user)
         
@@ -447,7 +445,7 @@ def reporte_udp4(request):
         Select * From lf_reportes inner join lf_projects on 
         rep_fk_pr_key_id = pr_key inner join lf_employees on
         rep_fk_emp_key_id = emp_key
-        where rep_key = '{request.session['rep_key']}';
+        where rep_key = '{pk}';
         """)
         
         counter = 0
@@ -472,7 +470,7 @@ def reporte_udp4(request):
             Select * From lf_reportes inner join lf_projects on 
             rep_fk_pr_key_id = pr_key inner join lf_employees on
             rep_fk_emp_key_id = emp_key
-            Where rep_key = '{request.session['rep_key']}'
+            Where rep_key = '{pk}'
         """)
         
         get_emp = Lf_Reportes.objects.raw(f"""
@@ -480,7 +478,7 @@ def reporte_udp4(request):
             rep_fk_emp_key_id = emp_key
             inner join lf_projects on 
             rep_fk_pr_key_id = pr_key
-            Where rep_key = '{request.session['rep_key']}'  
+            Where rep_key = '{pk}'  
             order by emp_name;
         """)
         
@@ -511,12 +509,37 @@ def reporte_udp4(request):
             }
         
         #filename = f"{request.user.username}-{datetime.now()}.pdf"
+        #destination = "/Users/marco/PythonProjects/lf-jennings-latest/lfjenning-latest/app/"
+        destination = "/home/ubuntu/mywebsite/lfjenning-latest/app/"
+        path = os.chdir(destination)
+        
+        #/Users/marco/PythonProjects/lf-jennings-latest/lfjenning-latest/app/
+        file = open(destination + 'filennname.pdf', "w+b")
+        #context = {'myvar': 'this is your template context'}
+        # Create a Django response object, and specify content_type as pdf
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+        # find the template and render it.
+        template = get_template(template_path)
+        html = template.render(context)
+
+        rep_fk_emp_key_sup = request.POST.getlist('rep_fk_emp_key_sup')
+            # if error then show some funny view
+        
+        # create a pdf
+        pisa_status = pisa.CreatePDF(
+        html, 
+        dest=file, 
+        link_callback=link_callback)
         time.sleep(3)
         print("inside the reporte_udp2 view")
         mail = EmailMultiAlternatives('Safety Report Email', 'message', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
-        mail.attach_file('./new.pdf')
+        mail.attach_file(destination+'filennname.pdf')
         mail.send()
-        return render(request, 'main/reporte_udp2.html', context)
+        if pisa_status.err:
+            return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        
+        return response
                 
                 
                 
@@ -555,109 +578,7 @@ def link_callback(uri, rel):
                     )
             return path
         
- 
-def render_pdf_view(request):
-    template_path = 'main/reporte_udp4.html'
-    user = authenticate(request, username=request.user.username,password=request.user.password)        
-    login(request,user)
-    
-        
-    request.session['first_name'] = request.user.first_name
-    request.session['last_name'] = request.user.last_name
-    data = Lf_Reportes.objects.raw(f"""
-    Select * From lf_reportes inner join lf_projects on 
-    rep_fk_pr_key_id = pr_key inner join lf_employees on
-    rep_fk_emp_key_id = emp_key
-    where rep_key = '{request.session['rep_key']}';
-    """)
-    
-    counter = 0
-    for x in data:
-        counter = counter + 1
-    print("count:",counter)
-    if(counter > 0):
-        dataEmp = Lf_Employees.objects.raw(f"""
-        Select *
-        From lf_employees
-        where emp_key = {data[0].rep_fk_emp_key_id}
-        """)
-        
-        for x in data:
-            print(x)
-        request.session['rep_key'] = data[0].rep_key
-        request.session['rep_fk_emp_key_id'] = data[0].rep_fk_emp_key_id
-        request.session['emp_key'] = dataEmp[0].emp_key
-        request.session['date'] = date.today().strftime(f"%B %d,%Y")
-
-    get_rep = Lf_Reportes.objects.raw(f"""
-        Select * From lf_reportes inner join lf_projects on 
-        rep_fk_pr_key_id = pr_key inner join lf_employees on
-        rep_fk_emp_key_id = emp_key
-        Where rep_key = '{request.session['rep_key']}'
-    """)
-    
-    get_emp = Lf_Reportes.objects.raw(f"""
-        Select * From lf_reportes inner join lf_employees on
-        rep_fk_emp_key_id = emp_key
-        inner join lf_projects on 
-        rep_fk_pr_key_id = pr_key
-        Where rep_key = '{request.session['rep_key']}'  
-        order by emp_name;
-    """)
-    
-    get_photo = Lf_Photos.objects.raw(f"""
-        Select *
-        From lf_photos left join lf_reportes on 
-        ph_fk_rep_key_id = rep_key
-        left join lf_photos2 on 
-        ph_key = ph_fk_rep_key_id  
-        where ph_fk_rep_key_id = '{request.session['rep_key']}'
-        and rep_user_name = '{request.user.username}'   
-        and ph_user_name = '{request.user.username}'
-    """)
-
-    context = {'date': request.session['date'],
-            'rep_ws_to':get_emp[0].rep_ws_to,
-            'emp_name': get_emp[0].emp_name,
-            #'emp_email':emails[0],
-            'emp_phone':get_rep[0].emp_phone,
-            'get_photo':get_photo,
-            'get_rep': get_rep[0],
-            'pr_desc': get_rep[0].pr_desc,
-            
-        }
-    # Create a Django response object, and specify content_type as pdf
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="report.pdf"'
-    # find the template and render it.
-    template = get_template(template_path)
-    html = template.render(context)
-    time.sleep(3)
-    print("inside the reporte_udp2 view")
-    mail = EmailMultiAlternatives('Safety Report Email', 'message', settings.EMAIL_HOST_USER)
-    mail.attach_file('new.pdf', 'application/pdf')
-    mail.send()
-    # create a pdf
-    pisa_status = pisa.CreatePDF(
-       html, dest=response, link_callback=link_callback)
-    # if error then show some funny view
-    if pisa_status.err:
-       return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response               
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
+              
                 
                 
                 
@@ -963,9 +884,13 @@ def delete_cert(request, pk):
     messages.success(request, 'Certification Deleted')
     return redirect('certification')
 
-def emailMessage(request,pk):
+def emailMessage(request):
+    print("inside the reporte_udp2 view")
+    mail = EmailMultiAlternatives('Safety Report Email', 'message', settings.EMAIL_HOST_USER)
+    mail.attach_file('./new.pdf')
+    mail.send()
     messages.success(request, 'email sent successfully')
-    return redirect('reporte_udp', pk = pk)
+    return redirect('reporte_udp4')
  
 def venue_pdf(request):
     # Create Bytestream buffer
