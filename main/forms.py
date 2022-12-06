@@ -152,9 +152,9 @@ class AddPhotosForm2(ModelForm):
             "ph_link2" : "Choose File",
           
         }
-        
+                
         widgets = {
-            'ph_link2': ClearableFileInput(attrs={'class':'form-control','multiple': False}),
+            'ph_link2': ClearableFileInput(attrs={'class':'form-control','multiple': False, 'required':True}),
             'ph_desc2': forms.HiddenInput(),
             'ph_fk_rep_key2':  forms.HiddenInput(),
             'ph_yyyymmdd': forms.HiddenInput(),

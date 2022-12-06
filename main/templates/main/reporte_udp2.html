@@ -1,173 +1,176 @@
 
+<html>
+  <head>
+    <head>
+      <style>
+          @page {
+              size: a4 portrait;
+              @frame header_frame {           /* Static Frame */
+                  -pdf-frame-content: header_content;
+                  left: 50pt; width: 512pt; top: 50pt; height: 40pt;
+                  
+              }
+              @frame content_frame {          /* Content Frame */
+                  left: 50pt; width: 512pt; top: 90pt; height: 632pt;
+            
+              }
+              @frame footer_frame {           /* Another static Frame */
+                  -pdf-frame-content: footer_content;
+                  left: 50pt; width: 512pt; top: 772pt; height: 20pt;
+                  {% comment %} -pdf-frame-border: 1; {% endcomment %}
+              }
+          }
 
-<style>
- 
-  header{
+header{
     height: 10vh;
   }
-  .box {
-    height:80vh;
-
-  }
-
-  footer{
-    height:10vh;
-  }
-  .container{
+.box {
+    height:700px;
     page-break-inside: avoid;
+    -pdf-frame-border: 1;
   }
+.wrapper{
+  page-break-inside: avoid;
+
+}
+
+footer{
+  height:10vh;
+  border-top-color:black;
+  border-top-width:100%;
+}
+
+#line{
+  background-color: #9c0030;
+
+  }
+
+img{
+  max-height: 55%;
+}
+
+#img0{
+  margin: 10px;
+ 
+}
+ 
+#img1{
+  margin: 10px;
+  
+}
+#img2{
+  margin: 10px;
+  height:50%;
+}   
+#resize{
+  margin:15pt;
+}
+  
+
 </style>
+
+</head>
+
 <body>
-<div class="container">
-  <div class="box">
-  <header class="mt-3">
-    <div class="hstack gap-3" id="header-img-container">
+  <div class="wrapper">
+    <header>
       <div>
-        {% load static %}
-        <a href="{% url 'home' %}">
-          <img
-            src="https://lfj.s3.amazonaws.com/img/jennings.png"
-            alt=""
-            style="max-height: 75px"
-            class="img-fluid"
-          />
-        </a>
+          <img src="https://lfj.s3.amazonaws.com/img/jennings.png" alt=""  style="max-height: 75px" class="img-fluid"  />
       </div>
-      <div><h3>L.F. Jennings</h3></div>
-    </div>
-    <div id="line"></div>
-  </header>
-  
-{% block content %}
-<!-- {% include 'header.html' %} -->
-<h3><center>{{tabletitle }}</center></h3>
-<div class="container">
+    
+    </header>
   <div class="box">
-    <p>{{date}}</p>
-    <p>To: {{rep_ws_to}}</p>
-    <p>From: {{emp_name}}</p>
-    <p>
-      This report is a follow up to the safety inspection completed on {{date}}.
-      The purpose of the inspection was to identify potential safety hazards
-      and/or OSHA violations. Attached is a list of observations and
-      recommendations based on the conditions present at the time of my visit.
-      Please review the report and verify that all potential hazards are
-      corrected. If you have any questions or require additional information
-      after reviewing this report, please don't hesitate to contact me.
-    </p>
-    <p>Sincerely,</p>
 
-    <p>
-      {{emp_name}}<br />
-      LF Jennings, Inc. <br />Safety Department
-      <br />{{emp_phone}}<br />{{emp_email}}
-    </p>
-  </div>
+
+<h3> {{tabletitle}} </h3>
+
+<p>{{date}}</p>
+<p>To: {{rep_ws_to}}</p>
+<p>From: {{emp_name}}</p>
+<p>
+  This report is a follow up to the safety inspection completed on {{date}}.
+  The purpose of the inspection was to identify potential safety hazards
+  and/or OSHA violations. Attached is a list of observations and
+  recommendations based on the conditions present at the time of my visit.
+  Please review the report and verify that all potential hazards are
+  corrected. If you have any questions or require additional information
+  after reviewing this report, please don't hesitate to contact me.
+</p>
+<p>Sincerely,</p>
+
+<p>
+  {{emp_name}}<br />
+  LF Jennings, Inc. <br />Safety Department
+  <br />{{emp_phone}}<br />{{emp_email}}
+</p>
+
 </div>
-  <footer>
-    <div class="card-footer text-muted"></div>
-  </footer>
-<div style="page-break-after: always"></div>
+<div id="footer_content">(c) - page <pdf:pagenumber>
+  of <pdf:pagecount>
+</div>
+  </div>
+  <div style="page-break-after: always;"></div>
   {% for x in get_photo %}
-  {% if x.ph_link2 != None %}
+    {% if x.ph_link2 is None %}
+    <div class="wrapper">
+      <div style="page-break-inside: avoid;"></div>
+      <header>
+        <div>
+            <img src="https://lfj.s3.amazonaws.com/img/jennings.png" alt=""  style="max-height: 75px" class="img-fluid"  />
+        </div>
+      
+      </header>
+    <div class="box" style="text-align:center;">
+        <strong><p id="shaded">Observation</p></strong>
+        <p>{{x.ph_obs}}</p>
+        <p>{{x.ph_desc}}</p>
+        <img class="img-fluid" src="https://lfj.s3.amazonaws.com/{{x.ph_link}}" id="resize" style="height: 500px"/>
+      </div>
+      <div id="footer_content">(c) - page <pdf:pagenumber>
+        of <pdf:pagecount>
+    </div>
+      </div>
+    
+      <div style="page-break-after: always;"></div>
+{% else %}
 
-<div class="box">
 
-  <header class="mt-3">
-    <div class="hstack gap-3" id="header-img-container">
+  <div class="wrapper">
+      
+    <header>
       <div>
+          <img src="https://lfj.s3.amazonaws.com/img/jennings.png" alt=""  style="max-height: 75px" class="img-fluid"  />
+      </div>
+    </header>
+
+    <div class="box" id="content_frame" style="text-align:center;">
+ 
+    <strong><p id="shaded">Observation</p></strong>
+    <p>{{x.ph_obs}}</p>
+    <p>{{x.ph_desc}}</p>
+     <img class="img-fluid" id="img1" src="https://lfj.s3.amazonaws.com/{{x.ph_link}}" style="height: 300px" id="resize"/>
+    <img class="img-fluid" id="img2" src="https://lfj.s3.amazonaws.com/{{x.ph_link2}}" style="height: 300px" id="resize"/> 
    
-        <a href="">
-          <img
-            src="https://lfj.s3.amazonaws.com/img/jennings.png"
-            alt=""
-            style="max-height: 75px"
-            class="img-fluid"
-          />
-        </a>
-      </div>
-      <div><h3>L.F. Jennings</h3></div>
-    </div>
-    <div id="line"></div>
-  </header>
-
-  <div class="box">
-    <div class="container text-center">
-      <div class="row">
-        <div class="col mt-4">
-          <strong>
-            <p id="shaded">Observation</p>
-          </strong>
-          <p>{{x.ph_obs}}</p>
-          <p>{{x.ph_desc}}</p>
-          <a href=""
-            ><img
-              class="img-fluid"
-              src="https://lfj.s3.amazonaws.com/{{x.ph_link}}"
-              id="resize"
-              style="height: 300px"
-          /></a>
-          <a href=""
-            ><img
-              class="img-fluid"
-              src="https://lfj.s3.amazonaws.com/{{x.ph_link2}}"
-              id="resize"
-              style="height: 300px"
-          /></a>
-        </div>
-      </div>
-    </div>
   </div>
-  
+  <div id="footer_content">(c) - page <pdf:pagenumber>
+    of <pdf:pagecount>
 </div>
-  <footer>
-    <div class="card-footer text-muted"></div>
-  </footer>
-
-  {% else %}
-  <div class="box">
-  <header class="mt-3">
-    <div class="hstack gap-3" id="header-img-container">
-      <div>
-        {% load static %}
-        <a href="{% url 'home' %}">
-          <img
-            src="https://lfj.s3.amazonaws.com/img/jennings.png"
-            alt=""
-            style="max-height: 75px"
-            class="img-fluid"
-          />
-        </a>
-      </div>
-      <div><h3>L.F. Jennings</h3></div>
-    </div>
-    <div id="line"></div>
-  </header>
-  <div class="box">
-    <div class="container text-center">
-      <div class="row">
-        <div class="col mt-4">
-          <strong>
-            <p id="shaded">Observation</p>
-          </strong>
-          <p>{{x.ph_obs}}</p>
-          <p>{{x.ph_desc}}</p>
-          <a href=""
-            ><img
-              class="img-fluid"
-              src="https://lfj.s3.amazonaws.com/{{x.ph_link}}"
-              id="resize"
-              style="height: 300px"
-          /></a>
-        </div>
-      </div>
-    </div>
   </div>
-</div>
-  <footer>
-    <div class="card-footer text-muted"></div>
-  </footer>
-  
 
-  {% endif %} {% endfor %} {% endblock content %}
-</div>
+  {% endif %}
+{% endfor %}
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -264,12 +264,7 @@ def reporte_udp(request, pk):
         request.session['rep_fk_emp_key_id'] = data[0].rep_fk_emp_key_id
         request.session['emp_key'] = dataEmp[0].emp_key
         request.session['date'] = date.today().strftime(f"%B %d,%Y")
-        print("inside reporte_udp ============")
-        print(f"Rep Key is::::::::::: ",{request.session['rep_key']})
-        print("rep_fk_emp_key_id:",request.session['rep_fk_emp_key_id'])
-        print("emp_key:",request.session['emp_key'])
-        print("date: ",request.session['date'])
-        print("inside reporte_udp ============")
+ 
         get_rep = Lf_Reportes.objects.raw(f"""
         Select * From lf_reportes inner join lf_projects on 
         rep_fk_pr_key_id = pr_key inner join lf_employees on

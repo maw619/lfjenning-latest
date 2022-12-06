@@ -131,7 +131,7 @@ def render_pdf_view(request,rep_key):
 				From lf_photos left join lf_reportes on 
 				ph_fk_rep_key_id = rep_key
 				left join lf_photos2 on 
-				ph_key = ph_fk_rep_key_id  
+				ph_key = ph_fk_ph_key  
 				where ph_fk_rep_key_id = '{request.session['rep_key']}'
 				and rep_user_name = '{request.user.username}'   
 				and ph_user_name = '{request.user.username}'
@@ -184,90 +184,4 @@ def render_pdf_view(request,rep_key):
 				return HttpResponse('We had some errors <pre>' + html + '</pre>')
 			messages.success(request,'email sent')
 			return redirect('reports')
-
-# # Generate a PDF File Venue List
-# def venue_pdf(request):
-# 		# Create Bytestream buffer
-# 		buf = io.BytesIO()
-# 		# Create a canvas
-# 		c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
-# 		# Create a text object
-# 		textob = c.beginText()
-# 		textob.setTextOrigin(inch, inch)
-# 		textob.setFont("Helvetica", 14)
-
-			
-# 		request.session['first_name'] = request.user.first_name
-# 		request.session['last_name'] = request.user.last_name
-# 		data = Lf_Reportes.objects.raw(f"""
-# 		Select * From lf_reportes inner join lf_projects on 
-# 		rep_fk_pr_key = pr_key inner join lf_employees on
-# 		rep_fk_emp_key = emp_key
-# 		where rep_user_name = '{request.user.username}';
-# 		""")
-
-# 		dataEmp = Lf_Employees.objects.raw(f"""
-# 		Select *
-# 		From lf_employees
-# 		where emp_key = {data[0].rep_fk_emp_key_sup}
-# 		""")
-
-# 		request.session['rep_key'] = data[0].rep_key
-# 		request.session['rep_fk_emp_key'] = data[0].rep_fk_emp_key
-# 		request.session['emp_key'] = dataEmp[0].emp_key
-# 		request.session['date'] = date.today().strftime(f"%B %d,%Y")
-# 		print(f"Rep Key is::::::::::: ",{request.session['rep_key']})
-# 		print("rep_key:",request.session['rep_key'])
-# 		print("rep_fk_emp_key:",request.session['rep_fk_emp_key'])
-# 		print("emp_key:",request.session['emp_key'])
-# 		print("date: ",request.session['date'])
-		
-# 		get_rep = Lf_Reportes.objects.raw(f"""
-# 		Select * From lf_reportes inner join lf_projects on 
-# 		rep_fk_pr_key = pr_key inner join lf_employees on
-# 		rep_fk_emp_key = emp_key
-# 		Where rep_key = '{request.session['rep_key']}'
-# 	""")
-
-# 		get_emp = Lf_Reportes.objects.raw(f"""
-# 		Select * From lf_reportes inner join lf_employees on
-# 		rep_fk_emp_key_sup = emp_key
-# 		inner join lf_projects on 
-# 		rep_fk_pr_key = pr_key
-# 		Where rep_key = '{request.session['rep_key']}'  
-# 		order by emp_name;
-# 	""")
-
-# 		get_photo = Lf_Photos.objects.raw(f"""
-# 		Select *
-# 		From lf_photos left join lf_reportes on 
-# 		ph_fk_rep_key = rep_key
-# 		left join lf_photos2 on 
-# 		ph_key = ph_fk_ph_key  
-
-# 		where ph_fk_rep_key = '{request.session['rep_key']}'
-# 		and rep_user_name = '{request.user.username}'   
-# 		and ph_user_name = '{request.user.username}'
-# 	""")
-# 		venues = get_photo
-
-# 	# Create blank list
-# 		lines = []
-
-# 		for venue in venues:
-# 			lines.append(str(venue.ph_link))
-# 			lines.append(" ")
-
-# 		# Loop
-# 		for line in lines:
-# 			textob.textLine(line)
-
-# 		# Finish Up
-# 		c.drawText(textob)
-# 		c.showPage()
-# 		c.save()
-# 		buf.seek(0)
-
-# 		# Return something
-# 		return FileResponse(buf, as_attachment=True, filename='venue.pdf')
  
