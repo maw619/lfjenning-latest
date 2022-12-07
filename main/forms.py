@@ -104,7 +104,6 @@ class AddPhotosForm(ModelForm):
             "ph_link" : "Choose File",
             "ph_obs": "Observations",
             "ph_desc": "Description",
-            'ph_fk_rep_key':'Report ID'
             
         }
         
@@ -116,7 +115,7 @@ class AddPhotosForm(ModelForm):
             'ph_fk_rep_key_id': forms.HiddenInput(),
             'ph_yyyymmdd': forms.HiddenInput(),
             'ph_user_name': forms.HiddenInput(),
-            
+            'ph_fk_rep_key': forms.HiddenInput()
         }
     
 class AddPhotosFormById(ModelForm):

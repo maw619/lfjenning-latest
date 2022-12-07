@@ -24,7 +24,7 @@
       </td>
       
       <td align ="right">
-        <a href="reporte_udp2/{{rep_key}}" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-mdb-toggle="tooltip" title="email this report" >Send to email</a> 
+        <a href="/app/render_pdf_view/{{rep_key}}" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-mdb-toggle="tooltip" title="email this report" >Send to email</a> 
       </td>
     </tr>
     <tr>
@@ -183,7 +183,7 @@ aria-hidden="true"
     //Add extra data to form before submission.
     //data.append("referer","https://example.com");
     //open the request
-    xhr.open("POST", "/reporte_udp2/{{x.rep_key}}");
+    xhr.open("POST", "/app/render_pdf_view/{{x.rep_key}}");
     //send the form data
     xhr.send(data);
 
@@ -199,7 +199,7 @@ aria-hidden="true"
 </script>
 <script>
   function redirect() {
-    window.location.href = "/reporte_udp2/{{rep_key}}";
+    window.location.href = "/app/render_pdf_view/{{x.rep_key}}";
   }
 </script>
 

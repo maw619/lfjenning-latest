@@ -48,7 +48,7 @@
       <td>{{ x.rep_desc }}</td>
   
       <td>
-          <a href="app/render_pdf_view/{{x.rep_key}}" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-mdb-toggle="tooltip" title="email this report" ><i class="fa fa-envelope" aria-hidden="true" ></i></a> | 
+          <a href="/app/render_pdf_view/{{rep_key}}" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-mdb-toggle="tooltip" title="email this report" ><i class="fa fa-envelope" aria-hidden="true" ></i></a> | 
             <a href="reporte_udp/{{x.rep_key}}" data-mdb-toggle="tooltip" title="Preview PDF"><i class="fa fa-magnifying-glass" class=""></i></a>
       </td>
    
@@ -132,7 +132,7 @@
       </a>
     </td>
     </tr>
-
+    {% endfor %}
 
         <script>
       //get the form from DOM (Document object model)
@@ -143,7 +143,7 @@
         //Add extra data to form before submission.
         //data.append("referer","https://example.com");
         //open the request
-        xhr.open("POST", "app/render_pdf_view/{{x.rep_key}}");
+        xhr.open("POST", "/app/render_pdf_view/{{rep_key}}");
         //send the form data
         xhr.send(data);
     
@@ -159,10 +159,10 @@
     </script>
     <script>
       function redirect() {
-        window.location.href = "app/render_pdf_view/{{rep_key}}";
+        window.location.href = "/app/render_pdf_view/{{rep_key}}";
       }                       
     </script>
-    {% endfor %}
+  
 
 
     
