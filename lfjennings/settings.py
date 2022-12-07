@@ -149,12 +149,12 @@ LOGOUT_REDIRECT_URL = 'logout'
 STATIC_URL = '/static/'
 MEDIA_URL = '/img/'
 
-# USE_S3 = os.getenv('USE_S3') == 'TRUE'
-# AWS_ACCESS_KEY_ID = 'AKIAURUAQBNX2ZT7WABI' 
-# AWS_SECRET_ACCESS_KEY = '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'
-# AWS_STORAGE_BUCKET_NAME = 'lfj'
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+USE_S3 = os.getenv('USE_S3') == 'TRUE'
+AWS_ACCESS_KEY_ID = 'AKIAURUAQBNX2ZT7WABI' 
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'lfj'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 
 
