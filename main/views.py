@@ -288,8 +288,18 @@ def reporte_udp(request, pk):
         left join lf_photos2 on 
         ph_key = ph_fk_ph_key  
         where ph_fk_rep_key_id = '{pk}'
-       
     """)
+        
+        page = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+        get_page = None
+        rep_pages = 0
+        
+        print(get_page)
+        for x in range(1, len(get_photo)):
+            get_page =+ page[x]
+            countrows =+ x
+        
+   
         request.session['date'] = date.today().strftime(f"%B %d,%Y")
         # and rep_user_name = '{request.user.username}'   
         # and ph_user_name = '{request.user.username}'
@@ -306,8 +316,10 @@ def reporte_udp(request, pk):
                 'pr_desc': get_rep[0].pr_desc,
                 'emails':Lf_Employees.objects.all(),
                 'rep_key':pk,
+                'page':get_page,
+                'rep_pages':rep_pages
             }
-    
+        #'rep_pages':[x for x in get_emp]
         return render(request, 'main/reporte_udp.html', context)
 
 

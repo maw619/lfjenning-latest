@@ -52,7 +52,7 @@ class AddReportsForm(ModelForm):
         model = Lf_Reportes
         fields = ['rep_name','rep_fk_emp_key','rep_fk_emp_key_sup',
                   'rep_notes','rep_user_name','rep_fk_pr_key','rep_desc',
-                  'rep_yyyymmdd']
+                  'rep_yyyymmdd', 'rep_pages']
         labels = {
             "rep_fk_pr_key": 'Project',
             'rep_fk_emp_key': "Report By:",
@@ -70,7 +70,7 @@ class AddReportsForm(ModelForm):
             'rep_fk_pr_key': forms.HiddenInput(),
             'rep_desc': forms.HiddenInput(),
             'rep_yyyymmdd': forms.HiddenInput(),
-           
+            'rep_pages':forms.HiddenInput()
         }
         
             

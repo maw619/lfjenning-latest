@@ -126,7 +126,7 @@ def render_pdf_view(request,pk):
    
 			 
 			destination = "/Users/marco/PythonProjects/lf-jennings-latest/lfjenning-latest/app/"
-			#destination = "/home/ubuntu/mywebsite/lfjenning-latest/app/"
+			#destination = "/root/lfjenning-latest/app/"
    
 			
 			# file = open(destination+f'{date_string}.pdf', 'rb')
@@ -136,8 +136,9 @@ def render_pdf_view(request,pk):
 			# reader = PdfReader(destination+f'{date_string}.pdf')
 			# pdf_page_count = len(reader.pages)
 
-			
-
+			page = []	
+			for x in range(100):
+				page.append(x)
 		 
    
 
@@ -152,7 +153,7 @@ def render_pdf_view(request,pk):
 					'pr_desc': get_rep[0].pr_desc,
 					'emails':Lf_Employees.objects.all(),
 					'rep_key':pk,
-					'page':0,
+					'page':page,
 					'totalpages':0,
 				}
    
@@ -185,7 +186,7 @@ def render_pdf_view(request,pk):
 			print("inside the reporte_udp2 from app view")
 			mail = EmailMultiAlternatives('Safety Report Email', 'message', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
 			mail.attach_file(destination+f'{date_string}.pdf')
-			mail.send()
+			#mail.send()
 			if pisa_status.err:
 				return HttpResponse('We had some errors <pre>' + html + '</pre>')
 			messages.success(request,'email sent')
