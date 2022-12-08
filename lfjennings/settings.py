@@ -150,8 +150,8 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/img/'
 
 USE_S3 = os.getenv('USE_S3') == 'TRUE'
-AWS_ACCESS_KEY_ID = 'AKIAURUAQBNX2ZT7WABI' 
-AWS_SECRET_ACCESS_KEY = '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'
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = 'lfj'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
@@ -172,8 +172,8 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'flooringsvc@gmail.com'
-EMAIL_HOST_PASSWORD = 'ayflfnxxhkptlvwz' 
+EMAIL_HOST_USER = 'mwolff0619@gmail.com'
+EMAIL_HOST_PASSWORD = 'zcwhwvjxxobnyvxn' 
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 

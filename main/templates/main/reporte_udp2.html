@@ -22,6 +22,15 @@
   right:0.5cm;
   height:0.5cm;
 }
+
+ 
+@frame line {
+  -pdf-frame-content:line;
+  top:4cm;
+  left:2.2cm;
+  right:2.2cm;
+  height:1cm;
+}  
 }
     </style>
       <style>
@@ -32,7 +41,7 @@ header{
 .box {
     height:8cm;
     page-break-inside: avoid;
-
+    font-size:15px;
   }
 .wrapper{
   page-break-inside: avoid;
@@ -90,16 +99,17 @@ img{
 <body>
 
   <div class="wrapper">
+
+    <!-- HEADER  -->
     <header>
       <div>
           <img src="https://lfj.s3.amazonaws.com/img/jennings.png"  style="max-height: 75px" class="img-fluid"  />
       </div>
-    
     </header>
-    
+    <tr><td><strong><p id="line">line</p></strong></td></tr>
+ 
+    <p class="separator">&nbsp;<p>
   <div class="box">
-
-
 <p>{{mydate}}</p>
 <p>To: {{rep_ws_to}}</p>
 <p>From: {{emp_name}}</p>
@@ -121,9 +131,9 @@ img{
 </p>
 </div>
 
-
+ <!-- FOOTER  -->
   <tr><td><strong><p id="footer">&nbsp;&nbsp;&nbsp;&nbsp;</p></strong></td></tr>
-  <tr><td><strong><p id="pg">0 of {{totalpages}}</p></strong></td></tr>
+  <tr><td><strong><p id="pg"> {{page  }} of {{totalpages}}</p></strong></td></tr>
   <td style="width:200px;">
 
   
@@ -133,18 +143,25 @@ img{
     {% if x.ph_link2 %}
  
     <div class="wrapper">
-     
       <div style="page-break-inside: avoid;"></div>
+
+      <!-- HEADER  -->
       <header>
         <div>
             <img src="https://lfj.s3.amazonaws.com/img/jennings.png" alt=""  style="max-height: 75px" class="img-fluid"  />
         </div> 
       </header>
+      <tr><td><strong><p id="line">line</p></strong></td></tr>
+      <p class="separator">&nbsp;<p>
+ 
     <div class="box" style="text-align:center;"> 
         <div class="box" style="text-align:center;">
         <tr><td><strong><p id="shaded">Observation</p></strong></td></tr>
         <tr><td><p>{{x.ph_obs}}</p></td></tr>
         <tr> <td> <p>{{x.ph_desc}}</p></td></tr> 
+        <div id="holder">
+          
+        </div>
         <img class="img-fluid" src="https://lfj.s3.amazonaws.com/{{x.ph_link}}" id="resize" style="height:400px;"/>&nbsp;&nbsp;&nbsp;&nbsp;
         <img class="img-fluid" src="https://lfj.s3.amazonaws.com/{{x.ph_link2}}" id="resize" style="height:400px;"/>
       </div>
@@ -153,20 +170,23 @@ img{
     </div>
   
     </div>
-    <tr><td><strong><p id="footer">&nbsp;&nbsp;&nbsp;&nbsp;</p></strong></td></tr>
-    <tr><td><strong><p id="pg"> 0 of {{totalpages}}</p></strong></td></tr>
+
+     <!-- FOOTER  -->
+    <tr><td><strong><p id="footer">&nbsp;&nbsp;&nbsp;&nbsp;</p></strong></td></tr>        
+    <tr><td><strong><p id="pg"> {{page   }} of {{totalpages}}</p></strong></td></tr>
       <div style="page-break-after: always;"></div>
  
 {% else %}
  
 <div class="wrapper">
-
+<!-- HEADER  -->
   <header>
     <div>
         <img src="https://lfj.s3.amazonaws.com/img/jennings.png" alt=""  style="max-height: 75px" class="img-fluid"  />
     </div> 
   </header>
- 
+  <tr><td><strong><p id="line">line</p></strong></td></tr>
+  <p class="separator">&nbsp;<p>
     <div class="box" style="text-align:center;">
     <tr><td><strong><p id="shaded">Observation</p></strong></td></tr>
     <tr><td><p>{{x.ph_obs}}</p></td></tr>
@@ -180,8 +200,10 @@ img{
 
   </div>
  
-<tr><td><strong><p id="footer">&nbsp;&nbsp;&nbsp;&nbsp;</p></strong></td></tr>
-<tr><td><strong><p id="pg">0 of {{totalpages}}</p></strong></td></tr>
+
+   <!-- FOOTER  -->
+<tr><td><strong><p id="footer">&nbsp;&nbsp;&nbsp;&nbsp;</p></strong></td></tr>  
+<tr><td><strong><p id="pg"> {{page  }} of {{totalpages}}</p></strong></td></tr>
   <div style="page-break-after: always;"></div>
    
   {% endif %}

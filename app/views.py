@@ -152,6 +152,7 @@ def render_pdf_view(request,pk):
 					'pr_desc': get_rep[0].pr_desc,
 					'emails':Lf_Employees.objects.all(),
 					'rep_key':pk,
+					'page':0,
 					'totalpages':0,
 				}
    
@@ -180,11 +181,11 @@ def render_pdf_view(request,pk):
 			html, 
 			dest=file, 
 			link_callback=link_callback)
-			#time.sleep(3)
+			time.sleep(2)
 			print("inside the reporte_udp2 from app view")
 			mail = EmailMultiAlternatives('Safety Report Email', 'message', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
 			mail.attach_file(destination+f'{date_string}.pdf')
-			#mail.send()
+			mail.send()
 			if pisa_status.err:
 				return HttpResponse('We had some errors <pre>' + html + '</pre>')
 			messages.success(request,'email sent')
