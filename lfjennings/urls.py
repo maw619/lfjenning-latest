@@ -18,6 +18,12 @@ from django.urls import path, include
 from django.conf import settings 
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
+from django.contrib import admin
+
+
+admin.site.site_header = 'L.F. Jennings Admin Panel'
+admin.site.site_title = 'L.F. Jennings'
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
