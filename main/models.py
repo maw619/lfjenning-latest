@@ -36,7 +36,7 @@ class Lf_EmpCer(models.Model):
         managed = True
         db_table = 'lf_emp_cer'
     def __str__(self) -> str:
-        return self.ec_key," ",self.ec_fk_emp_key," ",self.ec_fk_cer_key," ",self.ec_exp_yyyymmdd
+        return f"{self.ec_key ,self.ec_fk_emp_key ,self.ec_fk_cer_key ,self.ec_exp_yyyymmdd}"
 
 
 class Lf_Employees(models.Model):
@@ -66,7 +66,7 @@ class Lf_Photos(models.Model):
         managed = True
         db_table = 'lf_photos'
     def __str__(self) -> str:
-        return self.ph_desc
+        return f"{self.ph_link}"
 
 
 class Lf_Photos2(models.Model):
@@ -81,7 +81,7 @@ class Lf_Photos2(models.Model):
         managed = True
         db_table = 'lf_photos2'
     def __str__(self) -> str:
-        return self.ph_yyyymmdd
+        return f"{self.ph_link2}"
 
 
 class Lf_Reportes(models.Model):
@@ -104,7 +104,7 @@ class Lf_Reportes(models.Model):
         db_table = 'lf_reportes'
         
     def __str__(self) -> str:
-        return f"{self.rep_key}"
+        return f"{self.rep_key}, {self.rep_user_name}, {self.rep_desc},  {self.rep_yyyymmdd}"
         
         
 class Lf_Projects(models.Model):

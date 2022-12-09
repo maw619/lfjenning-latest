@@ -6,7 +6,7 @@
     <style>
        
 @page {
-  size: a4 portrait;
+  size: A4;
   margin: 2cm;
   @frame footer {
     -pdf-frame-content:footer;
@@ -14,6 +14,10 @@
     left:1.9cm;
     right:1.9cm;
     height:1cm;
+}
+@frame footer_frame {           /* Another static Frame */
+  -pdf-frame-content: footer_content;
+  left: 400pt; top: 1170pt; height: 20pt;
 }
 @frame pg {
   -pdf-frame-content:pg;
@@ -31,6 +35,11 @@
   right:2.2cm;
   height:1cm;
 }  
+@frame footer_frame {           /* Static frame */
+  -pdf-frame-content: footer_content;
+  left: 50pt; width: 512pt; top: 772pt; height: 20pt;
+}
+ 
 }
     </style>
       <style>
@@ -87,7 +96,7 @@ img{
   zoom: 45%;
 }
 #shaded{
-  background: #606060;
+  background: #909090;
   width:100%;
  }
 
@@ -97,9 +106,9 @@ img{
 </head>
 
 <body>
-
+ 
   <div class="wrapper">
-
+ 
     <!-- HEADER  -->
     <header>
       <div>
@@ -133,12 +142,15 @@ img{
 
  <!-- FOOTER  -->
   <tr><td><strong><p id="footer">&nbsp;&nbsp;&nbsp;&nbsp;</p></strong></td></tr>
-  <tr><td><strong><p id="pg"> {{page  }} of {{totalpages}}</p></strong></td></tr>
+  <tr><td><strong><p id="pg"><pdf:pagenumber>-- of  {{totalpages}}</div></p></strong></td></tr>
+ 
   <td style="width:200px;">
 
   
 </td>
-  <div style="page-break-after: always;"></div>
+<div> 
+  <pdf:nextpage /> 
+</div> 
   {% for x in get_photo %}
     {% if x.ph_link2 %}
  
@@ -170,11 +182,14 @@ img{
     </div>
   
     </div>
-
+ 
      <!-- FOOTER  -->
     <tr><td><strong><p id="footer">&nbsp;&nbsp;&nbsp;&nbsp;</p></strong></td></tr>        
-    <tr><td><strong><p id="pg"> {{page   }} of {{totalpages}}</p></strong></td></tr>
-      <div style="page-break-after: always;"></div>
+    <tr><td><strong><p id="pg"><pdf:pagenumber>-- of -- {{totalpages}}</div></p></strong></td></tr>
+
+      <div> 
+        <pdf:nextpage /> 
+     </div> 
  
 {% else %}
  
@@ -200,12 +215,13 @@ img{
 
   </div>
  
-
    <!-- FOOTER  -->
 <tr><td><strong><p id="footer">&nbsp;&nbsp;&nbsp;&nbsp;</p></strong></td></tr>  
-<tr><td><strong><p id="pg"> {{page  }} of {{totalpages}}</p></strong></td></tr>
-  <div style="page-break-after: always;"></div>
-   
+<tr><td><strong><p id="pg">Page <pdf:pagenumber> of {{totalpages}} </div></p></strong></td></tr>
+
+  <div> 
+    <pdf:nextpage /> 
+ </div> 
   {% endif %}
 {% endfor %}
 

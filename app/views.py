@@ -120,7 +120,7 @@ def render_pdf_view(request,pk):
 			where ph_fk_rep_key_id = '{pk}'
 		
 		""")
-   
+			
 			now = datetime.datetime.now()
 			date_string = now.strftime('%Y-%m-%d')
    
@@ -136,12 +136,10 @@ def render_pdf_view(request,pk):
 			# reader = PdfReader(destination+f'{date_string}.pdf')
 			# pdf_page_count = len(reader.pages)
 
-			page = []	
-			for x in range(100):
-				page.append(x)
-		 
-   
-
+	 		
+    
+    
+			pages = len(get_photo) + 1
 			rep_fk_emp_key_sup = request.POST.getlist('rep_fk_emp_key_sup') 
 			context = {'mydate': date.today().strftime(f"%B %d,%Y"),
 					'rep_ws_to':get_emp[0].rep_ws_to,
@@ -153,18 +151,9 @@ def render_pdf_view(request,pk):
 					'pr_desc': get_rep[0].pr_desc,
 					'emails':Lf_Employees.objects.all(),
 					'rep_key':pk,
-					'page':page,
-					'totalpages':0,
+					'totalpages':pages,
 				}
-   
-			
-
-		
-				
-	
-			
-			 
-			#/Users/marco/PythonProjects/lf-jennings-latest/lfjenning-latest/app/
+			print(pages)
 			file = open(destination + f'{date_string}.pdf', "w+b")
 			#context = {'myvar': 'this is your template context'}
 			# Create a Django response object, and specify content_type as pdf
@@ -191,4 +180,6 @@ def render_pdf_view(request,pk):
 				return HttpResponse('We had some errors <pre>' + html + '</pre>')
 			messages.success(request,'email sent')
 			return redirect('reports')
+ 
+ 
  

@@ -4,3 +4,4 @@ static/
 img/
 lfjennings/settings.py
 settings.py
+.env

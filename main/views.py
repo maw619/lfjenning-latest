@@ -154,7 +154,7 @@ def reports(request):
         Where rep_user_name =  '{request.user.username}';
         """)
         
-      
+        rows = zip(data,dataSup)
         
     except:
         return render(request, 'main/reports.html')
@@ -163,6 +163,7 @@ def reports(request):
     context = {'data': data,
                'rep_key':data[0].rep_key,
                'emails':Lf_Employees.objects.all(),
+               'rows': rows,
                'tabletitle':'reports'.upper()}
     return render(request, 'main/reports.html', context)
  
@@ -290,34 +291,33 @@ def reporte_udp(request, pk):
         where ph_fk_rep_key_id = '{pk}'
     """)
         
-        page = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
-        get_page = None
-        rep_pages = 0
+        dataSup = Lf_Employees.objects.raw(f"""
+        Select *
+        From lf_reportes inner join  lf_employees on
+        rep_fk_emp_key_sup_id = emp_key
+        Where rep_key =  '{pk}';
+        """)
         
-        print(get_page)
-        for x in range(1, len(get_photo)):
-            get_page =+ page[x]
-            countrows =+ x
-        
+
    
         request.session['date'] = date.today().strftime(f"%B %d,%Y")
         # and rep_user_name = '{request.user.username}'   
         # and ph_user_name = '{request.user.username}'
-
-        rep_fk_emp_key_sup = request.POST.getlist('rep_fk_emp_key_sup')
+        
         print("ooooooooooooooooo",get_rep[0].pr_desc)
         context = {'date': request.session['date'],
                 'rep_ws_to':get_emp[0].rep_ws_to,
                 'emp_name': get_emp[0].emp_name,
                 'emp_email':get_rep[0].emp_email,
                 'emp_phone':get_rep[0].emp_phone,
+                'dataSup':dataSup[0].emp_name,
                 'get_photo':get_photo,
                 'get_rep': get_rep[0],
+                'get_emp': get_emp[0],
                 'pr_desc': get_rep[0].pr_desc,
                 'emails':Lf_Employees.objects.all(),
                 'rep_key':pk,
-                'page':get_page,
-                'rep_pages':rep_pages
+ 
             }
         #'rep_pages':[x for x in get_emp]
         return render(request, 'main/reporte_udp.html', context)
