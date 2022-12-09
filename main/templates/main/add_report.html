@@ -1,5 +1,5 @@
 {% extends 'base.html' %} {% block content %}
-<h3><center>{{tabletitle }}</center></h3>
+<h3><center>{{tabletitle}}</center></h3>
 <form action="" method="POST">
   {% csrf_token %} {{ form.as_p }}
  

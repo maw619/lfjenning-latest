@@ -154,6 +154,14 @@ def reports(request):
         Where rep_user_name =  '{request.user.username}';
         """)
         
+        next_row = ''
+        for x in data:
+            next_row = x.rep_key + 1
+            
+        
+            print("iterated:::::",x.rep_key)
+        #request.session['rep_key'] = last
+        
         rows = zip(data,dataSup)
         
     except:
@@ -164,6 +172,7 @@ def reports(request):
                'rep_key':data[0].rep_key,
                'emails':Lf_Employees.objects.all(),
                'rows': rows,
+               'next_row':next_row,
                'tabletitle':'reports'.upper()}
     return render(request, 'main/reports.html', context)
  
@@ -206,27 +215,16 @@ def update_report(request, pk):
 
 
 @login_required(login_url='login')
-def add_reports(request):
+def add_reports(request,pk):
     form = AddReportsForm()
- 
+    
     if request.method == 'POST':
         form = AddReportsForm(request.POST)
         if form.is_valid(): 
             form.save()
-            data = Lf_Reportes.objects.raw(f"""
-            Select *
-            From lf_reportes inner join lf_projects on 
-            rep_fk_pr_key_id = pr_key inner join lf_employees on
-            rep_fk_emp_key_id = emp_key
-            where rep_user_name = '{request.user.username}';
-            """)
-            
-            last = ''
-            for x in data:
-                last = x.rep_key
-                print("iterated:::::",x.rep_key)
-            request.session['rep_key'] = last
-            return redirect('add_photos_by_id',pk=last)             
+           
+             
+            return redirect('add_photos_by_id',pk=next_row)             
     context = {'form':form, 
     'getPro': Lf_Projects.objects.all(),
     'empList': Lf_Employees.objects.all(),
@@ -433,12 +431,7 @@ def reporte_udp2(request, rep_key):
                 
             }
         
-        #filename = f"{request.user.username}-{datetime.now()}.pdf"
-        time.sleep(3)
-        print("inside the reporte_udp2 view")
-        mail = EmailMultiAlternatives('Safety Report Email', 'message', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
-        mail.attach_file('./new.pdf')
-        mail.send()
+ 
         return render(request, 'main/reporte_udp2.html', context)
                 
                 
