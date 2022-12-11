@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'storages',
+ 
 ]
 
 MIDDLEWARE = [
@@ -68,7 +68,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'lfjennings.wsgi.application'
-load_dotenv()
+ 
 
 
 # Database
@@ -76,32 +76,32 @@ load_dotenv()
 #aws user admin and pass Charlie23##
  
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.mysql",
-#         'NAME': "doadmin",
-#         'USER': "doadmin",
-#         'PASSWORD': "AVNS_SvQ1v6xZ3l-OPxuK-0n",
-#         'HOST': "db-mysql-nyc1-09498-do-user-13054411-0.b.db.ondigitalocean.com",
-#         'PORT': "25060",
-#     	'OPTIONS': {
-#             'sql_mode': 'traditional',
-#         }
-#     }
-# }
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        'NAME': os.getenv('NAME'),
-        'USER': os.getenv('USER'),
-        'PASSWORD': os.getenv('PASSWORD'),
-        'HOST': os.getenv('HOST'),
-        'PORT': os.getenv('PORT'),
+        'NAME': "wolffdb",
+        'USER': "doadmin",
+        'PASSWORD': "AVNS_SvQ1v6xZ3l-OPxuK-0n",
+        'HOST': "db-mysql-nyc1-09498-do-user-13054411-0.b.db.ondigitalocean.com",
+        'PORT': "25060",
     	'OPTIONS': {
             'sql_mode': 'traditional',
         }
     }
 }
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         'NAME': os.getenv('NAME'),
+#         'USER': os.getenv('USER'),
+#         'PASSWORD': os.getenv('PASSWORD'),
+#         'HOST': os.getenv('HOST'),
+#         'PORT': os.getenv('PORT'),
+#     	'OPTIONS': {
+#             'sql_mode': 'traditional',
+#         }
+#     }
+# }
 
 
 
@@ -146,16 +146,17 @@ LOGOUT_REDIRECT_URL = 'logout'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = '/static/'
-MEDIA_URL = '/img/'
 
-USE_S3 = os.getenv('USE_S3') == 'TRUE'
-AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = 'lfj'
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# USE_S3 = os.getenv('USE_S3') == 'TRUE'
+# AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+# AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+# AWS_STORAGE_BUCKET_NAME = 'lfj'
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
-
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 
 CSRF_TRUSTED_ORIGINS = ['https://marcowolff.me/*','https://keybyme.net','http://keybyme.net']
@@ -169,20 +170,20 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 #smtp configuration
  
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'outlook.office365.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'safety@lfjennings.com'
-EMAIL_HOST_PASSWORD = 'qdtxygbppdjrjtlb' 
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST = 'outlook.office365.com'
 # EMAIL_PORT = 587
-# EMAIL_HOST_USER = 'mwolff0619@gmail.com'
-# EMAIL_HOST_PASSWORD = 'zcwhwvjxxobnyvxn' 
+# EMAIL_HOST_USER = 'safety@lfjennings.com'
+# EMAIL_HOST_PASSWORD = 'qdtxygbppdjrjtlb' 
 # EMAIL_USE_TLS = True
 # EMAIL_USE_SSL = False
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'mwolff0619@gmail.com'
+EMAIL_HOST_PASSWORD = 'zcwhwvjxxobnyvxn' 
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 
 
 CORS_REPLACE_HTTPS_REFERER      = False

@@ -125,8 +125,8 @@ def render_pdf_view(request,pk):
 			date_string = now.strftime('%Y-%m-%d')
    
 			 
-			#destination = "/Users/marco/PythonProjects/lf-jennings-latest/lfjenning-latest/app/"
-			destination = "/root/lfjenning-latest/app/"
+			destination = "/Users/marco/PythonProjects/lf-jennings-latest/lfjenning-latest/app/"
+			#destination = "/root/lfjenning-latest/app/"
    
 			
 			# file = open(destination+f'{date_string}.pdf', 'rb')
