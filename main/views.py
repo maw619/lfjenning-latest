@@ -211,7 +211,7 @@ def add_reports(request):
     
     if request.method == 'POST':
         form = AddReportsForm(request.POST)
-        if form.is_valid(): 
+        if form.is_valid():  
             form.save()
             data = Lf_Reportes.objects.raw(f"""
             Select *
@@ -224,7 +224,7 @@ def add_reports(request):
             last = ''
             for x in data:
                 last = x.rep_key
-                print("iterated:::::",x.rep_key)
+                print("iterated:::::", x.rep_key)
             request.session['rep_key'] = last
             
             return redirect('add_photos_by_id',pk=last)             
@@ -233,8 +233,7 @@ def add_reports(request):
     'empList': Lf_Employees.objects.all(),
     'supList': Lf_Employees.objects.all(),
     'rep_user_name': request.user.username,
-    'tabletitle':'add reports'.upper(),
-
+    'tabletitle':'add reports'.upper(), 
     }  
     return render(request, 'main/add_report.html', context)
 
@@ -304,6 +303,10 @@ def reporte_udp(request, pk):
         request.session['date'] = date.today().strftime(f"%B %d,%Y")
         # and rep_user_name = '{request.user.username}'   
         # and ph_user_name = '{request.user.username}'
+
+        observation = "sdf"
+        for x in range(0, 100):
+            observation = f"Observation{x}"
         
         print("ooooooooooooooooo",get_rep[0].pr_desc)
         context = {'date': request.session['date'],
@@ -318,6 +321,7 @@ def reporte_udp(request, pk):
                 'pr_desc': get_rep[0].pr_desc,
                 'emails':Lf_Employees.objects.all(),
                 'rep_key':pk,
+                'observation':'reporte_udp',
  
             }
         #'rep_pages':[x for x in get_emp]
@@ -360,7 +364,7 @@ def link_callback(uri, rel):
 
 @pdf_decorator 
 def reporte_udp2(request, rep_key):
-        
+        print("inside reporte_udp2")
         user = authenticate(request, username=request.user.username,password=request.user.password)        
         login(request,user)
         
@@ -421,6 +425,10 @@ def reporte_udp2(request, rep_key):
 
         emails = Lf_Employees.objects.all()
         rep_fk_emp_key_sup = request.POST.getlist('rep_fk_emp_key_sup')
+
+        observation = ""
+        for x in range(0, 100):
+            observation = f"Observation{x}"
         
     
         context = {'date': request.session['date'],
@@ -429,9 +437,10 @@ def reporte_udp2(request, rep_key):
                 'emp_email':emails[0],
                 'emp_phone':get_rep[0].emp_phone,
                 'get_photo':get_photo,
+                'get_photo2':get_photo,
                 'get_rep': get_rep[0],
                 'pr_desc': get_rep[0].pr_desc,
-                
+                'observation':'obsercation',
             }
         
  
@@ -511,7 +520,7 @@ def reporte_udp4(request):
                 'get_photo':get_photo,
                 'get_rep': get_rep[0],
                 'pr_desc': get_rep[0].pr_desc,
-                
+                'observation':'reporte_udp4'
             }
         
         #filename = f"{request.user.username}-{datetime.now()}.pdf"
@@ -558,6 +567,7 @@ def link_callback(uri, rel):
         
  
 def render_pdf_view(request):
+    print("inside render_pdf_view")
     template_path = 'main/reporte_udp4.html'
     user = authenticate(request, username=request.user.username,password=request.user.password)        
     login(request,user)
@@ -583,12 +593,13 @@ def render_pdf_view(request):
         where emp_key = {data[0].rep_fk_emp_key_id}
         """)
         
-        for x in data:
-            print(x)
+        num = 0
         request.session['rep_key'] = data[0].rep_key
         request.session['rep_fk_emp_key_id'] = data[0].rep_fk_emp_key_id
         request.session['emp_key'] = dataEmp[0].emp_key
         request.session['date'] = date.today().strftime(f"%B %d,%Y")
+
+ 
 
     get_rep = Lf_Reportes.objects.raw(f"""
         Select * From lf_reportes inner join lf_projects on 
@@ -625,6 +636,7 @@ def render_pdf_view(request):
             'get_photo':get_photo,
             'get_rep': get_rep[0],
             'pr_desc': get_rep[0].pr_desc,
+            'observation':num + 1,
             
         }
     # Create a Django response object, and specify content_type as pdf
@@ -637,7 +649,7 @@ def render_pdf_view(request):
     print("inside the reporte_udp2 view")
     mail = EmailMultiAlternatives('Safety Report Email', 'message', settings.EMAIL_HOST_USER)
     mail.attach_file('new.pdf', 'application/pdf')
-    mail.send()
+    #mail.send()
     # create a pdf
     pisa_status = pisa.CreatePDF(
        html, dest=response, link_callback=link_callback)
@@ -728,6 +740,10 @@ def reporte_udp3(request,pk):
             and rep_user_name = '{request.user.username}'   
             and ph_user_name = '{request.user.username}'
         """)
+            
+            observation = ""
+            for x in range(0, 100):
+                observation = f"Observation{x}"
 
             rep_fk_emp_key_sup = request.POST.getlist('rep_fk_emp_key_sup')
             print("ooooooooooooooooo",get_rep[0].pr_desc)
@@ -738,7 +754,8 @@ def reporte_udp3(request,pk):
                     'emp_phone':get_rep[0].emp_phone,
                     'get_photo':get_photo,
                     'get_rep': get_rep[0],
-                    'pr_desc': get_rep[0].pr_desc
+                    'pr_desc': get_rep[0].pr_desc,
+                    'observation':observation,
                 }
             
             buf = io.BytesIO()
@@ -854,8 +871,9 @@ def add_photo(request):
     form = AddPhotosForm(initial={'ph_user_name': request.user.username}) 
     if(request.method == "POST"):
         form = AddPhotosForm(request.POST, request.FILES)
-        if form.is_valid():
+        if form.is_valid(): 
             form.save(commit=False)
+
             form.save()
             return redirect('photos')
         
@@ -968,7 +986,7 @@ def emailMessage(request):
     print("inside the reporte_udp2 view")
     mail = EmailMultiAlternatives('Safety Report Email', 'message', settings.EMAIL_HOST_USER)
     mail.attach_file('./new.pdf')
-    mail.send()
+    #mail.send()
     messages.success(request, 'email sent successfully')
     return redirect('reporte_udp4')
  

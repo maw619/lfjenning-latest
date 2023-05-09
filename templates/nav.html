@@ -61,17 +61,17 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url 'projects' %}">Projects</a>
             </li>
-            <li class="nav-item">
+            {% comment %} <li class="nav-item">
               <a class="nav-link" href="{% url 'photos' %}">Photos</a>
-            </li>
+            </li> {% endcomment %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'reports' %}">Reports</a>
             </li>
             {% comment %} {% else %} {% endcomment %}
        
-            <li class="nav-item">
+            {% comment %} <li class="nav-item">
               <a class="nav-link" href="{% url 'employees' %}">Employees</a>
-            </li>
+            </li> {% endcomment %}
   
        
           

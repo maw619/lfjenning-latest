@@ -1,6 +1,7 @@
 {% extends 'base.html' %} {% block content %}
 <h3><center>{{tabletitle}}</center></h3>
-<form action="" method="POST">
+<div style="max-width:1000px; margin:auto;">
+  <form action="" method="POST">
   {% csrf_token %} {{ form.as_p }}
  
   <input type="hidden" name="rep_user_name" value="{{rep_user_name}}" />
@@ -46,5 +47,6 @@
     <button type="submit" class="btn btn-primary">Submit</button>
   </div>
 </form>
+</div>
 
 {% endblock content %}

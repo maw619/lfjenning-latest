@@ -39,7 +39,8 @@
   -pdf-frame-content: footer_content;
   left: 50pt; width: 512pt; top: 772pt; height: 20pt;
 }
- 
+
+  
 }
     </style>
       <style>
@@ -64,11 +65,11 @@ header{
 
 #line{
   background-color: #9c0030;
-
+  height: 2px;
   }
 .line{
   background-color: #9c0030;
-  
+  height: 2px;
   }
 img{
   max-height: 55%;
@@ -112,15 +113,16 @@ img{
     <!-- HEADER  -->
     <header>
       <div>
-          <img src="jennings.png"  style="max-height: 75px" class="img-fluid"  />
+        
+          <img src="jennings.png" height="75" class="img-fluid"  />
       </div>
     </header>
-    <tr><td><strong><p id="line">line</p></strong></td></tr>
- 
+    <tr><td><strong><p id="line"></p></strong></td></tr>
+ <img src="https://mybucketholly.s3.amazonaws.com/redline.png" >
     <p class="separator">&nbsp;<p>
   <div class="box">
 <p>{{mydate}}</p>
-<p>To: {{rep_ws_to}}</p>
+{% comment %} <p>To: {{rep_ws_to}}</p> {% endcomment %}
 <p>From: {{emp_name}}</p>
 <p>
   This report is a follow up to the safety inspection completed on {{mydate}}.
@@ -152,8 +154,7 @@ img{
   <pdf:nextpage /> 
 </div> 
   {% for x in get_photo %}
-    {% if x.ph_link2 %}
- 
+    {% if x.ph_link2 %} 
     <div class="wrapper">
       <div style="page-break-inside: avoid;"></div>
 
@@ -163,12 +164,12 @@ img{
             <img src="jennings.png" alt=""  style="max-height: 75px" class="img-fluid"  />
         </div> 
       </header>
-      <tr><td><strong><p id="line">line</p></strong></td></tr>
+       <img src="https://mybucketholly.s3.amazonaws.com/redline.png" >
       <p class="separator">&nbsp;<p>
  
     <div class="box" style="text-align:center;"> 
         <div class="box" style="text-align:center;">
-        <tr><td><strong><p id="shaded">Observation</p></strong></td></tr>
+        <tr><td><strong><p id="shaded">{{observation}}</p></strong></td></tr>
         <tr><td><p>{{x.ph_obs}}</p></td></tr>
         <tr> <td> <p>{{x.ph_desc}}</p></td></tr> 
         <div id="holder">
@@ -192,7 +193,7 @@ img{
      </div> 
  
 {% else %}
- 
+
 <div class="wrapper">
 <!-- HEADER  -->
   <header>
@@ -200,11 +201,11 @@ img{
         <img src="jennings.png" alt=""  style="max-height: 75px" class="img-fluid"  />
     </div> 
   </header>
-  <tr><td><strong><p id="line">line</p></strong></td></tr>
+   <img src="https://mybucketholly.s3.amazonaws.com/redline.png" >
   <p class="separator">&nbsp;<p>
     <div class="box" style="text-align:center;">
-    <tr><td><strong><p id="shaded">Observation</p></strong></td></tr>
-    <tr><td><p>{{x.ph_obs}}</p></td></tr>
+    <tr><td><strong><p id="shaded">{{ observation }}</p></strong></td></tr>
+    <tr><td><p>{{x.ph_obs}}</p></td></tr> 
     <tr> <td> <p>{{x.ph_desc}}</p></td></tr>
  
     
@@ -222,10 +223,22 @@ img{
   <div> 
     <pdf:nextpage /> 
  </div> 
-  {% endif %}
+
+   {% endif %}
+ 
 {% endfor %}
+
+<table>
+  {% for t in get_photo  %}
+  <tr><th><strong><p id="shaded">{{ observation }}</p></strong></th></tr>
+  <tr><th><center>{{t.ph_obs}}</center></th></tr> 
+  {% endfor %}
+</table>
+ 
+   <!-- FOOTER  -->
+<tr><td><strong><p id="footer">&nbsp;&nbsp;&nbsp;&nbsp;</p></strong></td></tr>  
+<tr><td><strong><p id="pg">Page <pdf:pagenumber> of {{totalpages}} </div></p></strong></td></tr>
 
 </body>
 </html>
-
-
+ 

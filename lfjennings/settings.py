@@ -11,8 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-import os
-from dotenv import load_dotenv
+import os 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,7 +21,8 @@ SECRET_KEY = 'django-insecure-lxa(o7e6+i6_gbpt3g+l2^^p0lc1!$jw%+zpuxt8e-2^y=xx(4
 # SECURITY WARNING: don't run with debug turned on in production
 DEBUG = True
 
-ALLOWED_HOSTS = ['*','marcowolff.me']
+ALLOWED_HOSTS = ['*','marcowolff.me','keybyme.com','*']
+CSRF_TRUSTED_ORIGINS = ['https://marcowolff.me/*','https://sobran.net','https://keybyme.com']
 
 INSTALLED_APPS = [
     'login_app',
@@ -92,11 +92,11 @@ DATABASES = {
 # DATABASES = {
 #     "default": {
 #         "ENGINE": "django.db.backends.mysql",
-#         'NAME': os.getenv('NAME'),
-#         'USER': os.getenv('USER'),
-#         'PASSWORD': os.getenv('PASSWORD'),
-#         'HOST': os.getenv('HOST'),
-#         'PORT': os.getenv('PORT'),
+#         'NAME': "wolffdb",
+#         'USER': "root",
+#         'PASSWORD': "2552",
+#         'HOST': "localhost",
+#         'PORT': 3306,
 #     	'OPTIONS': {
 #             'sql_mode': 'traditional',
 #         }
@@ -159,7 +159,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 
-CSRF_TRUSTED_ORIGINS = ['https://marcowolff.me/*','https://keybyme.net','http://keybyme.net']
+CSRF_TRUSTED_ORIGINS = ['https://marcowolff.me/*','https://keybyme.com' ]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -180,8 +180,8 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'mwolff0619@gmail.com'
-EMAIL_HOST_PASSWORD = 'zcwhwvjxxobnyvxn' 
+EMAIL_HOST_USER = 'marcowolffa@gmail.com'
+EMAIL_HOST_PASSWORD = 'httkuvnflfwvxzib' 
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
@@ -196,3 +196,4 @@ SECURE_HSTS_SECONDS             = None
 SECURE_HSTS_INCLUDE_SUBDOMAINS  = False
 SECURE_FRAME_DENY               = False
 
+ 

@@ -125,7 +125,7 @@ def render_pdf_view(request,pk):
 			date_string = now.strftime('%Y-%m-%d')
    
 			 
-			destination = "/Users/marco/PythonProjects/lf-jennings-latest/lfjenning-latest/app/"
+			destination = "/Users/marco/pythonProjects/lf_jennings/lfjenning-latest/app"
 			#destination = "/root/lfjenning-latest/app/"
    
 			
@@ -135,13 +135,13 @@ def render_pdf_view(request,pk):
 
 			# reader = PdfReader(destination+f'{date_string}.pdf')
 			# pdf_page_count = len(reader.pages)
+		 
+			current_number = 1
 
-	 		
-    
-    
 			pages = len(get_photo) + 1
 			rep_fk_emp_key_sup = request.POST.getlist('rep_fk_emp_key_sup') 
-			context = {'mydate': date.today().strftime(f"%B %d,%Y"),
+			context = {
+                    'mydate': date.today().strftime(f"%B %d,%Y"),
 					'rep_ws_to':get_emp[0].rep_ws_to,
 					'emp_name': get_emp[0].emp_name,
 					'emp_email':get_rep[0].emp_email,
@@ -152,7 +152,11 @@ def render_pdf_view(request,pk):
 					'emails':Lf_Employees.objects.all(),
 					'rep_key':pk,
 					'totalpages':pages,
+					'observation':f'observation{current_number}',
+              
 				}
+			current_number += 1
+
 			print(pages)
 			file = open(destination + f'{date_string}.pdf', "w+b")
 			#context = {'myvar': 'this is your template context'}
@@ -171,11 +175,11 @@ def render_pdf_view(request,pk):
 			html, 
 			dest=file, 
 			link_callback=link_callback)
-			time.sleep(2)
+			time.sleep(1)
 			print("inside the reporte_udp2 from app view")
 			mail = EmailMultiAlternatives('Safety Report Email', 'message', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
 			mail.attach_file(destination+f'{date_string}.pdf')
-			#mail.send()
+			mail.send()
 			if pisa_status.err:
 				return HttpResponse('We had some errors <pre>' + html + '</pre>')
 			messages.success(request,'email sent')

@@ -1,5 +1,6 @@
 {% extends 'base.html' %} {% block content %}
 <h3><center>{{tabletitle }}</center></h3>
+<div style="max-width:800px; margin:auto;">
 <form action="" method="POST">
   {% csrf_token %} {{ form.as_p }}
   
@@ -7,5 +8,5 @@
     <button type="submit" class="btn btn-primary">Submit</button>
   </div>
 </form>
-
+</div>
 {% endblock content %}
