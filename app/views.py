@@ -422,28 +422,17 @@ def render_pdf_view_standalone(request,pk):
 	
 	if request.method == 'POST':
 		if group_selected:
-			print("GROUPS FIELD1", group_selected)
 			for group in email_groups:
 				if group.name in group_selected:
-					print("Group:", group.name)
 					members = group.members.all()
-					for member in members:
-						print("Email:", member.emp_email)
-						
-					# Send email to the group members
-					subject = 'Safety Report Email'
-					message = ''  # Add your message content here
-					from_email = settings.EMAIL_HOST_USER
-
-					# Build recipient list rep_fk_emp_key_sup
 					recipient_list = [member.emp_email for member in members]
 
-					mail = EmailMultiAlternatives(subject, message, from_email, recipient_list)
+					mail = EmailMultiAlternatives('Safety Report Email', '', settings.EMAIL_HOST_USER, recipient_list)
 					mail.attach_alternative(html_content, "text/html")
 					mail.attach_file(f"{get_rep[0].pr_desc}-{date_string}.pdf")
 					mail.send()
 		else:
-			mail = EmailMultiAlternatives('Safety Report Email', '', settings.EMAIL_HOST_USER, rep_fk_emp_key_sup)
+			mail = EmailMultiAlternatives('Safety Report Email', '', settings.EMAIL_HOST_USER, show_single_name)
 			mail.attach_alternative(html_content, "text/html")
 			mail.attach_file(f"{get_rep[0].pr_desc}-{date_string}.pdf")
 			mail.send()

@@ -26,7 +26,7 @@
     </button> -->
   </div>
 
-  <input class="btn btn-secondary" type="submit" value="Submit">
+  <input class="btn btn-secondary" type="submit" value="Add">
 </form>
 
  
@@ -51,6 +51,7 @@
 
 <br>
 <br>
+<!-- Display show_names table -->
 <table id="showNamesTable">
   {% for x in show_names %}
   <tr>
@@ -58,6 +59,8 @@
   </tr>
   {% endfor %}
 </table>
+
+<!-- Display show_single_name table -->
 <table id="showSingleNameTable">
   {% for x in show_single_name %}
   <tr>
@@ -65,43 +68,38 @@
   </tr>
   {% endfor %}
 </table>
-<br>
-<br>
-<br>
-<br>
-<br>
 
 
+<div style="display: flex; align-items: center;">
 
-
-
+<!-- Submit the form based on the available data -->
 {% if show_group_names %}
-<form action="" method="post" id="myForm2">
+<form method="post" id="myForm2">
   {% csrf_token %}
-  <input type="hidden" name="groups_field" value="{{ show_group_names }}">
+  <input type="hidden" name="groups_field" value="{{ show_names }}">
   <button type="submit" class="btn btn-secondary">
     Send <i class="fa-solid fa-paper-plane"></i>
   </button>
- 
 </form>
 {% else %}
-<form action="" method="post">
+<form method="post">
   {% csrf_token %}
   <input type="hidden" name="rep_fk_emp_key_sup" value="{{ rep_fk_emp_key_sup }}">
   <button type="submit" class="btn btn-secondary">
     Send <i class="fa-solid fa-paper-plane"></i>
   </button>
- 
+</form>
 {% endif %}
 
- 
-</form>
 
-<button class="btn btn-secondary" onclick="redirectToPDF('{{ rep_key }}')">
+ 
+ 
+
+<button class="btn btn-secondary" onclick="redirectToPDF('{{ rep_key }}')" style="margin-left: 10px;">
   Clear <i class="fa-solid fa-circle-xmark"></i>
 </button>
 
-
+</div>
 
 
 <script>
@@ -111,14 +109,34 @@
   }
 </script>
 <script>
-  function clearForm() {
-    document.getElementById("myForm1").reset();
-    document.getElementById("myForm2").reset();
-    document.getElementById("rep_fk_emp_key_sup").reset(); // Clear show_names table
-    document.getElementById("show_group_names").reset(); // Clear show_single_name table
+  document.getElementById("submitBtn").addEventListener("click", function (event) {
+    event.preventDefault(); // Prevent the default form submission
 
+    var form = document.getElementById("myForm1");
+    var formData = new FormData(form); // Get the form data
+
+    // Check if a group is selected or not
+    var groupSelected = formData.get("groups_field");
+    var queryString = "";
+
+    if (groupSelected) {
+      // If a group is selected, submit with groups_field value
+      queryString = "groups_field=" + encodeURIComponent(groupSelected);
+    } else {
+      // If no group is selected, submit with rep_fk_emp_key_sup value
+      var memberSelected = formData.getAll("rep_fk_emp_key_sup");
+      queryString = "rep_fk_emp_key_sup=" + encodeURIComponent(memberSelected.join(","));
+    }
+
+    // Submit the form by redirecting to the current URL with the query string
+    window.location.href = window.location.href.split("?")[0] + "?" + queryString;
+  });
+
+  function clearForm() {
+ 
   }
 </script>
+
 
 
 
