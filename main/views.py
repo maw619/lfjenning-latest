@@ -16,8 +16,7 @@ from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.loader import get_template
 from xhtml2pdf import pisa
-from django.contrib.staticfiles import finders
-
+from django.contrib.staticfiles import finders 
 from .forms import FileFieldForm
 from django.views.generic.edit import FormView
 from django.shortcuts import render, redirect
@@ -211,7 +210,7 @@ def add_reports(request):
     
     if request.method == 'POST':
         form = AddReportsForm(request.POST)
-        if form.is_valid():  
+        if form.is_valid():   
             form.save()
             data = Lf_Reportes.objects.raw(f"""
             Select *
@@ -303,11 +302,16 @@ def reporte_udp(request, pk):
         request.session['date'] = date.today().strftime(f"%B %d,%Y")
         # and rep_user_name = '{request.user.username}'   
         # and ph_user_name = '{request.user.username}'
+ 
 
-        observation = "sdf"
-        for x in range(0, 100):
-            observation = f"Observation{x}"
-        
+        groups = EmailGroup.objects.all()
+        # for group in groups:
+        #     print("Group:", group.name)
+        #     members = group.members.all()  # Access the members field to retrieve related employees
+        #     for member in members:
+        #         print("Email:", member.emp_email)
+
+
         print("ooooooooooooooooo",get_rep[0].pr_desc)
         context = {'date': request.session['date'],
                 'rep_ws_to':get_emp[0].rep_ws_to,
@@ -322,10 +326,38 @@ def reporte_udp(request, pk):
                 'emails':Lf_Employees.objects.all(),
                 'rep_key':pk,
                 'observation':'reporte_udp',
- 
+                'groups':groups,
             }
         #'rep_pages':[x for x in get_emp]
         return render(request, 'main/reporte_udp.html', context)
+
+
+
+
+
+
+
+@login_required(login_url='login')
+def add_photos_by_id(request, pk):
+    form = AddPhotosFormById(initial={'ph_user_name': request.user.username, 'ph_fk_rep_key': pk}) 
+    print(" request.session['ph_fk_rep_key_id'] = ", request.session['rep_key'])
+    if(request.method == "POST"):
+        form = AddPhotosFormById(request.POST, request.FILES)
+        if form.is_valid():
+            form.save(commit=False)
+            form.save()
+            return redirect('reporte_udp', pk = pk)
+        
+    context = {'form':form,
+               'ph_user_name': request.user.username,
+               'tabletitle':'add photo'.upper()
+            }
+    return render(request, 'main/add_photo.html', context)
+
+
+
+
+
 
 
 
@@ -636,7 +668,7 @@ def render_pdf_view(request):
             'get_photo':get_photo,
             'get_rep': get_rep[0],
             'pr_desc': get_rep[0].pr_desc,
-            'observation':num + 1,
+            'observation':'observation',
             
         }
     # Create a Django response object, and specify content_type as pdf
@@ -645,11 +677,11 @@ def render_pdf_view(request):
     # find the template and render it.
     template = get_template(template_path)
     html = template.render(context)
-    time.sleep(3)
+    time.sleep(2)
     print("inside the reporte_udp2 view")
     mail = EmailMultiAlternatives('Safety Report Email', 'message', settings.EMAIL_HOST_USER)
     mail.attach_file('new.pdf', 'application/pdf')
-    #mail.send()
+    mail.send()
     # create a pdf
     pisa_status = pisa.CreatePDF(
        html, dest=response, link_callback=link_callback)
@@ -674,135 +706,135 @@ def render_pdf_view(request):
                 
                 
                 
-def reporte_udp3(request,pk):
-        user = authenticate(request, username=request.user.username,password=request.user.password)        
-        login(request,user)
-        request.session['first_name'] = request.user.first_name
-        request.session['last_name'] = request.user.last_name
+# def reporte_udp3(request,pk):
+#         user = authenticate(request, username=request.user.username,password=request.user.password)        
+#         login(request,user)
+#         request.session['first_name'] = request.user.first_name
+#         request.session['last_name'] = request.user.last_name
         
-        data = Lf_Reportes.objects.raw(f"""
-        Select * From lf_reportes inner join lf_projects on 
-        rep_fk_pr_key = pr_key inner join lf_employees on
-        rep_fk_emp_key = emp_key
-        where rep_key = '{pk}';
-        """)
+#         data = Lf_Reportes.objects.raw(f"""
+#         Select * From lf_reportes inner join lf_projects on 
+#         rep_fk_pr_key = pr_key inner join lf_employees on
+#         rep_fk_emp_key = emp_key
+#         where rep_key = '{pk}';
+#         """)
         
-        counter = 0
-        for x in data:
-            counter = counter + 1
-        print("count:",counter)
+#         counter = 0
+#         for x in data:
+#             counter = counter + 1
+#         print("count:",counter)
         
-        try:
+#         try:
             
-            dataEmp = Lf_Employees.objects.raw(f"""
-            Select *
-            From lf_employees
-            where emp_key = {data[0].rep_fk_emp_key_sup}
-            """)
+#             dataEmp = Lf_Employees.objects.raw(f"""
+#             Select *
+#             From lf_employees
+#             where emp_key = {data[0].rep_fk_emp_key_sup}
+#             """)
             
-            for x in data:
-                print(x)
-            request.session['rep_key'] = data[0].rep_key
-            request.session['rep_fk_emp_key'] = data[0].rep_fk_emp_key
-            request.session['emp_key'] = dataEmp[0].emp_key
-            request.session['date'] = date.today().strftime(f"%B %d,%Y")
-            print("inside reporte_udp ============")
-            print(f"Rep Key is::::::::::: ",{request.session['rep_key']})
-            print("rep_fk_emp_key:",request.session['rep_fk_emp_key'])
-            print("emp_key:",request.session['emp_key'])
-            print("date: ",request.session['date'])
-            print("inside reporte_udp ============")
+#             for x in data:
+#                 print(x)
+#             request.session['rep_key'] = data[0].rep_key
+#             request.session['rep_fk_emp_key'] = data[0].rep_fk_emp_key
+#             request.session['emp_key'] = dataEmp[0].emp_key
+#             request.session['date'] = date.today().strftime(f"%B %d,%Y")
+#             print("inside reporte_udp ============")
+#             print(f"Rep Key is::::::::::: ",{request.session['rep_key']})
+#             print("rep_fk_emp_key:",request.session['rep_fk_emp_key'])
+#             print("emp_key:",request.session['emp_key'])
+#             print("date: ",request.session['date'])
+#             print("inside reporte_udp ============")
             
             
-            get_rep = Lf_Reportes.objects.raw(f"""
-            Select * From lf_reportes inner join lf_projects on 
-            rep_fk_pr_key = pr_key inner join lf_employees on
-            rep_fk_emp_key = emp_key
-            Where rep_key = '{request.session['rep_key']}'
-        """)
+#             get_rep = Lf_Reportes.objects.raw(f"""
+#             Select * From lf_reportes inner join lf_projects on 
+#             rep_fk_pr_key = pr_key inner join lf_employees on
+#             rep_fk_emp_key = emp_key
+#             Where rep_key = '{request.session['rep_key']}'
+#         """)
         
-            get_emp = Lf_Reportes.objects.raw(f"""
-            Select * From lf_reportes inner join lf_employees on
-            rep_fk_emp_key_sup = emp_key
-            inner join lf_projects on 
-            rep_fk_pr_key = pr_key
-            Where rep_key = '{request.session['rep_key']}'  
-            order by emp_name;
-        """)
+#             get_emp = Lf_Reportes.objects.raw(f"""
+#             Select * From lf_reportes inner join lf_employees on
+#             rep_fk_emp_key_sup = emp_key
+#             inner join lf_projects on 
+#             rep_fk_pr_key = pr_key
+#             Where rep_key = '{request.session['rep_key']}'  
+#             order by emp_name;
+#         """)
         
-            get_photo = Lf_Photos.objects.raw(f"""
-            Select *
-            From lf_photos left join lf_reportes on 
-            ph_fk_rep_key_id = rep_key
-            left join lf_photos2 on 
-            ph_key = ph_fk_ph_key  
-            where ph_fk_rep_key_id = '{request.session['rep_key']}'
-            and rep_user_name = '{request.user.username}'   
-            and ph_user_name = '{request.user.username}'
-        """)
+#             get_photo = Lf_Photos.objects.raw(f"""
+#             Select *
+#             From lf_photos left join lf_reportes on 
+#             ph_fk_rep_key_id = rep_key
+#             left join lf_photos2 on 
+#             ph_key = ph_fk_ph_key  
+#             where ph_fk_rep_key_id = '{request.session['rep_key']}'
+#             and rep_user_name = '{request.user.username}'   
+#             and ph_user_name = '{request.user.username}'
+#         """)
             
-            observation = ""
-            for x in range(0, 100):
-                observation = f"Observation{x}"
+#             observation = ""
+#             for x in range(0, 100):
+#                 observation = f"Observation{x}"
 
-            rep_fk_emp_key_sup = request.POST.getlist('rep_fk_emp_key_sup')
-            print("ooooooooooooooooo",get_rep[0].pr_desc)
-            context = {'date': request.session['date'],
-                    'rep_ws_to':get_emp[0].rep_ws_to,
-                    'emp_name': get_emp[0].emp_name,
-                    'emp_email':get_rep[0].emp_email,
-                    'emp_phone':get_rep[0].emp_phone,
-                    'get_photo':get_photo,
-                    'get_rep': get_rep[0],
-                    'pr_desc': get_rep[0].pr_desc,
-                    'observation':observation,
-                }
+#             rep_fk_emp_key_sup = request.POST.getlist('rep_fk_emp_key_sup')
+#             print("ooooooooooooooooo",get_rep[0].pr_desc)
+#             context = {'date': request.session['date'],
+#                     'rep_ws_to':get_emp[0].rep_ws_to,
+#                     'emp_name': get_emp[0].emp_name,
+#                     'emp_email':get_rep[0].emp_email,
+#                     'emp_phone':get_rep[0].emp_phone,
+#                     'get_photo':get_photo,
+#                     'get_rep': get_rep[0],
+#                     'pr_desc': get_rep[0].pr_desc,
+#                     'observation':observation,
+#                 }
             
-            buf = io.BytesIO()
-            # Create a canvas
-            c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
-            # Create a text object
-            textob = c.beginText()
-            textob.setTextOrigin(inch, inch)
-            textob.setFont("Helvetica", 14)
+#             buf = io.BytesIO()
+#             # Create a canvas
+#             c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
+#             # Create a text object
+#             textob = c.beginText()
+#             textob.setTextOrigin(inch, inch)
+#             textob.setFont("Helvetica", 14)
 
-            # Add some lines of text
-            #lines = [
-            #	"This is line 1",
-            #	"This is line 2",
-            #	"This is line 3",
-            #]
+#             # Add some lines of text
+#             #lines = [
+#             #	"This is line 1",
+#             #	"This is line 2",
+#             #	"This is line 3",
+#             #]
 
-            # Designate The Model
-            venues = Venue.objects.all()
+#             # Designate The Model
+#             venues = Venue.objects.all()
 
-            # Create blank list
-            lines = []
+#             # Create blank list
+#             lines = []
 
-            for x in get_rep:
-                lines.append(x.rep_key)
+#             for x in get_rep:
+#                 lines.append(x.rep_key)
                          
-                lines.append(" ")
+#                 lines.append(" ")
 
-            # Loop
-            for line in lines:
-                textob.textLine(line)
+#             # Loop
+#             for line in lines:
+#                 textob.textLine(line)
 
-            # Finish Up
-            c.drawText(textob)
-            c.showPage()
-            c.save()
-            buf.seek(0)
+#             # Finish Up
+#             c.drawText(textob)
+#             c.showPage()
+#             c.save()
+#             buf.seek(0)
     
      
-        except:
-            messages.success(request, 'something went wrong')
-            return render(request, 'main/reports.html')
+#         except:
+#             messages.success(request, 'something went wrong')
+#             return render(request, 'main/reports.html')
 
         
        
-        # Return something
-        return FileResponse(buf, as_attachment=True, filename='venue.pdf')
+#         # Return something
+#         return FileResponse(buf, as_attachment=True, filename='venue.pdf')
 
 
 ################### charges #############################################
@@ -874,7 +906,7 @@ def add_photo(request):
         if form.is_valid(): 
             form.save(commit=False)
 
-            form.save()
+            form.save()  
             return redirect('photos')
         
     context = {'form':form,
@@ -883,23 +915,6 @@ def add_photo(request):
             }
     return render(request, 'main/add_photo.html', context)
 
-
-@login_required(login_url='login')
-def add_photos_by_id(request, pk):
-    form = AddPhotosFormById(initial={'ph_user_name': request.user.username, 'ph_fk_rep_key': pk}) 
-    print(" request.session['ph_fk_rep_key_id'] = ", request.session['rep_key'])
-    if(request.method == "POST"):
-        form = AddPhotosFormById(request.POST, request.FILES)
-        if form.is_valid():
-            form.save(commit=False)
-            form.save()
-            return redirect('reporte_udp', pk = pk)
-        
-    context = {'form':form,
-               'ph_user_name': request.user.username,
-               'tabletitle':'add photo'.upper()
-            }
-    return render(request, 'main/add_photo.html', context)
 
 # @login_required(login_url='login')
 # def add_photo(request, pk):
@@ -918,10 +933,10 @@ def add_photos_by_id(request, pk):
 
 @login_required(login_url='login')
 def add_photo2(request, pk, ph_fk_ph_key):
-    form = AddPhotosForm2(initial={'ph_fk_rep_key2': pk,'ph_fk_ph_key':ph_fk_ph_key}) 
+    form = AddPhotosForm2(initial={'ph_fk_rep_key2': pk,'ph_fk_ph_key':ph_fk_ph_key, 'ph_desc2':None}) 
     if(request.method == "POST"):
         form = AddPhotosForm2(request.POST, request.FILES)
-     
+        form.instance.ph_desc2 = None
         if form.is_valid():
             form.save(commit=False)
             form.save()
@@ -933,11 +948,34 @@ def add_photo2(request, pk, ph_fk_ph_key):
     return render(request, 'main/add_photo2.html', context)
 
 
+
+
+
+
+
+
 def delete_photo(request, pk):
     pic = Lf_Photos.objects.get(ph_key=pk)
     pic.delete()
     messages.success(request, "Image deleted")
-    return redirect('photos')
+    print(f"inside delete_photo {request.session['rep_key']}")
+    return redirect('reporte_udp', pk = request.session['rep_key'])
+
+def delete_photo2(request, pk):
+    pic = Lf_Photos2.objects.get(ph_key2=pk)
+    pic.delete()
+    messages.success(request, "Image deleted")
+    print(f"inside delete_photo2 {request.session['rep_key']}")
+    return redirect('reporte_udp', pk = request.session['rep_key'])
+
+
+
+
+
+
+
+
+
 
 def update_photo(request, pk):
     photo = Lf_Photos.objects.get(ph_key=pk)
@@ -945,8 +983,17 @@ def update_photo(request, pk):
     if request.method == 'POST':
         form = AddPhotosForm(request.POST, request.FILES, instance=photo)
         form.save()
-        return redirect('photos')
+        return redirect('reporte_udp', pk = request.session['rep_key'])
     return render(request, 'main/add_photo.html', {'form':form})
+
+def update_photo2(request, pk):
+    photo = Lf_Photos2.objects.get(ph_key2=pk)
+    form = AddPhotosForm2(instance=photo)
+    if request.method == 'POST':
+        form = AddPhotosForm2(request.POST, request.FILES, instance=photo)
+        form.save()
+        return redirect('reporte_udp', pk = request.session['rep_key'])
+    return render(request, 'main/add_photo2.html', {'form':form})
 
 ################### certificates #############################################
 @login_required(login_url='login')
@@ -986,10 +1033,17 @@ def emailMessage(request):
     print("inside the reporte_udp2 view")
     mail = EmailMultiAlternatives('Safety Report Email', 'message', settings.EMAIL_HOST_USER)
     mail.attach_file('./new.pdf')
-    #mail.send()
+    mail.send()
     messages.success(request, 'email sent successfully')
     return redirect('reporte_udp4')
  
+
+ 
+def sendemail(request,pk):
+     return render(request, 'main/sendemail.html')
+
+
+
 def venue_pdf(request):
     # Create Bytestream buffer
     buf = io.BytesIO()
@@ -1034,3 +1088,14 @@ def venue_pdf(request):
  
     # Return something
     return FileResponse(buf, as_attachment=True, filename='venue.pdf')
+
+
+def add_email_group(request):
+    groups = EmailGroup.objects.all()
+    form = AddEmailGroupForm()
+    if(request.method == 'POST'):
+        form = AddEmailGroupForm(request.POST)
+        form.save()
+        return redirect('reports')
+    context = {'form': form, 'groups':groups}
+    return render(request, 'main/add_email_group.html', context)

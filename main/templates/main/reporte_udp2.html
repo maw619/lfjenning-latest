@@ -1,244 +1,430 @@
-
 <html>
-  <head>
- 
+
+<head>
+
   <head>
     <style>
-       
-@page {
-  size: A4;
-  margin: 2cm;
-  @frame footer {
-    -pdf-frame-content:footer;
-    bottom:0.5cm;
-    left:1.9cm;
-    right:1.9cm;
-    height:1cm;
-}
-@frame footer_frame {           /* Another static Frame */
-  -pdf-frame-content: footer_content;
-  left: 400pt; top: 1170pt; height: 20pt;
-}
-@frame pg {
-  -pdf-frame-content:pg;
-  bottom:0.5cm;
-  left:17.5cm;
-  right:0.5cm;
-  height:0.5cm;
-}
+      @page {
+        size: A4;
+        margin: 2cm;
 
- 
-@frame line {
-  -pdf-frame-content:line;
-  top:4cm;
-  left:2.2cm;
-  right:2.2cm;
-  height:1cm;
-}  
-@frame footer_frame {           /* Static frame */
-  -pdf-frame-content: footer_content;
-  left: 50pt; width: 512pt; top: 772pt; height: 20pt;
-}
+        @frame footer {
+          -pdf-frame-content: footer;
+          bottom: 0.5cm;
+          left: 1.9cm;
+          right: 1.9cm;
+          height: 1cm;
+        }
 
-  
-}
+        @frame footer_frame {
+          /* Another static Frame */
+          -pdf-frame-content: footer_content;
+          left: 400pt;
+          top: 1170pt;
+          height: 20pt;
+        }
+
+        @frame pg {
+          -pdf-frame-content: pg;
+          bottom: 0.5cm;
+          left: 17.5cm;
+          right: 0.5cm;
+          height: 0.5cm;
+        }
+
+
+        @frame line {
+          -pdf-frame-content: line;
+          top: 4cm;
+          left: 2.2cm;
+          right: 2.2cm;
+          height: 1cm;
+        }
+
+        @frame footer_frame {
+          /* Static frame */
+          -pdf-frame-content: footer_content;
+          left: 50pt;
+          width: 512pt;
+          top: 772pt;
+          height: 20pt;
+        }
+
+
+      }
     </style>
-      <style>
+    <style>
+      header {
+        height: 10vh;
+      }
 
-header{
-    height: 10vh;
-  }
-.box {
-    height:8cm;
-    page-break-inside: avoid;
-    font-size:15px;
-  }
-.wrapper{
-  page-break-inside: avoid;
-  height:100vh;
-}
+      .box {
+        height: 8cm;
+        page-break-inside: avoid;
+        font-size: 15px;
+      }
 
-#footer{
+      .wrapper {
+        page-break-inside: avoid;
+        height: 100vh;
+      }
 
-  background-color: black;
-}
+      #footer {
 
-#line{
-  background-color: #9c0030;
-  height: 2px;
-  }
-.line{
-  background-color: #9c0030;
-  height: 2px;
-  }
-img{
-  max-height: 55%;
-}
+        background-color: black;
+      }
 
-.img-fluid{
-  max-width:100%;height:auto
-}
+      #line {
+        background-color: #9c0030;
+        height: 2px;
+      }
 
-#img0{
-  margin: 10px;
- 
-}
- 
-#img1{
-  margin: 10px;
-  
-}
-#img2{
-  margin: 10px;
-  height:50%;
-}   
-#resize{
-  margin:15pt;
-  zoom: 45%;
-}
-#shaded{
-  background: #909090;
-  width:100%;
- }
+      .line {
+        background-color: #9c0030;
+        height: 2px;
+      }
 
+      img {
+        max-height: 55%;
+      }
 
-</style>
+      .img-fluid {
+        max-width: 100%;
+        height: auto
+      }
 
-</head>
+      #img0 {
+        margin: 10px;
+
+      }
+
+      #img1 {
+        margin: 10px;
+
+      }
+
+      #img2 {
+        margin: 10px;
+        height: 50%;
+      }
+
+      #resize {
+        margin: 15pt;
+        zoom: 45%;
+      }
+
+      #shaded {
+        background: #909090;
+        width: 100%;
+      }
+
+      table{
+        border: 1px solid black;
+      }
+
+      table p {
+        font-size: 20px;
+        padding: 8px; 
+      }
+       
+
+      #subtitle {
+        font-size: 20px;
+      }
+      .wrapper p{
+        font-size: 17px;
+      }
+    </style>
+
+  </head>
 
 <body>
- 
+
   <div class="wrapper">
- 
+
     <!-- HEADER  -->
     <header>
       <div>
-        
-          <img src="jennings.png" height="75" class="img-fluid"  />
+
+        <img src="jennings.png" height="75" class="img-fluid" />
       </div>
     </header>
-    <tr><td><strong><p id="line"></p></strong></td></tr>
- <img src="https://mybucketholly.s3.amazonaws.com/redline.png" >
-    <p class="separator">&nbsp;<p>
-  <div class="box">
-<p>{{mydate}}</p>
-{% comment %} <p>To: {{rep_ws_to}}</p> {% endcomment %}
-<p>From: {{emp_name}}</p>
-<p>
-  This report is a follow up to the safety inspection completed on {{mydate}}.
-  The purpose of the inspection was to identify potential safety hazards
-  and/or OSHA violations. Attached is a list of observations and
-  recommendations based on the conditions present at the time of my visit.
-  Please review the report and verify that all potential hazards are
-  corrected. If you have any questions or require additional information
-  after reviewing this report, please don't hesitate to contact me.
-</p>
-<p>Sincerely,</p>
+    <tr>
+      <td><strong>
+          <p id="line"></p>
+        </strong></td>
+    </tr>
+    <img src="https://mybucketholly.s3.amazonaws.com/redline.png">
+    <p class="separator">&nbsp;
+    <p>
+    <div class="box">
+      <p>{{mydate}}</p>
+      {% comment %} <p>To: {{rep_ws_to}}</p> {% endcomment %}
+      <p>From: {{emp_name}}</p>
+      <p>
+        This report is a follow up to the safety inspection completed on {{mydate}}.
+        The purpose of the inspection was to identify potential safety hazards
+        and/or OSHA violations. Attached is a list of observations and
+        recommendations based on the conditions present at the time of my visit.
+        Please review the report and verify that all potential hazards are
+        corrected. If you have any questions or require additional information
+        after reviewing this report, please don't hesitate to contact me.
+      </p>
+      <br><br><br>
+      <p>Sincerely,</p>
 
-<p>
-  {{emp_name}}<br />
-  LF Jennings, Inc. <br />Safety Department
-  <br />{{emp_phone}}<br />{{emp_email}}
-</p>
-</div>
+      <p>
+        {{emp_name}}<br />
+        LF Jennings, Inc. <br />Safety Department
+        <br />{{emp_phone}}<br />{{emp_email}}
+      </p>
+    </div>
 
- <!-- FOOTER  -->
-  <tr><td><strong><p id="footer">&nbsp;&nbsp;&nbsp;&nbsp;</p></strong></td></tr>
-  <tr><td><strong><p id="pg"><pdf:pagenumber>-- of  {{totalpages}}</div></p></strong></td></tr>
- 
+    <!-- FOOTER  -->
+    <tr>
+      <td><strong>
+          <p id="footer">&nbsp;&nbsp;&nbsp;&nbsp;</p>
+        </strong></td>
+    </tr>
+    <tr>
+      <td><strong>
+          <p id="pg">
+            <pdf:pagenumber>-- of {{totalpages}}
+  </div>
+  </p></strong></td>
+  </tr>
+
   <td style="width:200px;">
 
-  
-</td>
-<div> 
-  <pdf:nextpage /> 
-</div> 
-  {% for x in get_photo %}
-    {% if x.ph_link2 %} 
-    <div class="wrapper">
-      <div style="page-break-inside: avoid;"></div>
 
-      <!-- HEADER  -->
-      <header>
-        <div>
-            <img src="jennings.png" alt=""  style="max-height: 75px" class="img-fluid"  />
-        </div> 
-      </header>
-       <img src="https://mybucketholly.s3.amazonaws.com/redline.png" >
-      <p class="separator">&nbsp;<p>
- 
-    <div class="box" style="text-align:center;"> 
-        <div class="box" style="text-align:center;">
-        <tr><td><strong><p id="shaded">{{observation}}</p></strong></td></tr>
-        <tr><td><p>{{x.ph_obs}}</p></td></tr>
-        <tr> <td> <p>{{x.ph_desc}}</p></td></tr> 
-        <div id="holder">
-          
-        </div>
-        <img class="img-fluid" src="media/{{x.ph_link}}" id="resize" style="height:400px;"/>&nbsp;&nbsp;&nbsp;&nbsp;
-        <img class="img-fluid" src="media/{{x.ph_link2}}" id="resize" style="height:400px;"/>
-      </div>
-      
+  </td>
+  <div>
+    <pdf:nextpage />
+  </div>
 
-    </div>
-  
-    </div>
- 
-     <!-- FOOTER  -->
-    <tr><td><strong><p id="footer">&nbsp;&nbsp;&nbsp;&nbsp;</p></strong></td></tr>        
-    <tr><td><strong><p id="pg"><pdf:pagenumber>-- of -- {{totalpages}}</div></p></strong></td></tr>
 
-      <div> 
-        <pdf:nextpage /> 
-     </div> 
- 
-{% else %}
 
-<div class="wrapper">
-<!-- HEADER  -->
+
+
+
+
+  <!-- HEADER  -->
   <header>
     <div>
-        <img src="jennings.png" alt=""  style="max-height: 75px" class="img-fluid"  />
-    </div> 
+
+      <img src="jennings.png" height="75" class="img-fluid" />
+    </div>
   </header>
-   <img src="https://mybucketholly.s3.amazonaws.com/redline.png" >
-  <p class="separator">&nbsp;<p>
+  <tr>
+    <td><strong>
+        <p id="line"></p>
+      </strong></td>
+  </tr>
+  <img src="https://mybucketholly.s3.amazonaws.com/redline.png">
+  <p class="separator">&nbsp;
+  <p>
+  <div class="box">
+    <p>
+      <center>
+        <h3>{{mydate}}</h3>
+      </center>
+    </p>
+
+    <p>
+      <center>
+        <h1>{{pr_desc}}</h1>
+      </center>
+    </p>
+    <p>
+      <center>Reported by: {{emp_name}}</center><br />
+    </p>
+    <p>
+      <center>On-site Supervisor: {{sup_name}}</center><br />
+    </p>
+
+
+
+  </div>
+
+  <!-- FOOTER  -->
+  <tr>
+    <td><strong>
+        <p id="footer">&nbsp;&nbsp;&nbsp;&nbsp;</p>
+      </strong></td>
+  </tr>
+  <tr>
+    <td><strong>
+        <p id="pg">
+          <pdf:pagenumber>-- of {{totalpages}}</div>
+        </p>
+      </strong></td>
+  </tr>
+
+  <td style="width:200px;">
+
+
+  </td>
+  <div>
+    <pdf:nextpage />
+  </div>
+
+
+
+
+
+
+
+
+  {% for x in get_photo %}
+  {% if x.ph_link2 %}
+  <div class="wrapper">
+    <div style="page-break-inside: avoid;"></div>
+
+    <!-- HEADER  -->
+    <header>
+      <div>
+        <img src="jennings.png" alt="" style="max-height: 75px" class="img-fluid" />
+      </div>
+    </header>
+    <img src="https://mybucketholly.s3.amazonaws.com/redline.png">
+    <p class="separator">&nbsp;
+    <p>
+
     <div class="box" style="text-align:center;">
-    <tr><td><strong><p id="shaded">{{ observation }}</p></strong></td></tr>
-    <tr><td><p>{{x.ph_obs}}</p></td></tr> 
-    <tr> <td> <p>{{x.ph_desc}}</p></td></tr>
- 
-    
-    <img class="img-fluid" src="media/{{x.ph_link}}" id="resize" style="height:700px;"/>
+      <div class="box" style="text-align:center;">
+        <tr>
+          <td><strong>
+              <p id="shaded">{{observation}}</p>
+            </strong></td>
+        </tr>
+        <tr>
+          <td>
+            <p>{{x.ph_obs}}</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>{{x.ph_desc}}</p>
+          </td>
+        </tr>
+        <div id="holder">
+
+        </div>
+        <img class="img-fluid" src="media/{{x.ph_link}}" id="resize" style="height:400px;" />&nbsp;&nbsp;&nbsp;&nbsp;
+        <img class="img-fluid" src="media/{{x.ph_link2}}" id="resize" style="height:400px;" />
+      </div>
+
+
+    </div>
+
   </div>
- 
+
+  <!-- FOOTER  -->
+  <tr>
+    <td><strong>
+        <p id="footer">&nbsp;&nbsp;&nbsp;&nbsp;</p>
+      </strong></td>
+  </tr>
+  <tr>
+    <td><strong>
+        <p id="pg">
+          <pdf:pagenumber>-- of -- {{totalpages}}</div>
+        </p>
+      </strong></td>
+  </tr>
+
+  <div>
+    <pdf:nextpage />
+  </div>
+
+  {% else %}
+
+  <div class="wrapper">
+    <!-- HEADER  -->
+    <header>
+      <div>
+        <img src="jennings.png" alt="" style="max-height: 75px" class="img-fluid" />
+      </div>
+    </header>
+    <img src="https://mybucketholly.s3.amazonaws.com/redline.png">
+    <p class="separator">&nbsp;
+    <p>
+    <div class="box" style="text-align:center;">
+      <tr>
+        <td><strong>
+            <p id="shaded">{{ observation }}</p>
+          </strong></td>
+      </tr>
+      <tr>
+        <td>
+          <p>{{x.ph_obs}}</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>{{x.ph_desc}}</p>
+        </td>
+      </tr>
+
+
+      <img class="img-fluid" src="media/{{x.ph_link}}" id="resize" style="height:700px;" />
+    </div>
+
 
 
   </div>
- 
-   <!-- FOOTER  -->
-<tr><td><strong><p id="footer">&nbsp;&nbsp;&nbsp;&nbsp;</p></strong></td></tr>  
-<tr><td><strong><p id="pg">Page <pdf:pagenumber> of {{totalpages}} </div></p></strong></td></tr>
 
-  <div> 
-    <pdf:nextpage /> 
- </div> 
+  <!-- FOOTER  -->
+  <tr>
+    <td><strong>
+        <p id="footer">&nbsp;&nbsp;&nbsp;&nbsp;</p>
+      </strong></td>
+  </tr>
+  <tr>
+    <td><strong>
+        <p id="pg">Page <pdf:pagenumber> of {{totalpages}} </div>
+        </p>
+      </strong></td>
+  </tr>
 
-   {% endif %}
- 
-{% endfor %}
+  <div>
+    <pdf:nextpage />
+  </div>
 
-<table>
-  {% for t in get_photo  %}
-  <tr><th><strong><p id="shaded">{{ observation }}</p></strong></th></tr>
-  <tr><th><center>{{t.ph_obs}}</center></th></tr> 
+  {% endif %}
+
   {% endfor %}
-</table>
- 
-   <!-- FOOTER  -->
-<tr><td><strong><p id="footer">&nbsp;&nbsp;&nbsp;&nbsp;</p></strong></td></tr>  
-<tr><td><strong><p id="pg">Page <pdf:pagenumber> of {{totalpages}} </div></p></strong></td></tr>
+
+  <center>
+    <table>
+      {% for t in get_photo %}
+      <tr>
+        <td><strong>
+            <p id="shaded">{{ observation }}</p>
+          </strong></td>
+      </tr>
+      <tr>
+        <td>
+          <p>{{t.ph_obs}}</p>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </center>
+
+  <!-- FOOTER  -->
+  <tr>
+    <td><strong>
+        <p id="footer">&nbsp;&nbsp;&nbsp;&nbsp;</p>
+      </strong></td>
+  </tr>
+  <tr>
+    <td><strong>
+        <p id="pg">Page <pdf:pagenumber> of {{totalpages}} </div>
+        </p>
+      </strong></td>
+  </tr>
 
 </body>
+
 </html>
- 

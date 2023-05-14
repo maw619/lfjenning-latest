@@ -29,4 +29,4 @@ class Lf_ProjectsAdmin(admin.ModelAdmin):
 class Lf_ReportesAdmin(admin.ModelAdmin):
     list_display = "rep_key","rep_name","rep_desc","rep_user_name","rep_send","rep_send_email","rep_notes","rep_yyyymmdd","rep_ws_to","rep_pages","rep_fk_emp_key_id","rep_fk_emp_key_sup_id","rep_fk_pr_key_id"
 
-
+admin.site.register(EmailGroup)

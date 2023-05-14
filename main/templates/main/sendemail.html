@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+      <form action="" method="post" id="login-form" width="100%;">
+            {% csrf_token %}
+            <select class="form-control" id="single4" name="rep_fk_emp_key_sup" size="1" multiple="multiple"
+              style="width: 100%">
+              {% for x in emails %}
+              <option value="{{x.emp_email}}">{{x.emp_name}}</option>
+              {% endfor %}
+            </select>
+
+            <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal" onclick="redirect();">
+              Send <i class="fa-solid fa-paper-plane"></i>
+            </button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close" {% comment %}
+              onclick="redirect();" {% endcomment %}>
+              cancel <i class="fa-solid fa-circle-xmark"></i>
+            </button>
+
+          </form>
+
+{% endblock content %}
+
+

@@ -1,6 +1,6 @@
 from urllib import request
 from django import forms
-from django.forms import ModelForm , ClearableFileInput
+from django.forms import ModelForm , ClearableFileInput, SelectMultiple
 from .models import *
 
 
@@ -146,10 +146,10 @@ class AddPhotosFormById(ModelForm):
 class AddPhotosForm2(ModelForm):
      class Meta:
         model = Lf_Photos2
-        fields = {'ph_key2','ph_fk_rep_key2','ph_fk_ph_key','ph_link2','ph_yyyymmdd', 'ph_desc2' }
+        fields = {'ph_key2','ph_fk_rep_key2','ph_fk_ph_key','ph_link2','ph_yyyymmdd' }
+        exlude = ['ph_desc2']
         labels = {
-            "ph_link2" : "Choose File",
-          
+            "ph_link2" : "Choose File", 
         }
                 
         widgets = {
@@ -189,4 +189,19 @@ class AddChargsForm(ModelForm):
         widgets = {
             'ch_key': forms.HiddenInput(),
             'ch_desc': forms.TextInput(attrs={'class':'form-control'})
+        }
+
+
+class AddEmailGroupForm(ModelForm):
+    class Meta:
+        model = EmailGroup
+        fields = {'name', 'members'}
+        labels = {
+            'name': 'Group Name',
+            'members': 'members email'
+        }
+        
+        widgets = {
+            'name': forms.TextInput(attrs={'class':'form-control', 'id':'single5'}),
+            'members': SelectMultiple(attrs={'class': 'form-select', 'multiple': 'multiple'}),
         }

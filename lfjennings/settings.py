@@ -22,7 +22,7 @@ SECRET_KEY = 'django-insecure-lxa(o7e6+i6_gbpt3g+l2^^p0lc1!$jw%+zpuxt8e-2^y=xx(4
 DEBUG = True
 
 ALLOWED_HOSTS = ['*','marcowolff.me','keybyme.com','*']
-CSRF_TRUSTED_ORIGINS = ['https://marcowolff.me/*','https://sobran.net','https://keybyme.com']
+CSRF_TRUSTED_ORIGINS = ['https://marcowolff.me/*','https://sobran.net','https://keybyme.com','https://keybyme.net/*']
 
 INSTALLED_APPS = [
     'login_app',
@@ -75,34 +75,33 @@ WSGI_APPLICATION = 'lfjennings.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 #aws user admin and pass Charlie23##
  
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        'NAME': "wolffdb",
-        'USER': "doadmin",
-        'PASSWORD': "AVNS_SvQ1v6xZ3l-OPxuK-0n",
-        'HOST': "db-mysql-nyc1-09498-do-user-13054411-0.b.db.ondigitalocean.com",
-        'PORT': "25060",
+        'NAME': "lf2",
+        'USER': "root",
+        'PASSWORD': "2552",
+        'HOST': "localhost",
+        'PORT': 3306,
     	'OPTIONS': {
             'sql_mode': 'traditional',
         }
     }
 }
+
 # DATABASES = {
 #     "default": {
 #         "ENGINE": "django.db.backends.mysql",
 #         'NAME': "wolffdb",
-#         'USER': "root",
-#         'PASSWORD': "2552",
-#         'HOST': "localhost",
-#         'PORT': 3306,
-#     	'OPTIONS': {
+#         'USER': "doadmin",
+#         'PASSWORD': "AVNS_0Yy4HWwmjgAwuL2SNrc",
+#         'HOST': "db-mysql-nyc1-70308-do-user-14066511-0.b.db.ondigitalocean.com",
+#         'PORT': "25060",
+#         'OPTIONS': {
 #             'sql_mode': 'traditional',
 #         }
 #     }
 # }
-
 
 
 
@@ -157,9 +156,7 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-
-
-CSRF_TRUSTED_ORIGINS = ['https://marcowolff.me/*','https://keybyme.com' ]
+ 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -170,30 +167,23 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 #smtp configuration
  
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'outlook.office365.com'
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = 'safety@lfjennings.com'
-# EMAIL_HOST_PASSWORD = 'qdtxygbppdjrjtlb' 
-# EMAIL_USE_TLS = True
-# EMAIL_USE_SSL = False
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+ 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'marcowolffa@gmail.com'
-EMAIL_HOST_PASSWORD = 'httkuvnflfwvxzib' 
+EMAIL_HOST_USER = 'lfjsafetydepartment4@gmail.com'
+EMAIL_HOST_PASSWORD = 'mdtulheyohkecsxx' 
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+DEFAULT_FROM_EMAIL = 'lfjsafetydepartment4@gmail.com'
 
 
-CORS_REPLACE_HTTPS_REFERER      = False
-HOST_SCHEME                     = "http://"
-SECURE_PROXY_SSL_HEADER         = None
-SECURE_SSL_REDIRECT             = False
-SESSION_COOKIE_SECURE           = False
-CSRF_COOKIE_SECURE              = False
-SECURE_HSTS_SECONDS             = None
-SECURE_HSTS_INCLUDE_SUBDOMAINS  = False
-SECURE_FRAME_DENY               = False
-
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' 
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'marcowolffa@gmail.com'
+# EMAIL_HOST_PASSWORD = 'httkuvnflfwvxzib' 
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = False
+# DEFAULT_FROM_EMAIL = 'TEST'
  

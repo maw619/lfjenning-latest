@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="post">
+{% csrf_token %}
+{{form.as_p}}
+<input type="submit" value="Submit">
+</form>
+
+
+<table>
+    <tr>
+        <td>Group Name</td>
+
+    </tr>
+    {% for group in groups %}
+    <tr>
+        <td>{{group.name}}</td> 
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

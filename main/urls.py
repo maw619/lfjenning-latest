@@ -29,8 +29,10 @@ urlpatterns = [
     path('add_photos_by_id/<pk>', views.add_photos_by_id, name="add_photos_by_id"),
     #path('reporte_udp/add_photo', views.add_photo, name="add_photo"),
     path('add_photo2/<pk>/<int:ph_fk_ph_key>', views.add_photo2, name="add_photo2"),
-    path('delete_photo/delete/<int:pk>', views.delete_photo, name="delete_photo"),
+    path('delete_photo/<int:pk>', views.delete_photo, name="delete_photo"),
+    path('delete_photo2/<int:pk>', views.delete_photo2, name="delete_photo2"),
     path('update_photo/<int:pk>', views.update_photo, name="update_photo"),
+    path('update_photo2/<int:pk>', views.update_photo2, name="update_photo"),
     path('certification', views.certification, name="certification"),
     path('add_cert', views.add_cert, name="add_cert"),
     path('update_cert/<int:pk>', views.update_cert, name="update_cert"),
@@ -39,7 +41,8 @@ urlpatterns = [
     path('update_reports/<int:pk>', views.update_report, name='update_reports' ),
     path('load_update_form/<int:pk>', views.load_update_form, name="load_update_form"),
     path('emailMessage', views.emailMessage, name="emailMessage"),
- 
+    path('sendemail/<pk>', views.sendemail, name="sendemail"),
+    path('add-email-group', views.add_email_group, name="add_email_group"),
     
  ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

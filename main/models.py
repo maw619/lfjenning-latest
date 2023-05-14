@@ -71,11 +71,12 @@ class Lf_Photos(models.Model):
 
 class Lf_Photos2(models.Model):
     ph_key2 = models.AutoField(primary_key=True)
-    ph_fk_rep_key2 = models.IntegerField(blank=True, null=True)
+    ph_fk_rep_key2 = models.ForeignKey('Lf_Reportes', on_delete=models.CASCADE, null=True)
     ph_fk_ph_key = models.IntegerField(blank=True, null=True)
     ph_link2 = models.FileField(upload_to='img2/',null=True, blank=True)
     ph_yyyymmdd =  models.CharField(max_length=45,default=date.today())
-    ph_desc2 = models.CharField(max_length=254, blank=True, null=True)
+    ph_desc2 = models.CharField(max_length=254, blank=True, null=True) 
+
 
     class Meta:
         managed = True
@@ -131,3 +132,9 @@ class Lf_RepEmails(models.Model):
         return self.repe_fk_rep_key,' ',self.repe_fk_emp_key
 
 
+class EmailGroup(models.Model):
+    name = models.CharField(max_length=100)
+    members = models.ManyToManyField('Lf_Employees', related_name='email_groups')
+
+    def __str__(self):
+        return self.name
