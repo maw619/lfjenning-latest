@@ -36,7 +36,7 @@
 
       {% for x , y in rows %}
 
-<a href="app/render_pdf_view_standalone/{{x.rep_key}}">go</a>
+ 
       <tr>
         <td><a href="reporte_udp/{{x.rep_key}}" style="font-weight: 600;">{{ x.rep_yyyymmdd }}</a></td>
         <td>{{ x.pr_desc }}</td>
@@ -46,7 +46,8 @@
 
         <td>
          {% comment %} <a href="reporte_udp/{{x.rep_key}}"><center><i class="fa fa-envelope fa-2x" aria-hidden="true"></i></center> {% endcomment %}
-         <center> <a href="/app/render_pdf_view/{{x.rep_key}}" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-mdb-toggle="tooltip" title="email this report" ><i class="fa fa-envelope fa-2x" aria-hidden="true" ></i></a> </center>
+         {% comment %} <center> <a href="/app/render_pdf_view/{{x.rep_key}}" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-mdb-toggle="tooltip" title="email this report" ><i class="fa fa-envelope fa-2x" aria-hidden="true" ></i></a> </center> {% endcomment %}
+         <center> <a href="app/render_pdf_view_standalone/{{x.rep_key}}" title="email this report" ><i class="fa fa-envelope fa-2x" aria-hidden="true" ></i></a> </center>
           </a>
           {% comment %} <a href="reporte_udp/{{x.rep_key}}" data-mdb-toggle="tooltip" title="Preview PDF"><i
               class="fa fa-magnifying-glass" class=""></i></a> {% endcomment %}
