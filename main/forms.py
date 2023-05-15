@@ -56,6 +56,7 @@ class AddReportsForm(ModelForm):
         fields = ['rep_name','rep_fk_emp_key','rep_fk_emp_key_sup',
                   'rep_notes','rep_user_name','rep_fk_pr_key','rep_desc',
                   'rep_yyyymmdd', 'rep_pages']
+        
         labels = {
             "rep_fk_pr_key": 'Project',
             'rep_fk_emp_key': "Report By:",
@@ -80,21 +81,21 @@ class AddReportsForm(ModelForm):
 class AddEmployeesForm(ModelForm):
     class Meta:
         model = Lf_Employees
-        fields = {'emp_name','emp_email','emp_phone','emp_fk_ch_key'}
+        fields = ['emp_name', 'emp_email', 'emp_phone', 'emp_fk_ch_key']
+        field_order = ['emp_name', 'emp_email', 'emp_phone', 'emp_fk_ch_key']
         labels = {
-            "emp_name" : "Name",
-            "emp_email": "Email",
-            "emp_phone": "Phone",
-            "emp_fk_ch_key": "Charges",
+            'emp_name': 'Name',
+            'emp_email': 'Email',
+            'emp_phone': 'Phone',
+            'emp_fk_ch_key': 'Charges',
         }
-        
         widgets = {
-            'emp_name': forms.TextInput(attrs={'class':'form-control'}),
-            'emp_email': forms.TextInput(attrs={'class':'form-control'}),
-            'emp_phone': forms.TextInput(attrs={'class':'form-control'}),
-            'emp_fk_ch_key': forms.Select(attrs={'class':'form-select'}),
+            'emp_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'emp_email': forms.TextInput(attrs={'class': 'form-control'}),
+            'emp_phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'emp_fk_ch_key': forms.Select(attrs={'class': 'form-select'}),
         }
-        
+
          
             
             

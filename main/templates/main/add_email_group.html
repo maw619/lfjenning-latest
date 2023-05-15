@@ -1,21 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
+ 
+ 
 <form method="post">
 {% csrf_token %}
 {{form.as_p}}
 <input type="submit" value="Submit">
 </form>
 
-
-<table>
+<table class="table table-striped">
     <tr>
-        <td>Group Name</td>
+        <td>Groups</td>
+        <td></td>
 
     </tr>
     {% for group in groups %}
     <tr>
-        <td>{{group.name}}</td> 
+        <td>{{group.name}}</td>
+        <td><a href="{% url 'delete_email_group' group.id %}" style="color:red;"> delete</a></td> 
     </tr>
     {% endfor %}
 </table>

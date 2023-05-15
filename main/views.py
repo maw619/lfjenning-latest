@@ -1092,10 +1092,17 @@ def venue_pdf(request):
 
 def add_email_group(request):
     groups = EmailGroup.objects.all()
+    
     form = AddEmailGroupForm()
     if(request.method == 'POST'):
         form = AddEmailGroupForm(request.POST)
         form.save()
-        return redirect('reports')
+        return redirect('add_email_group')
     context = {'form': form, 'groups':groups}
     return render(request, 'main/add_email_group.html', context)
+
+def delete_email_group(request, pk):
+    group = EmailGroup.objects.get(id=pk)
+    group.delete()
+    messages.success(request, 'Group Deleted')
+    return redirect('add_email_group')

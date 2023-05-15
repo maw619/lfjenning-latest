@@ -43,6 +43,7 @@ urlpatterns = [
     path('emailMessage', views.emailMessage, name="emailMessage"),
     path('sendemail/<pk>', views.sendemail, name="sendemail"),
     path('add-email-group', views.add_email_group, name="add_email_group"),
+    path('delete-email-group/<int:pk>', views.delete_email_group, name="delete_email_group"),
     
  ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -30,8 +30,9 @@
     </tr>
     <tr>
       <td align="center" colspan="2"> <a href="/add_photos_by_id/{{rep_key}}" class="btn btn-primary">add photo</a>
-        <a href="/app/render_pdf_view/{{rep_key}}" class="btn btn-success" data-bs-toggle="modal"
-          data-bs-target="#staticBackdrop" data-mdb-toggle="tooltip" title="email this report">SEND EMAIL</a>
+        <a href="{% url 'render_pdf_view_standalone' rep_key %}" class="btn btn-success"  title="email this report">SEND EMAIL</a>
+        {% comment %} <a href="/app/render_pdf_view/{{rep_key}}" class="btn btn-success" data-bs-toggle="modal"
+          data-bs-target="#staticBackdrop" data-mdb-toggle="tooltip" title="email this report">SEND EMAIL</a> {% endcomment %}
         <!-- <a href="/sendemail/{{rep_key}}" class="btn btn-warning">SEND EMAIL2</a> -->
       </td>
     </tr>

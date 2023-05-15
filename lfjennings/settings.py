@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'lfjennings.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        'NAME': "lf2",
+        'NAME': "wolffdb",
         'USER': "root",
         'PASSWORD': "2552",
         'HOST': "localhost",

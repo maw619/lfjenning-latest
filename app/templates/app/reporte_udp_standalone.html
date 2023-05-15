@@ -1,50 +1,47 @@
 {% include 'head.html' %}
 {% include 'header.html' %}
 {% block content %}
-<form action="" method="get" style="display: flex;" id="myForm1">
-  {% csrf_token %}
-  <div style="width: 50%; margin-right: 10px;">
-    <select class="form-control" id="membersSelect" name="rep_fk_emp_key_sup" size="4" multiple="multiple"
-      style="width: 100%">
-      {% for x in emails %}
-      <option value="{{x.emp_email}}">{{x.emp_name}}</option>
-      {% endfor %}
-    </select>
-    <!-- <button class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">
-      Add member <i class="fa-solid fa-circle-xmark"></i>
-    </button> -->
-  </div>
-
-  <div style="width: 50%; margin-left: 10px;">
-    <select class="form-control" id="groupsSelect" name="groups_field" size="4" multiple="multiple" style="width: 100%">
-      {% for x in groups %}
-      <option value="{{x}}">{{x}}</option>
-      {% endfor %}
-    </select>
-    <!-- <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal" onclick="redirect();">
-      Choose group <i class="fa-solid fa-paper-plane"></i>
-    </button> -->
-  </div>
-
-  <input class="btn btn-secondary" type="submit" value="Add">
-</form>
-
- 
 
 <script>
-  function clearForm() {
-    document.getElementById("myForm1").reset();
-    document.getElementById("myForm2").reset();
-    document.getElementById("showNamesTable").innerHTML = ""; // Clear show_names table
-    document.getElementById("showSingleNameTable").innerHTML = ""; // Clear show_single_name table
+  // Disable the submit button initially
+  document.getElementById('submitButton').disabled = true;
 
-    // Clear rep_fk_emp_key_sup value
-    document.querySelector("[name='rep_fk_emp_key_sup']").value = "";
-
-    // Clear show_group_names value
-    document.querySelector("[name='show_group_names']").value = "";
-  }
+  // Enable the submit button when the form is submitted
+  document.getElementById('myForm1').addEventListener('submit', function () {
+    document.getElementById('submitButton').disabled = false;
+  });
 </script>
+
+
+<form action="" method="get" id="myForm1">
+  {% csrf_token %}
+  <div style="display: flex;">
+    <div style="width: 50%; margin-right: 10px;">
+      <select class="form-control" id="membersSelect" name="rep_fk_emp_key_sup" size="8" multiple="multiple" style="width: 100%">
+        {% for x in emails %}
+        <option value="{{x.emp_email}}">{{x.emp_name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+or
+    <div style="width: 50%; margin-left: 10px;">
+      <select class="form-control" id="groupsSelect" name="groups_field" size="8" multiple="multiple" style="width: 100%">
+        {% for x in groups %}
+        <option value="{{x}}">{{x}}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+<br>
+<div style="text-align: center;">
+<label for="">Add Email or Group</label>
+</div>
+  <div style="text-align: center;">
+    <input class="btn btn-secondary" type="submit" value="Add" style="width: 60%; height:50px;">
+    </div>
+</form>
+
+
 
 
 
@@ -52,6 +49,7 @@
 <br>
 <br>
 <!-- Display show_names table -->
+
 <table id="showNamesTable">
   {% for x in show_names %}
   <tr>
@@ -61,7 +59,7 @@
 </table>
 
 <!-- Display show_single_name table -->
-<table id="showSingleNameTable">
+<table id="showSingleNameTable" >
   {% for x in show_single_name %}
   <tr>
     <td>{{x}}</td>
@@ -69,30 +67,29 @@
   {% endfor %}
 </table>
 
-
 <div style="display: flex; align-items: center;">
-
-<!-- Submit the form based on the available data -->
-{% if show_group_names %}
-<form method="post" id="myForm2">
-  {% csrf_token %}
-  <input type="hidden" name="groups_field" value="{{ show_names }}">
-  <button type="submit" class="btn btn-secondary">
-    Send <i class="fa-solid fa-paper-plane"></i>
-  </button>
-</form>
-{% else %}
-<form method="post">
-  {% csrf_token %}
-  <input type="hidden" name="rep_fk_emp_key_sup" value="{{ rep_fk_emp_key_sup }}">
-  <button type="submit" class="btn btn-secondary">
-    Send <i class="fa-solid fa-paper-plane"></i>
-  </button>
-</form>
-{% endif %}
-
-
  
+{% if the_form_member is None and the_form_group is None%}
+ 
+{% else %}
+  {% if show_group_names %}
+  <form method="post" id="myForm2">
+    {% csrf_token %}
+    <input type="hidden" name="groups_field" value="{{ show_names }}">
+    <button type="submit" id="submitButton"  class="btn btn-success">
+      Send <i class="fa-solid fa-paper-plane"></i>
+    </button>
+  </form>
+  {% else %}
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="rep_fk_emp_key_sup" value="{{ rep_fk_emp_key_sup }}">
+    <button type="submit" id="submitButton" class="btn btn-success">
+      Send <i class="fa-solid fa-paper-plane"></i>
+    </button>
+  </form>
+  {% endif %}
+{% endif %}
  
 
 <button class="btn btn-secondary" onclick="redirectToPDF('{{ rep_key }}')" style="margin-left: 10px;">

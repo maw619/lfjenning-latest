@@ -344,6 +344,8 @@ def render_pdf_view_standalone(request,pk):
 		print("No group found")
  
 	pages = len(get_photo) + 3
+	the_form_member = request.GET.get('rep_fk_emp_key_sup')
+	the_form_group = request.GET.get('groups_field')
 	rep_fk_emp_key_sup = request.POST.getlist('rep_fk_emp_key_sup') 
 	sup_name = Lf_Employees.objects.filter(emp_key = get_emp[0].rep_fk_emp_key_sup_id)
 	context = {
@@ -365,6 +367,8 @@ def render_pdf_view_standalone(request,pk):
 			'show_names': show_emails,
 			'group_selected': group_selected,
 			'show_single_name': show_single_name,
+			'the_form_member': the_form_member,
+			'the_form_group': the_form_group,
 		}
 	
 	
@@ -421,7 +425,17 @@ def render_pdf_view_standalone(request,pk):
 	
 	
 	if request.method == 'POST':
-		if group_selected:
+		if group_selected and show_single_name:
+			for group in email_groups:
+				if group.name in group_selected:
+					members = group.members.all()
+					recipient_list = [member.emp_email for member in members]
+
+					mail = EmailMultiAlternatives('Safety Report Email', '', settings.EMAIL_HOST_USER, recipient_list+show_single_name)
+					mail.attach_alternative(html_content, "text/html")
+					mail.attach_file(f"{get_rep[0].pr_desc}-{date_string}.pdf")
+					mail.send()
+		elif group_selected:
 			for group in email_groups:
 				if group.name in group_selected:
 					members = group.members.all()
@@ -431,11 +445,12 @@ def render_pdf_view_standalone(request,pk):
 					mail.attach_alternative(html_content, "text/html")
 					mail.attach_file(f"{get_rep[0].pr_desc}-{date_string}.pdf")
 					mail.send()
-		else:
+		elif show_single_name:
 			mail = EmailMultiAlternatives('Safety Report Email', '', settings.EMAIL_HOST_USER, show_single_name)
 			mail.attach_alternative(html_content, "text/html")
 			mail.attach_file(f"{get_rep[0].pr_desc}-{date_string}.pdf")
 			mail.send()
+
 
 		if pisa_status.err:
 			return HttpResponse('We had some errors <pre>' + html + '</pre>')
