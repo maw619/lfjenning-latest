@@ -163,16 +163,33 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+#smtp configuration for outlook
+
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' 
+#EMAIL_HOST = 'smtp-mail.outlook.com'
+#EMAIL_HOST_USER = 'safety@lfjennings.com'
+#EMAIL_HOST_PASSWORD = 'fkwwrkkqwkrkqlbb' 
+#EMAIL_PORT = 587
+#EMAIL_USE_TLS = True
+#EMAIL_USE_SSL = False
 
 
-#smtp configuration
- 
- 
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' 
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'lfjsafetydepartment4@gmail.com'
+# EMAIL_HOST_PASSWORD = 'mdtulheyohkecsxx' 
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = False
+# DEFAULT_FROM_EMAIL = 'lfjsafetydepartment4@gmail.com'
+
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'lfjsafetydepartment4@gmail.com'
-EMAIL_HOST_PASSWORD = 'mdtulheyohkecsxx' 
+EMAIL_HOST_USER = 'lfjsafetydepartment3@gmail.com'
+EMAIL_HOST_PASSWORD = 'nkhjoifuwolkevpz' 
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 DEFAULT_FROM_EMAIL = 'lfjsafetydepartment4@gmail.com'

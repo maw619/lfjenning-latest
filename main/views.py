@@ -39,10 +39,28 @@ from reportlab.lib.pagesizes import letter
 import time
 from xhtml2pdf import pisa
 from io import BytesIO
-
+from django.contrib.sessions.backends.db import SessionStore
 
 # Import Pagination Stuff
 from django.core.paginator import Paginator
+
+def compress_image(image):
+    # Open the image using PIL
+    img = Image.open(image)
+
+    # Resize the image if necessary
+    if img.size[0] > MAX_IMAGE_SIZE or img.size[1] > MAX_IMAGE_SIZE:
+        img.thumbnail((MAX_IMAGE_SIZE, MAX_IMAGE_SIZE), Image.ANTIALIAS)
+
+    # Create an in-memory buffer to save the image
+    img_byte_array = io.BytesIO()
+
+    # Save the image to the buffer with JPEG format and a compression level
+    img.save(img_byte_array, format='JPEG', optimize=True, quality=80)
+
+    # Rewind the buffer and replace the image file
+    img_byte_array.seek(0)
+    image.file = img_byte_array
 
 
 @login_required(login_url='login')
@@ -94,7 +112,7 @@ def add_employees(request):
         form = AddEmployeesForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('home')  
+            return redirect('employees')  
     context = { 'form':form, 'tabletitle':'add employee'.upper()  }
     return render(request, 'main/add_employee.html', context)
 
@@ -344,8 +362,11 @@ def add_photos_by_id(request, pk):
     if(request.method == "POST"):
         form = AddPhotosFormById(request.POST, request.FILES)
         if form.is_valid():
-            form.save(commit=False)
-            form.save()
+            photo = form.save(commit=False)
+
+            # Compress and resize the uploaded image
+            compress_image(photo.ph_link)
+            photo.save()
             return redirect('reporte_udp', pk = pk)
         
     context = {'form':form,
@@ -800,9 +821,9 @@ def render_pdf_view(request):
 
 #             # Add some lines of text
 #             #lines = [
-#             #	"This is line 1",
-#             #	"This is line 2",
-#             #	"This is line 3",
+#             # "This is line 1",
+#             # "This is line 2",
+#             # "This is line 3",
 #             #]
 
 #             # Designate The Model
@@ -852,8 +873,8 @@ def charges(request):
     cargos = Lf_Cargos.objects.raw(
         """
          Select *
-		From lf_cargos
-		order by ch_desc
+        From lf_cargos
+        order by ch_desc
         """
     )
     context = {'charges': cargos, 'tabletitle':'charges'.upper() }
@@ -880,32 +901,22 @@ def delete_charge(request,pk):
 def photos(request):
     photoList = Lf_Photos.objects.raw(
     f"""Select *
-		From lf_photos where ph_user_name = '{request.user.username}'         
-		order by ph_yyyymmdd
+        From lf_photos where ph_user_name = '{request.user.username}'         
+        order by ph_yyyymmdd
     """)
     context = {'photo': photoList, 'tabletitle':'photos'.upper() }
     return render(request, 'main/photos.html', context)
 
 @login_required(login_url='login')
-def add_photo(request):
-    # data = Lf_Reportes.objects.raw(f"""
-    #         Select *
-    #         From lf_reportes inner join lf_projects on 
-    #         rep_fk_pr_key_id = pr_key inner join lf_employees on
-    #         rep_fk_emp_key_id = emp_key
-    #         where rep_user_name = '{request.user.username}';
-    #         """)
-            
-    # last = ''
-    # for x in data:
-    #     last = x.rep_key
-    # request.session['rep_key'] = last
+def add_photo(request): 
     form = AddPhotosForm(initial={'ph_user_name': request.user.username}) 
     if(request.method == "POST"):
         form = AddPhotosForm(request.POST, request.FILES)
         if form.is_valid(): 
-            form.save(commit=False)
+            photo = form.save(commit=False)
 
+            # Compress and resize the uploaded image
+            compress_image(photo.ph_link)
             form.save()  
             return redirect('photos')
         
@@ -916,11 +927,13 @@ def add_photo(request):
     return render(request, 'main/add_photo.html', context)
 
 
+#THIS WAS THE ORIGINAL ADD_PHOTO2
 # @login_required(login_url='login')
-# def add_photo(request, pk):
-#     form = AddPhotosForm(initial={'ph_fk_rep_key_id':request.session['rep_key'], 'ph_user_name':request.user.username}) 
+# def add_photo2(request, pk, ph_fk_ph_key):
+#     form = AddPhotosForm2(initial={'ph_fk_rep_key2': pk,'ph_fk_ph_key':ph_fk_ph_key, 'ph_desc2':None}) 
 #     if(request.method == "POST"):
-#         form = AddPhotosForm(request.POST, request.FILES)
+#         form = AddPhotosForm2(request.POST, request.FILES)
+#         form.instance.ph_desc2 = None
 #         if form.is_valid():
 #             form.save(commit=False)
 #             form.save()
@@ -929,23 +942,37 @@ def add_photo(request):
 #     context = {'form':form,
 #                'ph_user_name': request.user.username,
 #                'tabletitle':'add photo'.upper() }
-#     return render(request, 'main/add_photo.html', context)
+#     return render(request, 'main/add_photo2.html', context)
+
+
+from PIL import Image
+import io
+
+MAX_IMAGE_SIZE = 1024  # Maximum allowed image size in kilobytes
+
+
 
 @login_required(login_url='login')
 def add_photo2(request, pk, ph_fk_ph_key):
-    form = AddPhotosForm2(initial={'ph_fk_rep_key2': pk,'ph_fk_ph_key':ph_fk_ph_key, 'ph_desc2':None}) 
-    if(request.method == "POST"):
+    form = AddPhotosForm2(initial={'ph_fk_rep_key2': pk, 'ph_fk_ph_key': ph_fk_ph_key, 'ph_desc2': None}) 
+    if request.method == "POST":
         form = AddPhotosForm2(request.POST, request.FILES)
         form.instance.ph_desc2 = None
         if form.is_valid():
-            form.save(commit=False)
-            form.save()
-            return redirect('reporte_udp', pk = request.session['rep_key'])
+            photo = form.save(commit=False)
+
+            # Compress and resize the uploaded image
+            compress_image(photo.ph_link2) 
+            photo.save()
+            return redirect('reporte_udp', pk=request.session['rep_key'])
         
-    context = {'form':form,
-               'ph_user_name': request.user.username,
-               'tabletitle':'add photo'.upper() }
+    context = {
+        'form': form,
+        'ph_user_name': request.user.username,
+        'tabletitle': 'add photo'.upper()
+    }
     return render(request, 'main/add_photo2.html', context)
+
 
 
 
@@ -1043,63 +1070,37 @@ def sendemail(request,pk):
      return render(request, 'main/sendemail.html')
 
 
-
-def venue_pdf(request):
-    # Create Bytestream buffer
-    buf = io.BytesIO()
-    # Create a canvas
-    c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
-    # Create a text object
-    textob = c.beginText()
-    textob.setTextOrigin(inch, inch)
-    textob.setFont("Helvetica", 14)
-
-    # Add some lines of text
-    #lines = [
-    #	"This is line 1",
-    #	"This is line 2",
-    #	"This is line 3",
-    #]
-
-    # Designate The Model
-    venues = Venue.objects.all()
-
-    # Create blank list
-    lines = []
-
-    for venue in venues:
-        lines.append(venue.name)
-        lines.append(venue.address)
-        lines.append(venue.zip_code)
-        lines.append(venue.phone)
-        lines.append(venue.web)
-        lines.append(venue.email_address)
-        lines.append(" ")
-
-    # Loop
-    for line in lines:
-        textob.textLine(line)
-
-    # Finish Up
-    c.drawText(textob)
-    c.showPage()
-    c.save()
-    buf.seek(0)
- 
-    # Return something
-    return FileResponse(buf, as_attachment=True, filename='venue.pdf')
-
-
 def add_email_group(request):
     groups = EmailGroup.objects.all()
-    
+    member_list = request.GET.get('members')
+    print("member_list",member_list)
+    my_group = EmailGroup.objects.filter(members__exact=member_list)
+    if my_group:
+        print(f"found{my_group[0].members}")
+    else:
+        print("not found")
+    print("my_group",my_group)
     form = AddEmailGroupForm()
-    if(request.method == 'POST'):
+    
+    if my_group:
+         for x in my_group:
+              print("printing=========",x.members)
+    if request.method == 'POST':
         form = AddEmailGroupForm(request.POST)
         form.save()
         return redirect('add_email_group')
-    context = {'form': form, 'groups':groups}
+    
+    context = {
+        'form': form,
+        'groups': groups,
+        'member_list': member_list
+    }
+    
     return render(request, 'main/add_email_group.html', context)
+
+
+
+
 
 def delete_email_group(request, pk):
     group = EmailGroup.objects.get(id=pk)

@@ -312,23 +312,19 @@ def render_pdf_view_standalone(request,pk):
 	# reader = PdfReader(destination+f'{date_string}.pdf')
 	# pdf_page_count = len(reader.pages)
 	
-	member_name = request.GET.getlist('rep_fk_emp_key_sup') 
-	group_selected = request.GET.getlist('groups_field')  
-	show_group = None
-	show_emails = None
-	if group_selected is not None:
-		show_group = ""
+	member_name = request.GET.getlist('rep_fk_emp_key_sup')
+	group_selected = request.GET.getlist('groups_field')
+	show_group = []
+	show_emails = []
+
+	if group_selected:
 		for group_name in group_selected:
-			
-			show_group = []
 			group = EmailGroup.objects.filter(name=group_name).first()
 			if group:
 				show_group.append(group)
-
-			members = group.members.all()
-			show_emails = []
-			for member in members:
-				show_emails.append(member.emp_email)
+				members = group.members.all()
+				for member in members:
+					show_emails.append(member.emp_email)
 
 	show_single_name = ""
 	if member_name is not None:
@@ -425,13 +421,22 @@ def render_pdf_view_standalone(request,pk):
 	
 	
 	if request.method == 'POST':
+		print(f"New Report submitted by {get_emp[0].emp_name} on {date_string}")
+		bcc_email = 'mantonio329@gmail.com'  # Replace with the desired BCC email address
+
 		if group_selected and show_single_name:
 			for group in email_groups:
 				if group.name in group_selected:
 					members = group.members.all()
 					recipient_list = [member.emp_email for member in members]
 
-					mail = EmailMultiAlternatives('Safety Report Email', '', settings.EMAIL_HOST_USER, recipient_list+show_single_name)
+					mail = EmailMultiAlternatives(
+						'Safety Report Email',
+						'',
+						settings.EMAIL_HOST_USER,
+						recipient_list + show_single_name,
+						bcc=[bcc_email]  # Add the BCC email address here
+					)
 					mail.attach_alternative(html_content, "text/html")
 					mail.attach_file(f"{get_rep[0].pr_desc}-{date_string}.pdf")
 					mail.send()
@@ -440,17 +445,28 @@ def render_pdf_view_standalone(request,pk):
 				if group.name in group_selected:
 					members = group.members.all()
 					recipient_list = [member.emp_email for member in members]
-
-					mail = EmailMultiAlternatives('Safety Report Email', '', settings.EMAIL_HOST_USER, recipient_list)
+					print("Recipient List:", recipient_list)
+					mail = EmailMultiAlternatives(
+						'Safety Report Email',
+						'',
+						settings.EMAIL_HOST_USER,
+						recipient_list,
+						bcc=[bcc_email]  # Add the BCC email address here
+					)
 					mail.attach_alternative(html_content, "text/html")
 					mail.attach_file(f"{get_rep[0].pr_desc}-{date_string}.pdf")
 					mail.send()
 		elif show_single_name:
-			mail = EmailMultiAlternatives('Safety Report Email', '', settings.EMAIL_HOST_USER, show_single_name)
+			mail = EmailMultiAlternatives(
+				'Safety Report Email',
+				'',
+				settings.EMAIL_HOST_USER,
+				show_single_name,
+				bcc=[bcc_email]  # Add the BCC email address here
+			)
 			mail.attach_alternative(html_content, "text/html")
 			mail.attach_file(f"{get_rep[0].pr_desc}-{date_string}.pdf")
 			mail.send()
-
 
 		if pisa_status.err:
 			return HttpResponse('We had some errors <pre>' + html + '</pre>')

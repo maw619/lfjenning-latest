@@ -1,7 +1,36 @@
-{% include 'head.html' %}
-{% include 'header.html' %}
+{% extends 'base.html' %}
 {% block content %}
+ 
+<style>
+  @media (max-width: 768px) {
+    /* Apply styles when screen width is less than or equal to 768px */
 
+    /* Display the flex container vertically */
+    #myForm1 > div {
+      flex-direction: column;
+      margin-right: 0;
+      margin-left: 0;
+    }
+
+    /* Reset the width to 100% for the drop-down menus */
+    #membersSelect,
+    #groupsSelect {
+      width: 100%;
+    }
+
+    /* Override conflicting styles */
+    #myForm1 #rep_fk_width,
+    #myForm1 #secondmenu {
+      width: 100% !important;
+    }
+
+    #myflex {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+ 
+</style>
 <script>
   // Disable the submit button initially
   document.getElementById('submitButton').disabled = true;
@@ -11,21 +40,23 @@
     document.getElementById('submitButton').disabled = false;
   });
 </script>
-
-
+<div class="container">
+<br>
 <form action="" method="get" id="myForm1">
   {% csrf_token %}
-  <div style="display: flex;">
-    <div style="width: 50%; margin-right: 10px;">
-      <select class="form-control" id="membersSelect" name="rep_fk_emp_key_sup" size="8" multiple="multiple" style="width: 100%">
+  <div style="display: flex;" id="myflex">
+    <div style="width: 50%; margin-right: 10px;" id="rep_fk_width">
+      <label for="membersSelect">Select Member:</label>
+      <select class="form-control" id="membersSelect" name="rep_fk_emp_key_sup" size="8" multiple="multiple">
         {% for x in emails %}
         <option value="{{x.emp_email}}">{{x.emp_name}}</option>
         {% endfor %}
       </select>
     </div>
 or
-    <div style="width: 50%; margin-left: 10px;">
-      <select class="form-control" id="groupsSelect" name="groups_field" size="8" multiple="multiple" style="width: 100%">
+    <div style="width: 50%; margin-left: 10px;" id="secondmenu">
+      <label for="groupsSelect">Select Group:</label>
+      <select class="form-control" id="groupsSelect" name="groups_field" size="8" multiple="multiple" >
         {% for x in groups %}
         <option value="{{x}}">{{x}}</option>
         {% endfor %}
@@ -37,16 +68,14 @@ or
 <label for="">Add Email or Group</label>
 </div>
   <div style="text-align: center;">
-    <input class="btn btn-secondary" type="submit" value="Add" style="width: 60%; height:50px;">
+    <input class="btn btn-secondary" type="submit" value="Add">
     </div>
 </form>
 
 
 
 
-
-
-<br>
+ 
 <br>
 <!-- Display show_names table -->
 
@@ -97,7 +126,7 @@ or
 </button>
 
 </div>
-
+</div>
 
 <script>
   function redirectToPDF(repKey) {
