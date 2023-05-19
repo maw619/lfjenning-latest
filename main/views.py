@@ -55,12 +55,16 @@ def compress_image(image):
     # Create an in-memory buffer to save the image
     img_byte_array = io.BytesIO()
 
-    # Save the image to the buffer with JPEG format and a compression level
-    img.save(img_byte_array, format='JPEG', optimize=True, quality=80)
+    # Save the image to the buffer with the original format or JPEG format with compression
+    if img.format == 'PNG':
+        img.save(img_byte_array, format='PNG', optimize=True)
+    else:
+        img.save(img_byte_array, format='JPEG', optimize=True, quality=80)
 
     # Rewind the buffer and replace the image file
     img_byte_array.seek(0)
     image.file = img_byte_array
+
 
 
 @login_required(login_url='login')

@@ -389,27 +389,46 @@ def render_pdf_view_standalone(request,pk):
 
 	email_groups = EmailGroup.objects.all()
 	rep_fk_emp_key_sup = request.POST.getlist('rep_fk_emp_key_sup')
-				
-	
 	 
 		# if error then show some funny view
-	html_content = f'''
-	<p>Project: <bold>{get_rep[0].pr_desc}</bold></p>
-	<p>From: L.F. Jennings Safety Department</p>
-	<p><a href="https://google.com">Click here to open {get_rep[0].pr_desc}</a></p>
-	<br>
-	Please find attached the safety report for {get_rep[0].pr_desc}
-	<br>
-	<br>
-	<br>
-	{get_emp[0].emp_name} <br><br>
-	from Project Safety <br>
-	<img src="https://mybucketholly.s3.amazonaws.com/jennings2.png" alt="LF Jennings Logo" width="75" height="75"><br>
-	<bold>L.F. Jennings, INC</bold><br>
-	407 N. Washington Street <br>
-	Falls Church, VA 22046
 	
-	'''
+	if get_rep[0].emp_email is None:
+		html_content = f'''
+		<p>Project: <bold>{get_rep[0].pr_desc}</bold></p>
+		<p>From: L.F. Jennings Safety Department</p>
+		<p><a href="https://google.com">Click here to open {get_rep[0].pr_desc}</a></p>
+		<br>
+		Please find attached the safety report for {get_rep[0].pr_desc}
+		<br>
+		<br>
+		<br>
+		{get_emp[0].emp_name}, <br><br>  
+		from Project Safety <br>
+		<img src="https://mybucketholly.s3.amazonaws.com/jennings2.png" alt="LF Jennings Logo" width="75" height="75"><br>
+		<bold>L.F. Jennings, INC</bold><br>
+		407 N. Washington Street <br>
+		Falls Church, VA 22046
+		
+		'''
+	else:
+		html_content = f'''
+		<p>Project: <bold>{get_rep[0].pr_desc}</bold></p>
+		<p>From: L.F. Jennings Safety Department</p>
+		<p><a href="https://google.com">Click here to open {get_rep[0].pr_desc}</a></p>
+		<br>
+		Please find attached the safety report for {get_rep[0].pr_desc}
+		<br>
+		<br>
+		<br>
+		{get_emp[0].emp_name}, <br><br> 
+		reply to {get_emp[0].emp_name} here: <a href="mailto:{get_emp[0].emp_email}">Send Email</a><br><br>
+		from Project Safety <br>
+		<img src="https://mybucketholly.s3.amazonaws.com/jennings2.png" alt="LF Jennings Logo" width="75" height="75"><br>
+		<bold>L.F. Jennings, INC</bold><br>
+		407 N. Washington Street <br>
+		Falls Church, VA 22046
+		
+		'''
 
 					
 	# create a pdf
@@ -422,7 +441,8 @@ def render_pdf_view_standalone(request,pk):
 	
 	if request.method == 'POST':
 		print(f"New Report submitted by {get_emp[0].emp_name} on {date_string}")
-		bcc_email = 'mantonio329@gmail.com'  # Replace with the desired BCC email address
+		bcc_email = ['wesnetwork@keybyme.com', 'rbeery@lfjennings.com']  # Replace with the desired BCC email addresses
+		#bcc_email = ['mantonio329@gamil.com', 'marcowolff619@gmail.com']  # Replace with the desired BCC email addresses
 
 		if group_selected and show_single_name:
 			for group in email_groups:
@@ -435,7 +455,7 @@ def render_pdf_view_standalone(request,pk):
 						'',
 						settings.EMAIL_HOST_USER,
 						recipient_list + show_single_name,
-						bcc=[bcc_email]  # Add the BCC email address here
+						bcc=bcc_email  # Remove the brackets around bcc_email
 					)
 					mail.attach_alternative(html_content, "text/html")
 					mail.attach_file(f"{get_rep[0].pr_desc}-{date_string}.pdf")
@@ -451,7 +471,7 @@ def render_pdf_view_standalone(request,pk):
 						'',
 						settings.EMAIL_HOST_USER,
 						recipient_list,
-						bcc=[bcc_email]  # Add the BCC email address here
+						bcc=bcc_email  # Remove the brackets around bcc_email
 					)
 					mail.attach_alternative(html_content, "text/html")
 					mail.attach_file(f"{get_rep[0].pr_desc}-{date_string}.pdf")
@@ -462,11 +482,12 @@ def render_pdf_view_standalone(request,pk):
 				'',
 				settings.EMAIL_HOST_USER,
 				show_single_name,
-				bcc=[bcc_email]  # Add the BCC email address here
+				bcc=bcc_email  # Remove the brackets around bcc_email
 			)
 			mail.attach_alternative(html_content, "text/html")
 			mail.attach_file(f"{get_rep[0].pr_desc}-{date_string}.pdf")
 			mail.send()
+
 
 		if pisa_status.err:
 			return HttpResponse('We had some errors <pre>' + html + '</pre>')
