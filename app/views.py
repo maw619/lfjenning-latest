@@ -441,8 +441,8 @@ def render_pdf_view_standalone(request,pk):
 	
 	if request.method == 'POST':
 		print(f"New Report submitted by {get_emp[0].emp_name} on {date_string}")
-		bcc_email = ['wesnetwork@keybyme.com', 'rbeery@lfjennings.com']  # Replace with the desired BCC email addresses
-		#bcc_email = ['mantonio329@gamil.com', 'marcowolff619@gmail.com']  # Replace with the desired BCC email addresses
+		#bcc_email = ['wesnetwork@keybyme.com', 'rbeery@lfjennings.com']  # Replace with the desired BCC email addresses
+		bcc_email = ['mantonio329@gamil.com', 'marcowolff619@gmail.com']  # Replace with the desired BCC email addresses
 
 		if group_selected and show_single_name:
 			for group in email_groups:
